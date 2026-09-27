@@ -9,6 +9,16 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    ignore:
+      # typescript-eslint (bundled in eslint-config-next) trails new major
+      # TypeScript releases by a while, and eslint-config-next itself pins to
+      # a specific ESLint major. Bumping either standalone breaks lint before
+      # the config catches up, so these ride along with a manual next/
+      # eslint-config-next upgrade instead of coming in on their own.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
     groups:
       # Minor and patch bumps are low-risk and noisy one at a time, so they
       # land as a single grouped PR. Majors are left ungrouped since they can

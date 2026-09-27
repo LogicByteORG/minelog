@@ -1,0 +1,26 @@
+name: Bug report
+description: Something on minelog does not work the way it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Log link
+      description: A minelog.org link, if the problem is about a specific log. Leave it empty if the log is private.
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: Firefox 130 on Windows 11
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Screenshots or steps that help us see it.

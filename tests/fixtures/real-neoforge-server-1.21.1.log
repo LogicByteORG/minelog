@@ -1,0 +1,16 @@
+[18:51:20.421] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserver, --fml.neoForgeVersion, 21.1.57, --fml.fmlVersion, 4.0.24, --fml.mcVersion, 1.21.1, --fml.neoFormVersion, 20240808.144430, nogui]
+[18:51:20.426] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher 11.0.4+main.d2e20e43 starting: java version 21 by Oracle Corporation; OS Linux arch aarch64 version 6.8.0-1013-oracle
+[18:51:20.614] [main/INFO] [loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserver
+[18:51:20.717] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/home/mc/mc/srvs/MI/libraries/net/fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/sponge-mixin-0.15.2+mixin.0.8.7.jar%2375!/ Service=ModLauncher Env=SERVER
+[18:51:20.925] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "server-1.21.1-20240808.144430-srg.jar" [locator: production server provider +net.neoforged:neoforge:21.1.57:server]
+[18:51:20.945] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "neoforge-21.1.57-universal.jar" [locator: PathBasedLocator[name=neoforge, paths=[libraries/net/neoforged/neoforge/21.1.57/neoforge-21.1.57-universal.jar]], reader: mod manifest]
+[18:51:21.605] [main/INFO] [service.hacks.ModuleLayerMigrator/]: Successfully made module authlib transformable
+[18:51:21.816] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[18:51:21.866] [main/INFO] [LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserver' with arguments [nogui]
+[18:51:22.223] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/RecipeBookCategories for invalid dist DEDICATED_SERVER
+[18:51:22] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
+[18:51:29] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.57, for MC 1.21.1
+[18:51:29] [main/FATAL] [ne.ne.fm.ModLoader/LOADING]: Failed to wait for future Registry initialization, 1 errors found
+[18:51:29] [main/ERROR] [minecraft/CrashReport]: Negative index in crash report handler (0/25)
+[18:51:29] [main/FATAL] [ne.ne.ne.co.NeoForgeMod/]: Preparing crash report with UUID 8e18cc6b-9e45-4963-9bbe-029a07a2c2d5
+[18:51:29] [main/FATAL] [ne.ne.ne.se.lo.ServerModLoader/]: Crash report saved to ./crash-reports/crash-2024-09-20_18.51.29-fml.txt

@@ -1,0 +1,23 @@
+name: A crash minelog does not explain
+description: A log with a known cause that minelog did not point out
+labels: [diagnosis]
+body:
+  - type: input
+    id: link
+    attributes:
+      label: Log link
+      description: The minelog.org link to the log.
+    validations:
+      required: true
+  - type: textarea
+    id: cause
+    attributes:
+      label: What actually caused it
+      description: The real cause and how you fixed it. Mention the lines that showed it.
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Game version, loader and Java
+      placeholder: 1.21.1, NeoForge, Java 21

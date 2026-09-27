@@ -1,0 +1,39 @@
+---- Minecraft Crash Report ----
+// (header trimmed, the System Details block below is from a real report)
+
+Time: 2025-01-01 12:00:00
+Description: Exception in server tick loop
+
+-- System Details --
+Details:
+	Minecraft Version: 1.20.1
+	Minecraft Version ID: 1.20.1
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 22.0.1, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+	Memory: 188311488 bytes (179 MiB) / 1048576000 bytes (1000 MiB) up to 2147483648 bytes (2048 MiB)
+	CPUs: 6
+	JVM Flags: 2 total; -Xmx2G -Xms1000M
+	Server Running: true
+	Player Count: 0 / 20; []
+	Is Modded: Definitely; Server brand changed to 'forge'
+	Type: Dedicated Server (map_server.txt)
+	ModLauncher: 10.0.9+10.0.9+main.dcd20f30
+	ModLauncher launch target: forgeserver
+	ModLauncher naming: srg
+	ModLauncher services:
+		mixin-0.8.5.jar mixin PLUGINSERVICE
+		eventbus-6.0.5.jar eventbus PLUGINSERVICE
+		modlauncher-10.0.9.jar fml TRANSFORMATIONSERVICE
+	FML Language Providers:
+		lowcodefml@null
+		javafml@null
+	Mod List:
+		server-1.20.1-20230612.114412-srg.jar             |Minecraft                     |minecraft                     |1.20.1              |DONE      |Manifest: NOSIGNATURE
+		FarmersDelight-1.20.1-1.2.4.jar                   |Farmer's Delight              |farmersdelight                |1.20.1-1.2.4        |DONE      |Manifest: NOSIGNATURE
+		voicechat-forge-1.20.1-2.5.16.jar                 |Simple Voice Chat             |voicechat                     |1.20.1-2.5.16       |DONE      |Manifest: NOSIGNATURE
+		mcef-forge-2.1.4-1.20.1.jar                       |MCEF (Minecraft Chromium Embed|mcef                          |2.1.4-1.20.1        |DONE      |Manifest: NOSIGNATURE
+		aether-1.20.1-1.4.2-neoforge.jar                  |The Aether                    |aether                        |1.20.1-1.4.2-neoforg|DONE      |Manifest: NOSIGNATURE
+		jei-1.20.1-forge-15.3.0.7.jar                     |Just Enough Items             |jei                           |15.3.0.7            |DONE      |Manifest: NOSIGNATURE
+	FML: 47.2
+	Forge: net.minecraftforge:47.2.32

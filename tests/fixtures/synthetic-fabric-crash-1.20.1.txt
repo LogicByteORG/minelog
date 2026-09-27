@@ -1,0 +1,27 @@
+---- Minecraft Crash Report ----
+// Why did you do that?
+
+Time: 2026-01-02 12:00:00
+Description: Exception in server tick loop
+
+java.lang.IllegalStateException: Failed to load
+	at net.minecraft.server.MinecraftServer.method_3813(MinecraftServer.java:1)
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.20.1
+	Minecraft Version ID: 1.20.1
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 17.0.9, Eclipse Adoptium
+	Memory: 1024 bytes (0 MiB) / 4294967296 bytes (4096 MiB) up to 4294967296 bytes (4096 MiB)
+	Launched Version: fabric-loader-0.15.7-1.20.1
+	Fabric Mods: 
+		fabric-api: Fabric API 0.92.0+1.20.1
+			fabric-api-base: Fabric API Base 0.4.32+1.20.1
+		fabricloader: Fabric Loader 0.15.7
+		sodium: Sodium 0.5.8+mc1.20.1
+		java: OpenJDK 64-Bit Server VM 17
+		minecraft: Minecraft 1.20.1

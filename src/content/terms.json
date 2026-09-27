@@ -1,0 +1,63 @@
+{
+  "title": "Terms",
+  "lead": "The rules for using minelog and its API, in plain words.",
+  "updated": "Last updated September 2026.",
+  "sections": [
+    {
+      "id": "using",
+      "heading": "Using minelog",
+      "paragraphs": [
+        "minelog lets you share Minecraft logs, crash reports and config files by link. It's free and there are no accounts. By using the website or the API you agree to these terms. If you don't, please don't use them.",
+        "minelog is an independent project. It has no connection to Mojang Studios or Microsoft, and Minecraft is a trademark of Mojang Studios."
+      ]
+    },
+    {
+      "id": "your-content",
+      "heading": "What you upload",
+      "paragraphs": [
+        "You keep whatever rights you have in what you upload. By uploading, you let us store it, process it (to hide private details, count errors and read versions) and show it to anyone who has the link, for {days} days or until you delete it.",
+        "Only upload what you're allowed to share. That means plain text logs, crash reports and config files from your own game, server or mods. Every upload becomes a link that anyone can open, so keep passwords, keys and other secrets out of it. minelog refuses environment files for that reason.",
+        "Don't upload anything illegal, adult, hateful or harassing, anyone else's private information, or files meant to cause harm. Uploads run through a content filter, and we can refuse or remove anything that breaks these terms without notice."
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Limits and fair use",
+      "paragraphs": [
+        "A log can be up to {size} and {lines} lines, and one connection can save {uploads} logs a minute. These numbers can change. The API docs always show the current ones.",
+        "Don't try to get around the limits, overload the service, scrape saved logs, or guess log links. We can block a connection or an app that does."
+      ]
+    },
+    {
+      "id": "deleting",
+      "heading": "How long logs stay",
+      "paragraphs": [
+        "Every log is deleted {days} days after it's saved. The person who saved it can delete it earlier, but only in the first {minutes} minutes and only with the delete token they got when they saved it. After that we can't delete it for you unless it breaks these terms.",
+        "We don't keep backups of deleted or expired logs, and we can't recover one."
+      ]
+    },
+    {
+      "id": "reporting",
+      "heading": "Reporting a log",
+      "paragraphs": [
+        "If a log is harmful, upsetting, or has your private information in it, write to {email} with its link. We'll look at it and remove it if it breaks these terms."
+      ]
+    },
+    {
+      "id": "as-is",
+      "heading": "No guarantees",
+      "paragraphs": [
+        "minelog is provided as it is. The details it reads from a log, like the Minecraft version, the loader or the mods, come from the text of the log. They can be wrong, and a log can be edited to say anything. Treat them as a hint, not a diagnosis.",
+        "We try to keep the service running, but we don't promise it will always be up, that a log will always be available until it expires, or that hiding private details will catch everything. Read the preview before you share. To the extent the law allows, we aren't responsible for losses that come from using minelog or from what other people upload.",
+        "We can change or stop the service, including the API, at any time."
+      ]
+    },
+    {
+      "id": "changes",
+      "heading": "Changes to these terms",
+      "paragraphs": [
+        "If these terms change, the new version goes on this page with a new date. Using minelog after that means you accept it. For how we handle your data, see the [privacy page](/privacy)."
+      ]
+    }
+  ]
+}

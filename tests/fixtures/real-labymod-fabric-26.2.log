@@ -1,0 +1,52 @@
+[02:17:09] [main/INFO]: Discovered 1 loader plugin(s)
+[02:17:09] [main/INFO]: Initializing plugin: labymod (priority 500)
+[02:17:09] [main/INFO]: Library C:\Users\[redacted]\AppData\Roaming\.minecraft\labymod-neo\libraries\org\lwjgl\lwjgl\3.4.1\lwjgl-3.4.1.jar
+[02:17:09] [main/INFO]: Preloaded org.lwjgl.glfw.GLFW
+[02:17:09] [main/INFO]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/C:/Users/[redacted]/AppData/Roaming/LabyMod/libraries/net/labymod/sponge-mixin/0.5.11+0.17.3+mixin.0.8.7/sponge-mixin-0.5.11+0.17.3+mixin.0.8.7.jar Service=LabyMod Env=UNKNOWN
+[02:17:09] [main/INFO]: Compatibility level set to JAVA_25
+[02:17:10] [main/INFO]: Preparing client jar for Minecraft 26.2
+[02:17:11] [main/INFO]: Client jar up to date, skipping remap (labymod-neo\client-jars\26.2\client-26.2.jar)
+[02:17:13] [main/ERROR]: Could not download bundled addon fogcustomizer. WebRequestException: (https://flintmc.net/api/client-store/fetch-jar/fogcustomizer/26.2)"No matching release found."
+[02:17:15] [main/INFO]: Loading addon customnametags v1.0.13
+[02:17:15] [main/INFO]: Loading addon betterperspective v1.0.11
+[02:17:17] [main/INFO]: Loading addon labyfabric v2.1.4
+[02:17:17] [main/INFO]: Loading addon voicechat v2.0.27
+[02:17:17] [main/INFO]: Loading addon flux v1.3.0
+[02:17:17] [main/INFO]: Loading addon keystrokes v1.0.4
+[02:17:17] [main/INFO]: No access watcher exists for version 26.2
+[02:17:19] [main/WARN]: FabricLoaderImpl.load() failed with mod-resolution error
+net.fabricmc.loader.impl.discovery.ModResolutionException: Some of your mods are incompatible with the game or each other!
+A potential solution has been determined, this may resolve your problem:
+	 - Replace mod 'Sodium' (sodium) 0.9.2-alpha.4+mc26.2 with any version between 0.9.1+mc26.2 (inclusive) and 0.10- (exclusive) that is compatible with:
+		 - iris 1.11.2+mc26.2
+More details:
+	 - Mod 'Sodium' (sodium) 0.9.2-alpha.4+mc26.2 is incompatible with version 1.11.2 or earlier of mod 'Iris' (iris), yet a conflicting version is present: 1.11.2+mc26.2!
+	at net.fabricmc.loader.impl.discovery.ModResolver.findCompatibleSet(ModResolver.java:148)
+	at net.fabricmc.loader.impl.discovery.ModResolver.resolve(ModResolver.java:45)
+	at net.fabricmc.loader.impl.FabricLoaderImpl.setup(FabricLoaderImpl.java:236)
+	at net.labymod.addons.labyfabric.bootstrap.KnotLauncher.initKnot(KnotLauncher.java:167)
+	at net.laby.launcher.LabyLauncher.main(LabyLauncher.java:110)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:22)
+[02:17:21] [main/WARN]: Error loading class: com/terraformersmc/modmenu/config/ModMenuConfig (java.lang.ClassNotFoundException: com/terraformersmc/modmenu/config/ModMenuConfig)
+[02:17:22] [main/INFO]: Launching net.minecraft.client.main.Main
+[02:17:31] [Render thread/INFO]: LabyMod Version: 4.6.14
+[02:17:31] [Render thread/INFO]: ##########################  System Information  ##########################
+[02:17:31] [Render thread/INFO]: # Timestamp: 2026-08-08T02:17:31.2875984
+[02:17:31] [Render thread/INFO]: # Minecraft Version: 26.2
+[02:17:31] [Render thread/INFO]: # LabyMod Version: 4.6.14
+[02:17:31] [Render thread/INFO]: # OS: WINDOWS (windows) version 10.0 (amd64)
+[02:17:31] [Render thread/INFO]: # Java: 25.0.1 (Microsoft)
+[02:17:31] [Render thread/INFO]: # Memory: 32506MB total, 14098MB used (Allocated: 4096MB) 
+[02:17:31] [Render thread/INFO]: # GPU: NVIDIA: NVIDIA GeForce RTX 4060 Laptop GPU, 610.88
+[02:17:31] [Render thread/INFO]: ###########################################################################
+[02:17:31] [Render thread/INFO]: Minecraft Version: 26.2
+[02:17:33] [Render thread/INFO]: Setting user: Player
+[02:17:34] [Render thread/ERROR]: Unable to enable addon flux.
+java.lang.RuntimeException: java.lang.IllegalStateException: No provider could be found for the current version: 26.2
+	at net.labymod.core.event.method.DefaultListenerRegistry.invokeMethod(DefaultListenerRegistry.java:190)
+Caused by: java.lang.IllegalStateException: No provider could be found for the current version: 26.2
+	at net.labymod.addons.flux.core.Flux.enable(Flux.java:69)
+	... 23 more
+[02:17:44] [Render thread/ERROR]: ResponseError { code: InvalidPermissions, message: "Not authenticated or invalid scope" }
+[02:19:33] [Render thread/INFO]: Connecting to play.example.com, 25565
+[02:20:00] [Render thread/INFO]: Stopping!

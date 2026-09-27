@@ -1,0 +1,48 @@
+.hero--doc {
+  padding-bottom: 2rem;
+
+  @include breakpoint(large) {
+    padding-bottom: 3rem;
+  }
+}
+
+.doc-wrap {
+  padding-bottom: 4rem;
+
+  @include breakpoint(large) {
+    padding-bottom: 6rem;
+  }
+}
+
+.doc {
+  max-width: 44rem;
+  margin-inline: auto;
+
+  &__updated {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: 1.375rem;
+    line-height: 1.25;
+  }
+
+  h2:not(:first-child) {
+    margin-top: 2.5rem;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    line-height: 1.7;
+  }
+
+  p a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    @include link-states;
+  }
+}
+

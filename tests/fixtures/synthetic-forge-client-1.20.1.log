@@ -1,0 +1,2 @@
+[08Aug2026 12:00:00.123] [main/INFO] [net.minecraftforge.fml.loading.FMLLoader/]: ModLauncher running: args [--username, Dev, --fml.forgeVersion, 47.2.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[08Aug2026 12:00:01.123] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file jei-1.20.1-forge-15.3.0.4.jar

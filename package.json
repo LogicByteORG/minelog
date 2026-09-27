@@ -1,0 +1,57 @@
+{
+  "name": "minelog",
+  "version": "0.1.0",
+  "license": "PolyForm-Shield-1.0.0",
+  "homepage": "https://minelog.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LogicByteORG/minelog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LogicByteORG/minelog/issues"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "dev:api": "node scripts/service.mjs dev",
+    "build:api": "node scripts/service.mjs build",
+    "start:api": "node scripts/service.mjs start",
+    "lint": "eslint",
+    "db:migrate": "node --env-file=.env.local scripts/migrate.mjs",
+    "sync:banned": "node scripts/sync-banned-words.mjs",
+    "test": "node --import tsx --test \"tests/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@next/third-parties": "^16.3.6",
+    "@phosphor-icons/react": "^2.1.10",
+    "@tensorflow/tfjs": "^4.22.0",
+    "buffer": "^6.0.3",
+    "foundation-sites": "^6.9.0",
+    "next": "16.3.6",
+    "nsfwjs": "^4.3.0",
+    "postgres": "^3.4.9",
+    "qrcode": "^1.5.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-markdown": "^10.1.0",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "sass": "^1.105.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.6",
+    "tsx": "^4.23.15",
+    "typescript": "^5"
+  }
+}

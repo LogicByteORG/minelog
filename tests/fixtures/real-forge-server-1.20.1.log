@@ -1,0 +1,11 @@
+[19:48:55] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserver, --fml.forgeVersion, 47.4.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[19:48:55] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.15 by Eclipse Adoptium; OS Linux arch amd64 version 4.4.302+
+[19:48:59] [main/INFO] [ne.mi.fm.lo.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserver
+[19:48:59] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/data/libraries/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar%2365!/ Service=ModLauncher Env=SERVER
+[19:49:01] [main/WARN] [ne.mi.fm.lo.mo.ModDiscoverer/SCAN]: Locator {mods folder locator at /data/mods} returned 1 files which are client-side-only mods, but we're on a dedicated server. They will be skipped!
+[19:49:01] [main/WARN] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Mod file /data/libraries/net/minecraftforge/fmlcore/1.20.1-47.4.0/fmlcore-1.20.1-47.4.0.jar is missing mods.toml file
+[19:49:02] [main/INFO] [ne.mi.fm.lo.mo.JarInJarDependencyLocator/]: Found 33 dependencies adding them to mods collection
+[19:49:02] [main/ERROR] [ne.mi.fm.lo.LanguageLoadingProvider/LOADING]: Missing language javafml version [52,) wanted by AdvancedLootInfo-fabric-1.21.1-1.1.7.jar, found 47
+[19:49:06] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserver' with arguments []
+[19:49:18] [main/FATAL] [ne.mi.fm.ModLoader/CORE]: Error during pre-loading phase
+[19:49:18] [main/FATAL] [ne.mi.se.lo.ServerModLoader/]: Crash report saved to ./crash-reports/crash-2025-07-08_19.49.18-fml.txt

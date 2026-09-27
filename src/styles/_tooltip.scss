@@ -1,0 +1,28 @@
+.tooltip {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: max-content;
+  max-width: 16rem;
+  margin: 0;
+  padding: 0.3125rem 0.5rem;
+  border: 0;
+  overflow: visible;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: $font-body;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.35;
+  pointer-events: none;
+
+  &:not([data-open]) {
+    visibility: hidden;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &[data-open] {
+      animation: fade-in 120ms ease both;
+    }
+  }
+}
+

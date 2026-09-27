@@ -1,0 +1,22 @@
+@import "../../node_modules/foundation-sites/scss/util/util";
+
+$global-width: rem-calc(1152);
+$global-font-size: 100%;
+$global-lineheight: 1.55;
+$global-radius: 0;
+
+$body-font-family: system-ui, sans-serif;
+$header-font-family: $body-font-family;
+
+$grid-margin-gutters: (
+  small: 16px,
+  medium: 24px,
+);
+$grid-padding-gutters: $grid-margin-gutters;
+$grid-container-padding: $grid-padding-gutters;
+
+$button-margin: 0;
+$button-padding: 0.8em 1.25em;
+$callout-margin: 0;
+$callout-padding: 0.75rem 1rem;
+

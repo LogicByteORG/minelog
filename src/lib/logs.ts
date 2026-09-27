@@ -4,6 +4,7 @@ import {
   MAX_LOG_BYTES,
   MAX_LOG_LINES,
   RETENTION_DAYS,
+  UPLOADS_PER_DAY,
   UPLOADS_PER_MINUTE,
 } from "./config";
 import { db } from "./db";
@@ -36,10 +37,31 @@ export class BlockedContentError extends Error {
 }
 
 export class RateLimitedError extends Error {
-  constructor() {
+  scope: "minute" | "day";
+  retryAfter: number;
+  constructor(scope: "minute" | "day", retryAfter: number) {
     super("Too many uploads from this connection.");
     this.name = "RateLimitedError";
+    this.scope = scope;
+    this.retryAfter = retryAfter;
   }
+}
+
+async function whyRefused(ipHash: string): Promise<RateLimitedError> {
+  const [row] = await db()<{ lastMinute: number; lastDay: number; minuteWait: number; dayWait: number }[]>`
+    select
+      (count(*) filter (where created_at > now() - interval '1 minute'))::int as last_minute,
+      count(*)::int as last_day,
+      coalesce(extract(epoch from (min(created_at) filter (where created_at > now() - interval '1 minute')
+        + interval '1 minute' - now())), 60)::int as minute_wait,
+      coalesce(extract(epoch from (min(created_at) + interval '1 day' - now())), 86400)::int as day_wait
+    from public.logs
+    where ip_hash = ${ipHash} and created_at > now() - interval '1 day'
+  `;
+  if (row && row.lastDay >= UPLOADS_PER_DAY) {
+    return new RateLimitedError("day", Math.max(1, row.dayWait));
+  }
+  return new RateLimitedError("minute", Math.max(1, row?.minuteWait ?? 60));
 }
 
 export type StoredLog = {
@@ -116,13 +138,17 @@ export async function saveLog({
           ${analysis.bytes}, ${analysis.errorCount}, ${analysis.warnCount},
           ${hidePrivate}, ${ipHash}, ${source}, ${hashToken(deleteToken)},
           now() + make_interval(days => ${RETENTION_DAYS})
-        where (
-          select count(*) from public.logs
-          where ip_hash = ${ipHash} and created_at > now() - interval '1 minute'
-        ) < ${UPLOADS_PER_MINUTE}
+        from (
+          select
+            count(*) filter (where created_at > now() - interval '1 minute') as last_minute,
+            count(*) as last_day
+          from public.logs
+          where ip_hash = ${ipHash} and created_at > now() - interval '1 day'
+        ) as recent
+        where recent.last_minute < ${UPLOADS_PER_MINUTE} and recent.last_day < ${UPLOADS_PER_DAY}
         returning created_at, expires_at
       `;
-      if (!row) throw new RateLimitedError();
+      if (!row) throw await whyRefused(ipHash);
       return {
         id,
         kind: analysis.kind,

@@ -8,6 +8,7 @@ import {
   type SavedLog,
 } from "@/lib/logs";
 import { moderationMessage } from "@/lib/moderation";
+import { UPLOADS_PER_DAY } from "@/lib/config";
 import { normalizeSource } from "@/lib/source";
 
 export type UploadCode =
@@ -42,6 +43,15 @@ export function isBinaryText(text: string): boolean {
     if (char === "�") bad += 1;
   }
   return sample.length > 0 && bad > 40;
+}
+
+function waitText(seconds: number): string {
+  if (seconds >= 3600) {
+    const hours = Math.round(seconds / 3600);
+    return hours === 1 ? "about an hour" : `about ${hours} hours`;
+  }
+  const minutes = Math.max(1, Math.round(seconds / 60));
+  return minutes === 1 ? "a minute" : `${minutes} minutes`;
 }
 
 export function clientIp(request: Request): string {
@@ -90,8 +100,10 @@ export async function uploadLog({
       throw new UploadError(
         429,
         "rate_limited",
-        "Too many uploads from this connection. Try again in a minute.",
-        60,
+        error.scope === "day"
+          ? `This connection has saved ${UPLOADS_PER_DAY} logs in the last day, which is the daily limit. Try again in ${waitText(error.retryAfter)}.`
+          : "Too many uploads from this connection. Try again in a minute.",
+        error.retryAfter,
       );
     }
     if (error instanceof LogTooLargeError) {

@@ -17,7 +17,7 @@
       "heading": "What we store",
       "paragraphs": [
         "Each log is saved with its text, the type we detected, its line count, error and warning counts, whether hiding was on, when it expires, and which app uploaded it if the app said so. If hiding was off, the log page says so.",
-        "To limit uploads we keep a keyed hash of your IP address, and you can save {uploads} logs a minute. We never store the address itself.",
+        "To limit uploads we keep a keyed hash of your IP address, and you can save {uploads} logs a minute and {perDay} a day. We never store the address itself.",
         "Every log is deleted {days} days after it's saved, and its link stops working.",
         "The person who saves a log can delete it themselves during the first hour. To make that possible, saving hands your browser a secret delete token, and we keep only a hash of it, never the token. It stays in your browser storage for that hour and is not sent anywhere else."
       ]

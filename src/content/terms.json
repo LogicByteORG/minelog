@@ -24,7 +24,7 @@
       "id": "limits",
       "heading": "Limits and fair use",
       "paragraphs": [
-        "A log can be up to {size} and {lines} lines, and one connection can save {uploads} logs a minute. These numbers can change. The API docs always show the current ones.",
+        "A log can be up to {size} and {lines} lines, and one connection can save {uploads} logs a minute and {perDay} a day. These numbers can change. The API docs always show the current ones.",
         "Don't try to get around the limits, overload the service, scrape saved logs, or guess log links. We can block a connection or an app that does."
       ]
     },

@@ -8,6 +8,7 @@ import {
   MAX_LOG_LINES,
   REPORT_EMAIL,
   RETENTION_DAYS,
+  UPLOADS_PER_DAY,
   UPLOADS_PER_MINUTE,
 } from "@/lib/config";
 import { openGraphFor } from "@/lib/seo";
@@ -17,6 +18,7 @@ function fill(text: string): string {
   return text
     .replaceAll("{days}", String(RETENTION_DAYS))
     .replaceAll("{uploads}", String(UPLOADS_PER_MINUTE))
+    .replaceAll("{perDay}", String(UPLOADS_PER_DAY))
     .replaceAll("{size}", `${MAX_LOG_BYTES / (1024 * 1024)} MB`)
     .replaceAll("{lines}", MAX_LOG_LINES.toLocaleString("en"))
     .replaceAll("{minutes}", String(DELETE_WINDOW_MINUTES))

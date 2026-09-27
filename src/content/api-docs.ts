@@ -11,6 +11,7 @@ import {
   MAX_LOG_LINES,
   RETENTION_DAYS,
   SITE_BASE,
+  UPLOADS_PER_DAY,
   UPLOADS_PER_MINUTE,
 } from "@/lib/config";
 import { readInsights } from "@/lib/diagnose/insights";
@@ -132,6 +133,11 @@ export const LIMITS = [
     text: "Per connection. Counted in the database, so it is exact. Reading a log doesn't count.",
   },
   {
+    label: "Uploads a day",
+    value: `${UPLOADS_PER_DAY} per day`,
+    text: "Per connection, over the last 24 hours. When you reach it, Retry-After tells you when the oldest of those uploads drops out of the count.",
+  },
+  {
     label: "Largest text to analyse",
     value: `${MAX_ANALYSE_BYTES / (1024 * 1024)} MB`,
     text: `For the analyse endpoints, which read text without saving it. The line limit is the same ${MAX_LOG_LINES.toLocaleString("en")}.`,
@@ -159,6 +165,7 @@ export const LIMITS_JSON = JSON.stringify(
     maxBytes: MAX_LOG_BYTES,
     maxLines: MAX_LOG_LINES,
     uploadsPerMinute: UPLOADS_PER_MINUTE,
+    uploadsPerDay: UPLOADS_PER_DAY,
     maxAnalyseBytes: MAX_ANALYSE_BYTES,
     analysesPerMinute: ANALYSES_PER_MINUTE,
   },

@@ -20,6 +20,8 @@ export const PREVIEW_LINE_LIMIT = 2000;
 
 export const UPLOADS_PER_MINUTE = 70;
 
+export const UPLOADS_PER_DAY = 300;
+
 export const DELETE_WINDOW_MINUTES = 60;
 
 export const VIEW_CHUNK_LINES = 2000;

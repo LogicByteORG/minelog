@@ -39,6 +39,7 @@ import {
   DELETE_WINDOW_MINUTES,
   RETENTION_DAYS,
   SITE_BASE,
+  UPLOADS_PER_DAY,
   UPLOADS_PER_MINUTE,
 } from "@/lib/config";
 import { openGraphFor } from "@/lib/seo";
@@ -511,8 +512,9 @@ export default function ApiPage() {
             <section id="rate-limits" className="api-section">
               <h2>Rate limits</h2>
               <p>
-                Each connection can save {UPLOADS_PER_MINUTE} logs a minute and
-                analyse {ANALYSES_PER_MINUTE}. Reading the findings of a saved
+                Each connection can save {UPLOADS_PER_MINUTE} logs a minute and{" "}
+                {UPLOADS_PER_DAY} a day, and analyse {ANALYSES_PER_MINUTE} a
+                minute. Reading the findings of a saved
                 log and deleting have limits too, listed under{" "}
                 <a href="#limits">Limits</a>. After that you get a{" "}
                 <code>429</code> with a <code>Retry-After</code> header, in

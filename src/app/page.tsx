@@ -8,6 +8,10 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { GUIDES } from "@/content/guides";
 import { HOME_FAQ } from "@/content/home-faq";
+import {
+  HIGHLIGHTED_LANGUAGES,
+  SUPPORTED_FILE_TYPES,
+} from "@/content/supported-files";
 import { RETENTION_DAYS } from "@/lib/config";
 import {
   SITE_NAME,
@@ -139,6 +143,53 @@ export default function Home() {
                     </div>
                   ))}
                 </dl>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="filetypes" className="section">
+          <div className="grid-container reveal">
+            <div className="grid-x grid-margin-x">
+              <div className="cell small-12 large-4 section__intro">
+                <h2 className="section__title">Supported file types</h2>
+                <p className="section__text">
+                  minelog reads plain text. Logs, crash reports and config
+                  files get spotted on their own, and shown the way
+                  they&apos;re meant to look — no need to tell us what
+                  you&apos;re pasting.
+                </p>
+              </div>
+              <div className="cell small-12 large-8">
+                <ul className="filetype-grid">
+                  {SUPPORTED_FILE_TYPES.map((item) => (
+                    <li key={item.kind} className="filetype-card">
+                      <h3 className="filetype-card__name">{item.kind}</h3>
+                      <p className="filetype-card__note">{item.note}</p>
+                      <code className="filetype-card__example">
+                        {item.example}
+                      </code>
+                    </li>
+                  ))}
+                </ul>
+                <div className="filetypes-also">
+                  <p className="filetypes-also__title">
+                    Anything else that&apos;s plain text still gets colored
+                    if we recognize the language:
+                  </p>
+                  <ul className="filetypes-also__list">
+                    {HIGHLIGHTED_LANGUAGES.map((language) => (
+                      <li key={language} className="lang-tag">
+                        {language}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="filetypes-excluded">
+                    Not supported: archives like .zip, .jar, .gz, .7z and
+                    .rar (unzip them and paste the file inside), plus
+                    images, audio and video.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

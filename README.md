@@ -9,8 +9,6 @@
 Share Minecraft logs with a link. Paste a server log, client log or crash report, get a
 short address back, and send it to whoever is helping you.
 
-Live at [minelog.org](https://minelog.org).
-
 [![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/license-PolyForm%20Shield%201.0.0-blue)](LICENSE)
 
 ## What it does

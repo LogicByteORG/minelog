@@ -13,7 +13,7 @@ import { REPORT_EMAIL } from "@/lib/config";
 import { readEnvironment } from "@/lib/diagnose";
 import { isValidId } from "@/lib/ids";
 import { classifyLine, formatBytes, kindLabel, type LogKind } from "@/lib/log";
-import { findLog } from "@/lib/logs";
+import { getCachedLog } from "@/lib/log-cache";
 import { openGraphFor } from "@/lib/seo";
 import { rawUrl } from "@/lib/site";
 import { formatUtc, timeAgo } from "@/lib/time";
@@ -21,7 +21,7 @@ import { formatUtc, timeAgo } from "@/lib/time";
 export const dynamic = "force-dynamic";
 
 const getLog = cache(async (id: string) =>
-  isValidId(id) ? findLog(id) : null,
+  isValidId(id) ? getCachedLog(id) : null,
 );
 
 const isGameLog = (kind: LogKind) =>

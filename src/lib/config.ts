@@ -24,6 +24,8 @@ export const UPLOADS_PER_DAY = 300;
 
 export const DELETE_WINDOW_MINUTES = 60;
 
+export const LOG_CACHE_SECONDS = 600;
+
 export const VIEW_CHUNK_LINES = 2000;
 
 export const API_BASE = "https://api.minelog.org";

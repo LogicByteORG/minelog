@@ -1,5 +1,6 @@
 import { DELETES_PER_MINUTE, DELETE_WINDOW_MINUTES } from "@/lib/config";
 import { isValidId } from "@/lib/ids";
+import { forgetLog } from "@/lib/log-cache";
 import { deleteLog } from "@/lib/logs";
 import { waitFor } from "./rate";
 
@@ -75,6 +76,7 @@ export async function deleteLogWithToken(id: string, token: string): Promise<voi
 
   switch (result.status) {
     case "deleted":
+      await forgetLog(id);
       return;
     case "not_found":
       throw new DeleteError(404, "not_found", "This log doesn't exist or has expired.");

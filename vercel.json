@@ -1,4 +1,5 @@
 {
   "regions": ["fra1"],
+  "crons": [{ "path": "/api/heartbeat", "schedule": "*/20 * * * *" }],
   "ignoreCommand": "git diff --quiet HEAD^ HEAD -- src public db scripts package.json package-lock.json next.config.ts tsconfig.json vercel.json"
 }

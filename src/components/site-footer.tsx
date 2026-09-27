@@ -1,7 +1,11 @@
 import Link from "next/link";
-import { LOGICBYTE_URL } from "@/lib/config";
+import { GITHUB_URL, LOGICBYTE_URL } from "@/lib/config";
+
+const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
 
 export function SiteFooter() {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="site-footer">
       <div className="grid-container site-footer__inner">
@@ -11,9 +15,21 @@ export function SiteFooter() {
             Studios or Microsoft. Minecraft is a trademark of Mojang Studios.
           </p>
           <p className="site-footer__made">
-            Made by{" "}
-            <a href={LOGICBYTE_URL} target="_blank" rel="noopener noreferrer">
-              LogicByte Studios
+            <span>&copy; {year}</span>
+            <span className="site-footer__dot" aria-hidden="true" />
+            <span>
+              Made by{" "}
+              <a
+                href={LOGICBYTE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LogicByte Studios
+              </a>
+            </span>
+            <span className="site-footer__dot" aria-hidden="true" />
+            <a href={LICENSE_URL} target="_blank" rel="noopener noreferrer">
+              PolyForm Shield License
             </a>
           </p>
         </div>

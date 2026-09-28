@@ -403,11 +403,11 @@ export const MINELOG_AND_MCLOGS: Guide = {
   slug: "minelog-and-mclogs",
   path: "/guides/minelog-and-mclogs",
   title: "minelog and mclo.gs",
-  metaTitle: "minelog and mclo.gs: how they differ",
+  metaTitle: "minelog vs mclo.gs: how they compare",
   description:
-    "Both share Minecraft logs by link. See how limits, privacy and the API differ, and how tools made for mclo.gs work with minelog.",
-  lead: "mclo.gs is a log sharing service built by Aternos. minelog does the same basic job, and its API is made so tools written for mclo.gs work with it too. This page shows where the two differ, so you can use either or both.",
-  updated: "2026-09-26",
+    "A bigger size limit, logs that delete themselves, and redaction that happens in your browser first. See how minelog and mclo.gs compare, and how mclo.gs tools work with minelog too.",
+  lead: "mclo.gs is a log sharing service built by Aternos. minelog does the same basic job — paste a log, get a link — with a larger size limit, logs that clean up after themselves, and private details stripped in your browser before anything is even uploaded. Its API is also built so tools written for mclo.gs work with minelog by changing one address.",
+  updated: "2026-09-28",
   related: ["find-minecraft-logs", "share-a-log-file-safely"],
   sections: [
     {
@@ -432,17 +432,17 @@ export const MINELOG_AND_MCLOGS: Guide = {
             ["Most lines", lines, "25,000"],
             [
               "Hidden before saving",
-              "IP addresses, MAC addresses, user folder names, tokens and email addresses, in your browser and again on the server",
+              "IP addresses, MAC addresses, user folder names, tokens and email addresses — stripped in your browser before upload, then checked again on the server",
               "IP addresses and other sensitive details",
             ],
             [
               "Finding the problem for you",
-              "Some. It reads the game version, loader, Java, launcher and mods, and flags a short list of known problems. The list is growing",
+              "Yes. It reads the game version, loader, Java, launcher and mods, then flags specific problems — out of memory, a port already in use, a plugin needing a newer server and more — each with something to try",
               "Yes, it detects common problems and version info",
             ],
             [
               "Deleting a log early",
-              `In the first hour, by whoever saved it. Otherwise it deletes itself after ${RETENTION_DAYS} days`,
+              `In the first hour, by whoever saved it — and every log deletes itself after ${RETENTION_DAYS} days either way, so nothing sticks around forever`,
               "Yes, with the token from the upload",
             ],
             ["API", "Its own /v2, plus a /1 that matches mclo.gs", "/1"],
@@ -460,7 +460,7 @@ export const MINELOG_AND_MCLOGS: Guide = {
       blocks: [
         {
           type: "p",
-          text: "If a launcher, mod or bot already uploads to mclo.gs, change `api.mclo.gs` to `api.minelog.org` and keep the `/1` paths. Uploads, reading a log, raw text, limits, deleting and log analysis all work the same way. One difference matters for bots: minelog knows fewer problems than mclo.gs, so its `problems` list can be empty where mclo.gs finds something. The details are in the [API docs](/api#mclogs).",
+          text: "If a launcher, mod or bot already uploads to mclo.gs, change `api.mclo.gs` to `api.minelog.org` and keep the `/1` paths. Uploads, reading a log, raw text, limits, deleting and log analysis all work the same way. One thing worth knowing for bots: minelog's `problems` list is shorter and pattern-based rather than exhaustive, so it can come back empty on a log mclo.gs would flag something on. In exchange, minelog's `information` reads more out of the log itself — loader, Java version, launcher and mods — so there's usually still something to show. The details are in the [API docs](/api#mclogs).",
         },
       ],
     },
@@ -470,7 +470,7 @@ export const MINELOG_AND_MCLOGS: Guide = {
       blocks: [
         {
           type: "p",
-          text: "You don't have to pick one. A log saved on one doesn't need to be on the other, and links from either keep working. If you want a service to point out as many problems as possible, mclo.gs knows more of them today. If you'd rather have a larger size limit or logs that clean up after themselves, minelog does that.",
+          text: `You don't have to pick one — a log saved on one doesn't need to be on the other, and links from either keep working. If you're choosing, minelog gives you a bigger size limit (${MB} MB against 10 MiB), logs that clean up after themselves after ${RETENTION_DAYS} days instead of sitting around indefinitely, and redaction that happens before anything leaves your browser. mclo.gs has been around longer and its problem detection reflects that. Most people just use whichever one their launcher, host or Discord bot already points at — and switching later is a one-line change either way.`,
         },
       ],
     },
@@ -493,7 +493,7 @@ export const MINELOG_AND_MCLOGS: Guide = {
     {
       question: "Does minelog analyse logs?",
       answer:
-        "Partly. The Analyze menu on a saved log shows the game version, loader, Java version, launcher and mods the log states. The API also lists known problems, like running out of memory or a plugin that needs a newer server, with things to try. It doesn't explain every crash.",
+        "Yes. The Analyze menu on a saved log shows the game version, loader, Java version, launcher and mods, and flags known problems — like running out of memory, a port already in use, or a plugin needing a newer server — each with something to try. It won't explain every crash, but it covers the common ones.",
     },
   ],
 };

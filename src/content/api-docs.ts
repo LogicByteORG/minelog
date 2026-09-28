@@ -481,7 +481,7 @@ export const COMPAT: {
     method: "GET",
     path: "/1/insights/{id}",
     support: "Different",
-    text: "Same shape as mclo.gs: name, type, version, title and analysis with problems and information. The details differ. minelog reads more facts (loader, Java, launcher, mods) and knows fewer problems, so problems can be empty where mclo.gs finds something. Entries show at most 40 lines each.",
+    text: "Same shape as mclo.gs: name, type, version, title and analysis with problems and information. The details differ: minelog reads more facts (loader, Java, launcher, mods) into information, and its problems list is shorter and pattern-based rather than exhaustive, so it can come back empty on a log mclo.gs would flag something on. Entries show at most 40 lines each.",
   },
   {
     method: "POST",

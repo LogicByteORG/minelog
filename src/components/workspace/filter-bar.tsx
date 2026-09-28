@@ -113,7 +113,7 @@ export function FilterBar({
           </button>
           <button
             type="button"
-            className="action"
+            className="action action--wide-toggle"
             aria-pressed={actions.fullWidth}
             data-tip={actions.fullWidth ? "Back to the normal width" : "Stretch to the whole window"}
             onClick={actions.onToggleFullWidth}

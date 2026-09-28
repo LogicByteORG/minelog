@@ -403,10 +403,10 @@ export const MINELOG_AND_MCLOGS: Guide = {
   slug: "minelog-and-mclogs",
   path: "/guides/minelog-and-mclogs",
   title: "minelog and mclo.gs",
-  metaTitle: "minelog vs mclo.gs: how they compare",
+  metaTitle: "minelog vs mclo.gs, mclogs.minestrator.com and Pastebin",
   description:
-    "A bigger size limit, logs that delete themselves, and redaction that happens in your browser first. See how minelog and mclo.gs compare, and how mclo.gs tools work with minelog too.",
-  lead: "mclo.gs is a log sharing service built by Aternos. minelog does the same basic job — paste a log, get a link — with a larger size limit, logs that clean up after themselves, and private details stripped in your browser before anything is even uploaded. Its API is also built so tools written for mclo.gs work with minelog by changing one address.",
+    "A bigger size limit, a longer window before logs expire, and redaction that happens in your browser first. See how minelog compares to mclo.gs, its mclogs.minestrator.com mirror, and Pastebin.",
+  lead: "mclo.gs is a log sharing service built by Aternos, and the one most Minecraft launchers, mods and Discord bots already point at. minelog does the same basic job — paste a log, get a link — with a bigger size limit, a longer window before logs expire, and private details stripped in your browser before anything is even uploaded. Its API is also built so tools written for mclo.gs work with minelog by changing one address.",
   updated: "2026-09-28",
   related: ["find-minecraft-logs", "share-a-log-file-safely"],
   sections: [
@@ -442,15 +442,15 @@ export const MINELOG_AND_MCLOGS: Guide = {
             ],
             [
               "Deleting a log early",
-              `In the first hour, by whoever saved it — and every log deletes itself after ${RETENTION_DAYS} days either way, so nothing sticks around forever`,
-              "Yes, with the token from the upload",
+              `In the first hour, by whoever saved it. Either way, a log expires on its own after ${RETENTION_DAYS} days`,
+              "Yes, with the token from the upload. Logs also expire on their own, after 90 days",
             ],
             ["API", "Its own /v2, plus a /1 that matches mclo.gs", "/1"],
           ],
         },
         {
           type: "p",
-          text: "The mclo.gs column comes from its public API documentation as of September 2026 and can change. minelog isn't affiliated with mclo.gs or Aternos.",
+          text: "The mclo.gs column comes from its public API (api.mclo.gs/1/limits, checked September 2026) and can change. minelog isn't affiliated with mclo.gs or Aternos.",
         },
       ],
     },
@@ -470,7 +470,27 @@ export const MINELOG_AND_MCLOGS: Guide = {
       blocks: [
         {
           type: "p",
-          text: `You don't have to pick one — a log saved on one doesn't need to be on the other, and links from either keep working. If you're choosing, minelog gives you a bigger size limit (${MB} MB against 10 MiB), logs that clean up after themselves after ${RETENTION_DAYS} days instead of sitting around indefinitely, and redaction that happens before anything leaves your browser. mclo.gs has been around longer and its problem detection reflects that. Most people just use whichever one their launcher, host or Discord bot already points at — and switching later is a one-line change either way.`,
+          text: `You don't have to pick one — a log saved on one doesn't need to be on the other, and links from either keep working. If you're choosing, minelog gives you a bigger size limit (${MB} MB against 10 MiB), a longer window before a log expires (${RETENTION_DAYS} days against mclo.gs's 90), and redaction that happens before anything leaves your browser. mclo.gs has been around longer and its problem detection reflects that. Most people just use whichever one their launcher, host or Discord bot already points at — and switching later is a one-line change either way.`,
+        },
+      ],
+    },
+    {
+      id: "minestrator",
+      heading: "What about mclogs.minestrator.com?",
+      blocks: [
+        {
+          type: "p",
+          text: "mclogs.minestrator.com is a separate instance of the same open-source software mclo.gs runs, hosted by MineStrator, a Minecraft hosting company, rather than by Aternos. Its own API reports the same 10 MiB size limit, the same 25,000 line limit, and the same 90-day expiry as mclo.gs — it's a mirror with different branding, not a different tool. Everything on this page about mclo.gs and its /1 API applies to it too.",
+        },
+      ],
+    },
+    {
+      id: "pastebin",
+      heading: "What about Pastebin?",
+      blocks: [
+        {
+          type: "p",
+          text: "Pastebin is a general text paste site, not a Minecraft tool, and it shows: there's no log level highlighting, no crash or version detection, and nothing gets redacted for you, so an IP address or access token in a log stays right there unless you cut it out yourself. A guest paste tops out at 512 KB — small enough that a real latest.log often won't fit — and paying for PRO only raises that to 10 MiB, still under minelog's limit. Pastes are public and indexed by search engines by default, and stay online indefinitely unless you set an expiry date yourself. It's a fine tool for a snippet of code; a full Minecraft log is what minelog, mclo.gs and their mirrors exist for.",
         },
       ],
     },
@@ -485,6 +505,16 @@ export const MINELOG_AND_MCLOGS: Guide = {
       question: "Can I use minelog and mclo.gs together?",
       answer:
         "Yes. You can share one log on both, or point a tool at whichever you prefer.",
+    },
+    {
+      question: "Is mclogs.minestrator.com the same as mclo.gs?",
+      answer:
+        "Same underlying software and the same limits (10 MiB, 25,000 lines, a 90-day expiry), just hosted by MineStrator instead of Aternos. Anything here about using mclo.gs with minelog applies to it too.",
+    },
+    {
+      question: "Why not just use Pastebin for a Minecraft log?",
+      answer:
+        "You can, but it isn't built for it: no redaction, no log formatting, no crash detection, and a 512 KB size limit on a free account that a full log can easily exceed. minelog and mclo.gs both hide private details automatically and read the log itself for you.",
     },
     {
       question: "Can I delete a log on minelog?",

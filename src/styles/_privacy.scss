@@ -39,7 +39,7 @@
     line-height: 1.7;
   }
 
-  p a {
+  p a:not(.button) {
     text-decoration: underline;
     text-underline-offset: 0.2em;
     @include link-states;

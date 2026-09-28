@@ -655,7 +655,7 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
               </button>
               <button
                 type="button"
-                className="action"
+                className="action action--wide-toggle"
                 aria-pressed={settings.fullWidth}
                 data-tip={settings.fullWidth ? "Back to the normal width" : "Stretch to the whole window"}
                 onClick={() => {

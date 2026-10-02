@@ -45,6 +45,11 @@ next-env.d.ts
 # python bytecode from the bundled skills
 __pycache__/
 
+# gradle (apps/plugins)
+.gradle/
+**/build/
+**/bin/
+
 # local notes and tooling that stay out of the public repo
 /AGENT.md
 /AGENTS.md

@@ -1,0 +1,25 @@
+name: minelog
+version: ${modVersion}
+main: org.minelog.bukkit.MinelogPlugin
+description: Share server logs on minelog.org with a link.
+author: LogicByte
+website: https://minelog.org
+commands:
+  minelog:
+    description: Share a log on minelog.org.
+    usage: /minelog share [file]
+    aliases: [mlog]
+    permission: minelog.share
+permissions:
+  minelog.share:
+    description: Share logs on minelog.org.
+    default: op
+  minelog.delete:
+    description: Delete own uploads from minelog.org.
+    default: op
+  minelog.admin:
+    description: Full minelog access.
+    default: op
+    children:
+      minelog.share: true
+      minelog.delete: true

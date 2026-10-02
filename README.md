@@ -80,6 +80,7 @@ src/lib          redaction, log parsing, diagnosis, storage, rate limiting
 src/styles       Sass partials, colors live in _tokens.scss
 db/migrations    plain SQL, applied in name order
 tests            unit tests and real log fixtures
+apps/plugins     server plugins (core + bukkit, bungee, velocity)
 ```
 
 ## Contributing

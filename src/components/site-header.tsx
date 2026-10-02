@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { GithubLogo } from "@phosphor-icons/react/dist/ssr";
 import { GITHUB_URL } from "@/lib/config";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
@@ -24,7 +23,7 @@ export function SiteHeader() {
             aria-label="minelog on GitHub"
             data-tip="View the source on GitHub"
           >
-            <GithubLogo size={20} weight="fill" aria-hidden />
+            <span className="github-icon" aria-hidden="true" />
           </a>
         </nav>
       </div>

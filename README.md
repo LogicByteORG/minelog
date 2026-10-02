@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://minelog.org">
-    <img src="public/icon-white.svg" alt="minelog" width="96">
+    <img src="public/brand/minelog-white.svg" alt="minelog" width="96">
   </a>
 </p>
 

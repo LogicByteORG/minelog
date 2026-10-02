@@ -2,6 +2,8 @@ import Link from "next/link";
 import { GITHUB_URL, LOGICBYTE_URL } from "@/lib/config";
 
 const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
+const COMMIT_SHA = process.env.VERCEL_GIT_COMMIT_SHA ?? null;
+const COMMIT_SHORT = COMMIT_SHA?.slice(0, 7) ?? null;
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -31,6 +33,18 @@ export function SiteFooter() {
             <a href={LICENSE_URL} target="_blank" rel="noopener noreferrer">
               PolyForm Shield License
             </a>
+            {COMMIT_SHORT && (
+              <>
+                <span className="site-footer__dot" aria-hidden="true" />
+                <a
+                  href={`${GITHUB_URL}/commit/${COMMIT_SHA}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  build {COMMIT_SHORT}
+                </a>
+              </>
+            )}
           </p>
         </div>
         <nav aria-label="Footer">

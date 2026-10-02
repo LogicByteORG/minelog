@@ -1,0 +1,94 @@
+name: plugins-release
+
+on:
+  push:
+    tags:
+      - "plugins-v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Check tag against modVersion
+        id: meta
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          FULL="${TAG#plugins-v}"
+          BASE="${FULL%%-*}"
+          PROP="$(grep '^modVersion=' apps/plugins/gradle.properties | cut -d= -f2)"
+          if [ "$BASE" != "$PROP" ]; then
+            echo "Tag base $BASE does not match modVersion $PROP."
+            exit 1
+          fi
+          case "$FULL" in
+            *-alpha*) CHANNEL="alpha" ;;
+            *-beta*|*-rc*) CHANNEL="beta" ;;
+            *) CHANNEL="release" ;;
+          esac
+          {
+            echo "full=$FULL"
+            echo "channel=$CHANNEL"
+            echo "title=minelog plugins v$FULL"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build plugins
+        working-directory: apps/plugins
+        run: ./gradlew clean build
+
+      - name: Collect changelog section
+        run: |
+          awk -v ver="${{ steps.meta.outputs.full }}" '
+            $0 == "## "ver || index($0, "## "ver" ") == 1 {found=1; next}
+            found && /^## / {exit}
+            found {print}
+          ' apps/plugins/CHANGELOG.md | sed -e :a -e '/^\n*$/{$d;N;ba' -e '}' > /tmp/plugin-notes.md
+          if [ ! -s /tmp/plugin-notes.md ]; then
+            echo "No CHANGELOG section for ${{ steps.meta.outputs.full }}."
+            exit 1
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          FLAGS=""
+          if [ "${{ steps.meta.outputs.channel }}" != "release" ]; then
+            FLAGS="--prerelease"
+          fi
+          # shellcheck disable=SC2086
+          gh release create "$GITHUB_REF_NAME" \
+            --title "${{ steps.meta.outputs.title }}" \
+            --notes-file /tmp/plugin-notes.md \
+            $FLAGS \
+            apps/plugins/platform-bukkit/build/libs/minelog-bukkit-*.jar \
+            apps/plugins/platform-bungee/build/libs/minelog-bungee-*.jar \
+            apps/plugins/platform-velocity/build/libs/minelog-velocity-*.jar
+
+      - name: Publish to Modrinth
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: |
+          BUKKIT_JAR=(apps/plugins/platform-bukkit/build/libs/minelog-bukkit-*.jar)
+          BUNGEE_JAR=(apps/plugins/platform-bungee/build/libs/minelog-bungee-*.jar)
+          VELOCITY_JAR=(apps/plugins/platform-velocity/build/libs/minelog-velocity-*.jar)
+          node apps/plugins/scripts/publish-modrinth.mjs \
+            --version "${{ steps.meta.outputs.full }}" \
+            --title "${{ steps.meta.outputs.title }}" \
+            --channel "${{ steps.meta.outputs.channel }}" \
+            --changelog-file /tmp/plugin-notes.md \
+            --file "bukkit=$BUKKIT_JAR" \
+            --file "bungee=$BUNGEE_JAR" \
+            --file "velocity=$VELOCITY_JAR"

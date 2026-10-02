@@ -1,0 +1,6 @@
+name: minelog
+version: ${modVersion}
+main: org.minelog.bungee.MinelogPlugin
+description: Share proxy logs on minelog.org with a link.
+author: LogicByte
+website: https://minelog.org

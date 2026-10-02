@@ -7,13 +7,29 @@
   -webkit-user-select: none;
 
   &__mark {
-    display: block;
-    width: 1.75rem;
-    height: 1.75rem;
     pointer-events: none;
     -webkit-user-drag: none;
     user-select: none;
     -webkit-user-select: none;
+  }
+
+  &__marks {
+    position: relative;
+    flex: none;
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  &__marks &__mark {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__mark--dark {
+    opacity: 0;
   }
 
   a:hover & {
@@ -33,24 +49,30 @@
 }
 
 .logo__mark--dark {
-  display: none;
+  opacity: 0;
 }
 
 :root[data-theme="dark"] .logo__mark--light {
-  display: none;
+  opacity: 0;
 }
 
 :root[data-theme="dark"] .logo__mark--dark {
-  display: block;
+  opacity: 1;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) .logo__mark--light {
-    display: none;
+    opacity: 0;
   }
 
   :root:not([data-theme]) .logo__mark--dark {
-    display: block;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo__mark {
+    transition: opacity 300ms ease;
   }
 }
 
@@ -99,14 +121,41 @@
   width: 1.125rem;
   height: 1.125rem;
   background-color: currentColor;
-  -webkit-mask-image: url("/modrinth-light.svg");
+  -webkit-mask-image: url("/vendor/modrinth-light.svg");
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
-  mask-image: url("/modrinth-light.svg");
+  mask-image: url("/vendor/modrinth-light.svg");
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
+}
+
+.github-icon {
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  background-color: currentColor;
+  -webkit-mask-image: url("/brand/github-black.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: url("/brand/github-black.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+:root[data-theme="dark"] .github-icon {
+  -webkit-mask-image: url("/brand/github-white.svg");
+  mask-image: url("/brand/github-white.svg");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .github-icon {
+    -webkit-mask-image: url("/brand/github-white.svg");
+    mask-image: url("/brand/github-white.svg");
+  }
 }
 
 .site-header__modrinth {

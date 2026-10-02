@@ -224,11 +224,11 @@ body:has(.workspace[data-wide="true"]) {
         width: 1.5rem;
         height: 1.5rem;
         background-color: var(--muted);
-        -webkit-mask-image: url("/claude.svg");
+        -webkit-mask-image: url("/vendor/claude.svg");
         -webkit-mask-size: contain;
         -webkit-mask-repeat: no-repeat;
         -webkit-mask-position: center;
-        mask-image: url("/claude.svg");
+        mask-image: url("/vendor/claude.svg");
         mask-size: contain;
         mask-repeat: no-repeat;
         mask-position: center;

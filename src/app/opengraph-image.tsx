@@ -12,7 +12,7 @@ const MUTED = "#8e97a4";
 const LINE = "#272c33";
 
 export default async function Image() {
-  const icon = await readFile(join(process.cwd(), "public", "icon-white.svg"));
+  const icon = await readFile(join(process.cwd(), "public", "brand", "minelog-white.svg"));
   const mark = `data:image/svg+xml;base64,${icon.toString("base64")}`;
 
   return new ImageResponse(

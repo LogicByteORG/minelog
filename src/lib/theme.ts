@@ -28,10 +28,7 @@ function systemDark(): boolean {
 }
 
 export function applyTheme(): void {
-  const next = effectiveTheme(readSaved(), systemDark());
-  const root = document.documentElement;
-  root.dataset.theme = next;
-  root.style.colorScheme = next;
+  setTheme(effectiveTheme(readSaved(), systemDark()));
 }
 
 export function toggleTheme(): void {
@@ -40,7 +37,20 @@ export function toggleTheme(): void {
     window.localStorage.setItem(THEME_KEY, next);
   } catch {
   }
+  setTheme(next);
+}
+
+function setTheme(next: ThemeName): void {
   const root = document.documentElement;
+  let reduce = false;
+  try {
+    reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+  }
+  if (!reduce) {
+    root.classList.add("theme-anim");
+    window.setTimeout(() => root.classList.remove("theme-anim"), 350);
+  }
   root.dataset.theme = next;
   root.style.colorScheme = next;
 }

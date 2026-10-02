@@ -15,7 +15,7 @@ import { readInsights } from "@/lib/diagnose/insights";
 import { isValidId } from "@/lib/ids";
 import { classifyLine, formatBytes, kindLabel, type LogKind } from "@/lib/log";
 import { getCachedLog } from "@/lib/log-cache";
-import { openGraphFor } from "@/lib/seo";
+import { openGraphFor, logEmbedDescription } from "@/lib/seo";
 import { rawUrl } from "@/lib/site";
 import { formatUtc, timeAgo } from "@/lib/time";
 
@@ -64,23 +64,21 @@ export async function generateMetadata({
     return { title: "Log not found", robots: { index: false, follow: false } };
   }
 
-  const counts = [
-    `${number(log.lineCount)} ${log.lineCount === 1 ? "line" : "lines"}`,
-    log.errorCount > 0
-      ? `${number(log.errorCount)} ${log.errorCount === 1 ? "error" : "errors"}`
-      : null,
-    log.warnCount > 0
-      ? `${number(log.warnCount)} ${log.warnCount === 1 ? "warning" : "warnings"}`
-      : null,
-  ].filter(Boolean);
   const title = `${kindLabel(log.kind, log.content)} | ${log.id}`;
-  const description = `${counts.join(", ")}. Shared on minelog.`;
+  const description = logEmbedDescription(log);
 
   return {
     title,
     description,
     robots: { index: false, follow: false },
-    openGraph: openGraphFor({ type: "article", title, description }),
+    openGraph: openGraphFor({
+      type: "article",
+      title,
+      description,
+      path: `/${log.id}`,
+      images: [],
+    }),
+    twitter: { card: "summary", title, description, images: [] },
   };
 }
 

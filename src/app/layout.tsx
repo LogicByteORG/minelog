@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   applicationName: SITE_NAME,
   openGraph: { type: "website", siteName: SITE_NAME, locale: "en_US" },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary" },
   robots: { index: true, follow: true },
   description:
     `Paste a Minecraft log or crash report and get a link you can share. Private details are hidden, and the link stops working after ${RETENTION_DAYS} days.`,

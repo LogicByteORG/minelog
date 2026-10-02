@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GITHUB_URL } from "@/lib/config";
+import { GITHUB_URL, MODRINTH_URL } from "@/lib/config";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -14,6 +14,16 @@ export function SiteHeader() {
           <Link href="/api" className="nav-button">
             API
           </Link>
+          <a
+            href={MODRINTH_URL}
+            className="nav-button site-header__modrinth"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-tip="Get the server plugin on Modrinth"
+          >
+            <span className="modrinth-icon" aria-hidden="true" />
+            Download
+          </a>
           <ThemeToggle />
           <a
             href={GITHUB_URL}

@@ -32,6 +32,50 @@
   }
 }
 
+.logo__mark--dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .logo__mark--light {
+  display: none;
+}
+
+:root[data-theme="dark"] .logo__mark--dark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .logo__mark--light {
+    display: none;
+  }
+
+  :root:not([data-theme]) .logo__mark--dark {
+    display: block;
+  }
+}
+
+.theme-toggle__icon--sun {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle__icon--moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle__icon--sun {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .theme-toggle__icon--moon {
+    display: none;
+  }
+
+  :root:not([data-theme]) .theme-toggle__icon--sun {
+    display: block;
+  }
+}
+
 .site-header {
   @media (prefers-reduced-motion: no-preference) {
     animation: fade-in 400ms ease both;

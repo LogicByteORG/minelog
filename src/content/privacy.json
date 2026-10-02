@@ -18,6 +18,7 @@
       "paragraphs": [
         "Each log is saved with its text, the type we detected, its line count, error and warning counts, whether hiding was on, when it expires, and which app uploaded it if the app said so. If hiding was off, the log page says so.",
         "To limit uploads we keep a keyed hash of your IP address, and you can save {uploads} logs a minute and {perDay} a day. We never store the address itself.",
+        "Each server also keeps a memory-only count of how often each kind of finding appears, so we can see which errors still need their own rule. It holds no log text and no addresses, and it disappears whenever the server restarts.",
         "Every log is deleted {days} days after it's saved, and its link stops working.",
         "The person who saves a log can delete it themselves during the first hour. To make that possible, saving hands your browser a secret delete token, and we keep only a hash of it, never the token. It stays in your browser storage for that hour and is not sent anywhere else."
       ]
@@ -37,7 +38,7 @@
       "paragraphs": [
         "Every log gets a random 9-character link that nobody can guess. There's no password, so anyone with the link can read the log and its raw text. Only share it with people you trust.",
         "If you share a log by mistake, you can delete it yourself in the first hour, from the button at the bottom of its page. That button only shows in the browser that saved the log. After that hour the log stays readable until it expires, so check the preview first.",
-        "README pages show the pictures the README points to, loaded straight from the sites that host them, so those sites can see your IP address. minelog checks the pictures in your browser and removes any that look like adult content. Nothing is sent to us or to anyone else for that. It can only check pictures the host lets it read, and no check is perfect."
+        "README pages show the pictures the README points to, loaded through the wsrv.nl image cache instead of straight from each site that hosts them. That means wsrv.nl can see your IP address when you open such a page, and not the sites themselves. They keep request logs for 7 days on servers in the EU and cached pictures for a while after that. The sites that host the pictures only ever see wsrv.nl fetching them, never you. minelog checks the pictures in your browser and removes any that look like adult content. Nothing is sent to us or to anyone else for that. It can only check pictures the cache can read, and no check is perfect."
       ]
     }
   ]

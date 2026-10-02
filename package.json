@@ -21,6 +21,7 @@
     "lint": "eslint",
     "db:migrate": "node --env-file=.env.local scripts/migrate.mjs",
     "sync:banned": "node scripts/sync-banned-words.mjs",
+    "rule:new": "node scripts/new-rule.mjs",
     "test": "node --import tsx --test \"tests/**/*.test.ts\""
   },
   "dependencies": {

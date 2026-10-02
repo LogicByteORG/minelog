@@ -1,4 +1,5 @@
 import { kindLabel, splitLines, type LogKind } from "../log";
+import { recordCoverage } from "./coverage";
 import { entryOf, spanAt, spansOf, type Entry, type Span } from "./entries";
 import { readEnvironment } from "./index";
 import {
@@ -102,6 +103,7 @@ export function readInsights(text: string, kind: LogKind): Insights {
     ? readEnvironment(text, kind)
     : { conflicts: [], mods: [], bundled: 0 };
   const problems = readable ? findProblems({ lines, spans: getSpans(), environment, kind }) : [];
+  if (readable) recordCoverage(problems);
 
   const software = softwareOf(kind, environment);
   const type = typeOf(kind, text);

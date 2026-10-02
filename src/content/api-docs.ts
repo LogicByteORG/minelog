@@ -375,6 +375,12 @@ export const PROBLEM_DOCS: { id: string; text: string }[] = [
   { id: "client-code-on-server", text: "Forge or NeoForge loaded client-only code on a dedicated server." },
   { id: "plugin-needs-newer-server", text: "A Bukkit, Spigot or Paper plugin needs a newer API version than the server has." },
   { id: "damaged-file", text: "A jar can't be opened because it looks damaged or incomplete." },
+  { id: "mixin-failed", text: "A mod failed while changing the game's code with a mixin." },
+  { id: "wrong-loader-mod", text: "A mod file was made for a different loader than the one running it." },
+  { id: "connection-timed-out", text: "A player lost connection because the network timed out." },
+  { id: "server-full", text: "Someone tried to join but the server was full." },
+  { id: "unknown-error", text: "An error no rule covers yet, shown with its own line." },
+  { id: "crash-summary", text: "What a crash report or Java crash log says, when no rule covers it." },
 ];
 
 export const SWITCH_SAMPLES: Sample[] = [

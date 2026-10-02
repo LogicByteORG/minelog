@@ -127,6 +127,87 @@
   }
 }
 
+.problems {
+  &__panel {
+    position: fixed;
+    z-index: 60;
+    right: var(--problems-right, 0.5rem);
+    width: min(24rem, calc(100vw - 1rem));
+    max-height: min(32rem, calc(100vh - 6rem));
+    max-height: min(32rem, calc(100dvh - 6rem));
+    padding: 0.75rem 0.875rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid var(--line);
+    background: var(--surface);
+
+    @media (max-width: 40em) {
+      right: 0.5rem;
+      left: 0.5rem;
+      width: auto;
+    }
+  }
+
+  &__head {
+    margin: 0 0 0.25rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--line);
+
+    &:first-child {
+      border-top: 0;
+    }
+  }
+
+  &__message {
+    margin: 0;
+    color: var(--ink);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  &__count {
+    display: inline-block;
+    margin-left: 0.5rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+
+  &__solutions {
+    margin: 0.375rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--ink);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+
+    li + li {
+      margin-top: 0.25rem;
+    }
+  }
+
+  &__foot {
+    margin: 0.5rem 0 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+}
+
 .line-link {
   padding: 0;
   border: 0;

@@ -68,14 +68,22 @@ jobs:
           if [ "${{ steps.meta.outputs.channel }}" != "release" ]; then
             FLAGS="--prerelease"
           fi
-          # shellcheck disable=SC2086
-          gh release create "$GITHUB_REF_NAME" \
-            --title "${{ steps.meta.outputs.title }}" \
-            --notes-file /tmp/plugin-notes.md \
-            $FLAGS \
-            apps/plugins/platform-bukkit/build/libs/minelog-bukkit-*.jar \
-            apps/plugins/platform-bungee/build/libs/minelog-bungee-*.jar \
-            apps/plugins/platform-velocity/build/libs/minelog-velocity-*.jar
+          JARS="apps/plugins/platform-bukkit/build/libs/minelog-bukkit-*.jar apps/plugins/platform-bungee/build/libs/minelog-bungee-*.jar apps/plugins/platform-velocity/build/libs/minelog-velocity-*.jar"
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            # Re-run after a partial failure: refresh notes and files.
+            gh release edit "$GITHUB_REF_NAME" \
+              --title "${{ steps.meta.outputs.title }}" \
+              --notes-file /tmp/plugin-notes.md $FLAGS
+            # shellcheck disable=SC2086
+            gh release upload "$GITHUB_REF_NAME" --clobber $JARS
+          else
+            # shellcheck disable=SC2086
+            gh release create "$GITHUB_REF_NAME" \
+              --title "${{ steps.meta.outputs.title }}" \
+              --notes-file /tmp/plugin-notes.md \
+              $FLAGS \
+              $JARS
+          fi
 
       - name: Publish to Modrinth
         env:

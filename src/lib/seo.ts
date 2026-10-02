@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
+import type { LogKind } from "./log";
 import { pageBase } from "./site";
 
 export const SITE_NAME = "minelog";
 
 export const SITE_TAGLINE =
   "Share Minecraft server logs, client logs and crash reports with one link.";
-
-const OG_ALT = "minelog: share Minecraft logs and crash reports with one link";
 
 type OpenGraph = NonNullable<Metadata["openGraph"]>;
 
@@ -16,6 +15,7 @@ export function openGraphFor(page: {
   path?: string;
   type?: "website" | "article";
   modifiedTime?: string;
+  images?: OpenGraph["images"];
 }): OpenGraph {
   return {
     type: page.type ?? "website",
@@ -25,8 +25,28 @@ export function openGraphFor(page: {
     description: page.description,
     ...(page.path ? { url: page.path } : {}),
     ...(page.modifiedTime ? { modifiedTime: page.modifiedTime } : {}),
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: OG_ALT }],
+    images: page.images ?? [],
   } as OpenGraph;
+}
+
+const GAME_LOG_KINDS: ReadonlySet<LogKind> = new Set([
+  "server",
+  "client",
+  "crash",
+  "jvm",
+]);
+
+export function logEmbedDescription(log: {
+  kind: LogKind;
+  lineCount: number;
+  errorCount: number;
+  warnCount: number;
+}): string {
+  const lines = `${log.lineCount.toLocaleString("en")} ${log.lineCount === 1 ? "line" : "lines"}`;
+  if (!GAME_LOG_KINDS.has(log.kind)) return `${lines}. Shared on minelog.`;
+  const errors = `${log.errorCount.toLocaleString("en")} ${log.errorCount === 1 ? "error" : "errors"}`;
+  const warnings = `${log.warnCount.toLocaleString("en")} ${log.warnCount === 1 ? "warning" : "warnings"}`;
+  return `${lines}, ${errors}, ${warnings}. Shared on minelog.`;
 }
 
 export function absoluteUrl(path = "/"): string {

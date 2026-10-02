@@ -109,6 +109,7 @@ export function PasteEditor() {
   const ids = useId();
   const router = useRouter();
   const fileInput = useRef<HTMLInputElement>(null);
+  const pasteBox = useRef<HTMLTextAreaElement>(null);
 
   const [text, setText] = useState("");
   const [view, setView] = useState<View>("paste");
@@ -258,21 +259,43 @@ export function PasteEditor() {
   }, [canSave, text, hidePrivate, sourceName, router]);
 
   useEffect(() => {
+    function focusEditor() {
+      setView("paste");
+      window.setTimeout(() => pasteBox.current?.focus({ preventScroll: true }), 0);
+    }
+    function fillSample() {
+      replaceText(SAMPLE_LOG, "preview");
+      setPreviewRun((run) => run + 1);
+    }
     function onGlobalKeyDown(event: globalThis.KeyboardEvent) {
-      if (
-        !(event.ctrlKey || event.metaKey) ||
-        event.key !== "Enter" ||
-        event.shiftKey ||
-        event.altKey
-      ) {
+      if (!(event.ctrlKey || event.metaKey) || event.shiftKey || event.altKey) {
         return;
       }
-      event.preventDefault();
-      void save();
+      const key = event.key.toLowerCase();
+      if (key === "enter") {
+        event.preventDefault();
+        if (document.activeElement === pasteBox.current) void save();
+        else focusEditor();
+        return;
+      }
+      if (key === "o") {
+        event.preventDefault();
+        fileInput.current?.click();
+        return;
+      }
+      if (key === "u") {
+        event.preventDefault();
+        fillSample();
+        return;
+      }
+      if (key === "e" && !isEmpty) {
+        event.preventDefault();
+        setView((current) => (current === "paste" ? "preview" : "paste"));
+      }
     }
     window.addEventListener("keydown", onGlobalKeyDown);
     return () => window.removeEventListener("keydown", onGlobalKeyDown);
-  }, [save]);
+  }, [save, isEmpty]);
 
   function onTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
@@ -310,13 +333,13 @@ export function PasteEditor() {
             <div className="editor__tools">
               <ToolButton
                 label="Open file"
-                tip="Open a log or config file"
+                tip="Open a log or config file (Ctrl+O)"
                 icon={<UploadSimple aria-hidden="true" />}
                 onClick={() => fileInput.current?.click()}
               />
               <ToolButton
                 label="Use a sample"
-                tip="Fill in an example log"
+                tip="Fill in an example log (Ctrl+U)"
                 icon={<FileText aria-hidden="true" />}
                 onClick={() => {
                   replaceText(SAMPLE_LOG, "preview");
@@ -346,6 +369,7 @@ export function PasteEditor() {
           >
             {view === "paste" ? (
               <textarea
+                ref={pasteBox}
                 value={text}
                 onChange={(event) => replaceText(event.target.value, "paste")}
                 spellCheck={false}
@@ -448,7 +472,8 @@ export function PasteEditor() {
             <Message tone="error">{phase.message}</Message>
           ) : (
             <p className="side__hint">
-              Or press <kbd>Ctrl</kbd> or <kbd>Cmd</kbd> + <kbd>Enter</kbd>.
+              <kbd>Ctrl</kbd> or <kbd>Cmd</kbd> + <kbd>Enter</kbd> saves, or jumps back here.{" "}
+              <kbd>O</kbd> opens a file, <kbd>U</kbd> fills a sample, <kbd>E</kbd> flips the preview.
             </p>
           )}
         </div>

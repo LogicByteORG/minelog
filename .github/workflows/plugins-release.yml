@@ -85,6 +85,15 @@ jobs:
               $JARS
           fi
 
+      - name: Check Modrinth identity
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: |
+          echo "Token owner:"
+          curl -s -H "Authorization: $MODRINTH_TOKEN" https://api.modrinth.com/v2/user | jq '{username: .username, id: .id}'
+          echo "Project team:"
+          curl -s https://api.modrinth.com/v2/project/${MODRINTH_PROJECT_ID:-minelog}/members | jq '[.[] | {user: .user.username, role: .role}]'
+
       - name: Publish to Modrinth
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}

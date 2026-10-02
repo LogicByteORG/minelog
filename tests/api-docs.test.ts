@@ -1,13 +1,14 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import * as docs from "../src/content/api-docs";
+import { GENERIC_PROBLEM_IDS } from "../src/lib/diagnose/problems";
 import { RULES } from "../src/lib/diagnose/problems/rules";
 
 test("every problem the finder knows is documented, and nothing else is", () => {
-  const known = RULES.map((rule) => rule.id).sort();
+  const known = [...RULES.map((rule) => rule.id), ...GENERIC_PROBLEM_IDS].sort();
   const documented = docs.PROBLEM_DOCS.map((row) => row.id).sort();
   assert.deepEqual(documented, known);
-  assert.equal(new Set(known).size, known.length, "rule ids must be unique");
+  assert.equal(new Set(known).size, known.length, "problem ids must be unique");
 });
 
 test("the compatibility table lists every mclo.gs endpoint and none is left out", () => {

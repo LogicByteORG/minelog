@@ -207,6 +207,33 @@
     }
   }
 
+  &__problems {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  &__problems-title {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  &__problems ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--ink);
+  }
+
+  &__problems-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+
   &__save {
     display: flex;
     flex-direction: column;

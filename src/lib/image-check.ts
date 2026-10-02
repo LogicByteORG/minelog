@@ -25,6 +25,19 @@ export function needsCheck(src: string | undefined): src is string {
   return !/\.svg(?:[?#]|$)/i.test(src);
 }
 
+const PROXY_BASE = "https://wsrv.nl/?url=";
+const MAX_PROXY_SOURCE = 2000;
+
+export function proxyUrl(src: string): string | null {
+  if (src.length > MAX_PROXY_SOURCE) return null;
+  if (/\.svg(?:[?#]|$)/i.test(src)) return null;
+  const match = /^(https?):\/\/([^\s/?#]+)([^\s#]*)/i.exec(src.trim());
+  if (!match) return null;
+  const value = match[1].toLowerCase() === "https" ? `https://${match[2]}${match[3]}` : `${match[2]}${match[3]}`;
+  const encoded = value.replace(/\?/g, "%3F").replace(/&/g, "%26");
+  return `${PROXY_BASE}${encoded}`;
+}
+
 let detector: Promise<NSFWJS> | null = null;
 
 function getDetector(): Promise<NSFWJS> {

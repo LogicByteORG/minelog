@@ -23,6 +23,7 @@ import { createLog } from "@/lib/api";
 import { saveDeleteToken } from "@/lib/delete-token";
 import { MAX_LOG_BYTES, MAX_LOG_LINES, PREVIEW_LINE_LIMIT } from "@/lib/config";
 import { analyze, formatBytes, kindLabel, type Analysis } from "@/lib/log";
+import { readInsights } from "@/lib/diagnose/insights";
 import { moderationMessage } from "@/lib/moderation";
 import { isPrivateFileName, privateFileMessage } from "@/lib/private-files";
 import { SAMPLE_LOG } from "@/lib/samples";
@@ -484,6 +485,22 @@ function Detected({
     () => kindLabel(analysis.kind, analysis.output),
     [analysis.kind, analysis.output],
   );
+  const previewProblems = useMemo(() => {
+    if (isEmpty || tooBig || tooLong || analysis.blocked) return [];
+    if (
+      analysis.kind !== "server" &&
+      analysis.kind !== "client" &&
+      analysis.kind !== "crash" &&
+      analysis.kind !== "jvm"
+    ) {
+      return [];
+    }
+    try {
+      return readInsights(analysis.output, analysis.kind).problems.slice(0, 3);
+    } catch {
+      return [];
+    }
+  }, [analysis, isEmpty, tooBig, tooLong]);
   return (
     <div className="side__block" aria-live="polite">
       <h2 className="side__label">Detected</h2>
@@ -512,6 +529,17 @@ function Detected({
                 </span>
               )}
             </p>
+          )}
+          {previewProblems.length > 0 && (
+            <div className="side__problems">
+              <p className="side__problems-title">Looks like:</p>
+              <ul>
+                {previewProblems.map((problem) => (
+                  <li key={`${problem.id}:${problem.line}`}>{problem.message}</li>
+                ))}
+              </ul>
+              <p className="side__problems-note">Full list and fixes after saving.</p>
+            </div>
           )}
           {tooBig && (
             <Message tone="error">

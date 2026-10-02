@@ -1,20 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { checkImage, needsCheck, type Verdict } from "@/lib/image-check";
+import { checkImage, needsCheck, proxyUrl, type Verdict } from "@/lib/image-check";
 
 type ReadmeImageProps = { src?: string; alt?: string; title?: string };
 
 export function ReadmeImage({ src, alt, title }: ReadmeImageProps) {
   const checking = needsCheck(src);
+  const proxied = checking ? proxyUrl(src) : null;
   const [verdict, setVerdict] = useState<Verdict | "checking">(
     checking ? "checking" : "ok",
   );
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  if (failedSrc !== null && failedSrc !== src) setFailedSrc(null);
 
   useEffect(() => {
     if (!needsCheck(src)) return;
     let current = true;
-    void checkImage(src).then((result) => {
+    void checkImage(proxyUrl(src) ?? src).then((result) => {
       if (current) setVerdict(result);
     });
     return () => {
@@ -41,12 +44,15 @@ export function ReadmeImage({ src, alt, title }: ReadmeImageProps) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
+      src={proxied && failedSrc !== src ? proxied : src}
       alt={alt ?? ""}
       title={title}
       loading="lazy"
       decoding="async"
       className="readme__img"
+      onError={() => {
+        if (proxied && failedSrc !== src) setFailedSrc(src ?? null);
+      }}
     />
   );
 }

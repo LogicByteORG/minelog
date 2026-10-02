@@ -8,9 +8,10 @@ import { SiteHeader } from "@/components/site-header";
 import { ShareLink } from "@/components/share-link";
 import { AskAiMenu } from "@/components/ask-ai";
 import { AnalyzeMenu } from "@/components/analyze-menu";
+import { ProblemsPanel } from "@/components/problems-panel";
 import { LogWorkspace } from "@/components/workspace/log-workspace";
 import { REPORT_EMAIL } from "@/lib/config";
-import { readEnvironment } from "@/lib/diagnose";
+import { readInsights } from "@/lib/diagnose/insights";
 import { isValidId } from "@/lib/ids";
 import { classifyLine, formatBytes, kindLabel, type LogKind } from "@/lib/log";
 import { getCachedLog } from "@/lib/log-cache";
@@ -89,6 +90,7 @@ export default async function LogPage({ params }: PageProps<"/[id]">) {
   if (!log) notFound();
 
   const source = log.source;
+  const insights = isGameLog(log.kind) ? readInsights(log.content, log.kind) : null;
 
   return (
     <>
@@ -125,9 +127,8 @@ export default async function LogPage({ params }: PageProps<"/[id]">) {
           </div>
           <div className="log-head__actions">
             <ShareLink />
-            {isGameLog(log.kind) && (
-              <AnalyzeMenu env={readEnvironment(log.content, log.kind)} />
-            )}
+            {insights && <AnalyzeMenu env={insights.environment} />}
+            {insights && <ProblemsPanel problems={insights.problems} />}
             <AskAiMenu excerpt={errorExcerpt(log.content, log.kind)} />
             <a
               href={rawUrl(log.id)}

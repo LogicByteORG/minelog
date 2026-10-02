@@ -152,14 +152,15 @@ test("a damaged jar", () => {
   );
 });
 
-test("a crash report is read too", () => {
+test("a crash report with a known cause gets no extra summary", () => {
   const text = fixture("synthetic-fabric-crash-1.20.1.txt").replace(
     "java.lang.IllegalStateException: Failed to load",
     "java.lang.OutOfMemoryError: Java heap space",
   );
-  const [problem] = problems(text, "crash");
-  assert.equal(problem.id, "out-of-memory");
-  assert.equal(problem.line, 7);
+  const found = problems(text, "crash");
+  assert.equal(found.length, 1);
+  assert.equal(found[0].id, "out-of-memory");
+  assert.equal(found[0].line, 7);
 });
 
 test("chat cannot pose as a problem", () => {
@@ -173,11 +174,102 @@ test("chat cannot pose as a problem", () => {
 });
 
 test("healthy real logs stay quiet", () => {
-  assert.deepEqual(ids(fixture("real-forge-server-1.20.1.log")), []);
   assert.deepEqual(ids(fixture("real-fabric-1.21.11.log")), []);
   assert.deepEqual(ids(fixture("real-forge-client-1.19.2.log"), "client"), []);
   assert.deepEqual(ids(fixture("real-paper-1.21.11.log")), []);
   assert.deepEqual(ids(fixture("real-fabric-client-integrated-1.21.11.log"), "client"), []);
+});
+
+test("a Fabric mod on Forge names the file", () => {
+  const found = problems(fixture("real-forge-server-1.20.1.log"));
+  assert.ok(found.some((p) => p.id === "wrong-loader-mod"));
+  const [wrong] = found.filter((p) => p.id === "wrong-loader-mod");
+  assert.match(wrong.message, /AdvancedLootInfo/);
+  assert.equal(wrong.line, 8);
+});
+
+test("a mixin that fails to apply", () => {
+  const text = server(
+    "org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered",
+  );
+  assert.deepEqual(ids(text), ["mixin-failed"]);
+  const text2 = server("Mixin apply failed minecraft.mixins.json:player.json from mod examplemod");
+  assert.deepEqual(ids(text2), ["mixin-failed"]);
+  assert.deepEqual(ids(fixture("real-neoforge-server-1.21.1.log")), [
+    "client-code-on-server",
+    "unknown-error",
+  ]);
+});
+
+test("a player who times out is one problem", () => {
+  const text = [
+    "[12:00:00] [Server thread/INFO]: Steve lost connection: Timed out",
+    "[12:00:01] [Server thread/INFO]: Disconnecting Alex: Internal Exception: java.net.SocketTimeoutException: Read timed out",
+    "[12:00:02] [Server thread/INFO]: Disconnecting Bob: Internal Exception: java.io.IOException: An existing connection was forcibly closed by the remote host",
+  ].join("\n");
+  const [problem] = problems(text);
+  assert.equal(problem.id, "connection-timed-out");
+  assert.equal(problem.count, 3);
+});
+
+test("a full server names the cause", () => {
+  const text = server("Disconnecting com.mojang.authlib.GameProfile@123: The server is full!");
+  assert.deepEqual(ids(text), ["server-full"]);
+});
+
+test("an error no rule covers is still shown, grouped without its timestamp", () => {
+  const text = [
+    "[12:00:00] [Server thread/ERROR]: com.example.Broken: something snapped",
+    "[12:00:05] [Server thread/ERROR]: com.example.Broken: something snapped",
+    "[12:00:09] [Server thread/ERROR]: net.other.Failure: a different break",
+  ].join("\n");
+  const found = problems(text);
+  assert.equal(found.length, 2);
+  assert.equal(found[0].id, "unknown-error");
+  assert.equal(found[0].count, 2);
+  assert.equal(found[0].line, 1);
+  assert.equal(found[0].message, "com.example.Broken: something snapped");
+});
+
+test("a known problem and an unknown one share the page in line order", () => {
+  const text = [
+    "[12:00:00] [Server thread/ERROR]: com.example.Broken: something snapped",
+    "[12:00:01] [Server thread/ERROR]: java.lang.OutOfMemoryError: Java heap space",
+  ].join("\n");
+  assert.deepEqual(ids(text), ["unknown-error", "out-of-memory"]);
+});
+
+test("warnings alone are not problems", () => {
+  const text = "[12:00:00] [Server thread/WARN]: Something looks odd, check your config";
+  assert.deepEqual(ids(text), []);
+});
+
+test("unknown errors are capped so one log cannot flood the page", () => {
+  const text = Array.from(
+    { length: 12 },
+    (_, i) => `[12:00:${String(i).padStart(2, "0")}] [Server thread/ERROR]: com.example.Broken${i}: snap`,
+  ).join("\n");
+  const found = problems(text);
+  assert.equal(found.filter((p) => p.id === "unknown-error").length, 10);
+});
+
+test("a crash report without a known cause still says what it is", () => {
+  const found = problems(fixture("synthetic-fabric-crash-1.20.1.txt"), "crash");
+  assert.equal(found.length, 1);
+  assert.equal(found[0].id, "crash-summary");
+  assert.match(found[0].message, /Exception in server tick loop/);
+});
+
+test("a Java crash log without a known cause names where it stopped", () => {
+  const text = [
+    "#",
+    "# A fatal error has been detected by the Java Runtime Environment:",
+    "#  SIGSEGV (0xb) at pc=0x00007f1, pid=1, tid=2",
+    "# Problematic frame: C  [libjvm.so+0x1]",
+  ].join("\n");
+  const [problem] = problems(text, "jvm");
+  assert.equal(problem.id, "crash-summary");
+  assert.match(problem.message, /Java stopped/);
 });
 
 test("files that are not game logs get no problems", () => {
@@ -204,6 +296,11 @@ test("no problem has an empty message or empty advice", () => {
     server("**** FAILED TO BIND TO PORT!"),
     server("java.util.zip.ZipException: zip END header not found"),
     server("Attempted to load class a/B for invalid dist DEDICATED_SERVER"),
+    server("Mixin apply failed minecraft.mixins.json:player.json from mod examplemod"),
+    server("Missing language javafml version [52,) wanted by Example-fabric-1.21.1-1.0.0.jar, found 47"),
+    server("Steve lost connection: Timed out"),
+    server("Disconnecting Steve: The server is full!"),
+    server("com.example.Broken: something snapped"),
   ];
   for (const sample of samples) {
     for (const problem of problems(sample)) {
@@ -212,6 +309,10 @@ test("no problem has an empty message or empty advice", () => {
       const all = [problem.message, ...problem.solutions].join(" ");
       assert.doesNotMatch(all, /[—–‘’“”]/);
     }
+  }
+  for (const problem of problems(fixture("synthetic-fabric-crash-1.20.1.txt"), "crash")) {
+    assert.ok(problem.message.length > 10);
+    assert.ok(problem.solutions.length > 0 && problem.solutions.every((s) => s.length > 10));
   }
 });
 

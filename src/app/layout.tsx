@@ -51,8 +51,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geist.variable} ${bricolage.variable} ${jetbrains.variable} ${minecraft.variable}`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var s=localStorage.getItem("minelog:theme");var t=s==="light"||s==="dark"?s:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){}`,
+          }}
+        />
+      </head>
       <body>
         {children}
         <TooltipHost />

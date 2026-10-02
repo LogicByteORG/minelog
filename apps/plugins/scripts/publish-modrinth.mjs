@@ -15,7 +15,7 @@
 
 import { readFileSync, statSync } from "node:fs";
 
-const API = "https://api.modrinth.com/v2/version";
+const API = "https://api.modrinth.com/v2";
 
 // Loaders validated against GET /v2/tag/loader on 2026-10-03. Every entry
 // below supports the "plugin" project type.
@@ -92,7 +92,7 @@ const data = {
   loaders: LOADERS,
   featured: false,
   status: "listed",
-  project_id: process.env.MODRINTH_PROJECT_ID ?? "minelog",
+  project_id: null,
   file_parts: files.map((file) => file.part),
   primary_file: files[0].part,
 };
@@ -109,6 +109,18 @@ if (!token) {
   process.exit(1);
 }
 
+// The version endpoint wants the base62 project ID, not the slug, and answers a
+// slug with a misleading 401. Resolve it first (the token also lets us see drafts).
+const projectRef = process.env.MODRINTH_PROJECT_ID ?? "minelog";
+const headers = { Authorization: token, "User-Agent": "minelog/1.0 (https://minelog.org)" };
+const projectResponse = await fetch(`${API}/project/${encodeURIComponent(projectRef)}`, { headers });
+if (!projectResponse.ok) {
+  console.error(`Could not resolve Modrinth project "${projectRef}": ${projectResponse.status}`);
+  console.error(await projectResponse.text());
+  process.exit(1);
+}
+data.project_id = (await projectResponse.json()).id;
+
 const form = new FormData();
 form.append("data", JSON.stringify(data));
 for (const file of files) {
@@ -116,14 +128,7 @@ for (const file of files) {
   form.append(file.part, new Blob([readFileSync(file.path)]), name);
 }
 
-const response = await fetch(API, {
-  method: "POST",
-  headers: {
-    Authorization: token,
-    "User-Agent": "minelog/1.0 (https://minelog.org)",
-  },
-  body: form,
-});
+const response = await fetch(`${API}/version`, { method: "POST", headers, body: form });
 
 if (!response.ok) {
   console.error(`Modrinth upload failed: ${response.status}`);

@@ -8,6 +8,7 @@ import {
   MAX_LOG_LINES,
   REPORT_EMAIL,
   RETENTION_DAYS,
+  UNHIDDEN_RETENTION_HOURS,
   UPLOADS_PER_DAY,
   UPLOADS_PER_MINUTE,
 } from "@/lib/config";
@@ -17,6 +18,7 @@ import content from "@/content/terms.json";
 function fill(text: string): string {
   return text
     .replaceAll("{days}", String(RETENTION_DAYS))
+    .replaceAll("{hours}", String(UNHIDDEN_RETENTION_HOURS))
     .replaceAll("{uploads}", String(UPLOADS_PER_MINUTE))
     .replaceAll("{perDay}", String(UPLOADS_PER_DAY))
     .replaceAll("{size}", `${MAX_LOG_BYTES / (1024 * 1024)} MB`)

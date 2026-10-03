@@ -32,7 +32,7 @@
       "id": "deleting",
       "heading": "How long logs stay",
       "paragraphs": [
-        "Every log is deleted {days} days after it's saved. The person who saved it can delete it earlier, but only in the first {minutes} minutes and only with the delete token they got when they saved it. After that we can't delete it for you unless it breaks these terms.",
+        "Every log is deleted {days} days after it's saved, or after {hours} hours if the person saving it turned off hiding of private details. The person who saved it can delete it earlier, but only in the first {minutes} minutes and only with the delete token they got when they saved it. After that we can't delete it for you unless it breaks these terms.",
         "We don't keep backups of deleted or expired logs, and we can't recover one."
       ]
     },

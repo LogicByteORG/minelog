@@ -3,12 +3,12 @@ import {
   DELETE_WINDOW_MINUTES,
   MAX_LOG_BYTES,
   MAX_LOG_LINES,
-  RETENTION_DAYS,
   UPLOADS_PER_DAY,
   UPLOADS_PER_MINUTE,
 } from "./config";
 import { db } from "./db";
 import { createId } from "./ids";
+import { retentionHours } from "./retention";
 import { analyze, detectKind, type LogKind } from "./log";
 
 export class LogTooLargeError extends Error {
@@ -137,7 +137,7 @@ export async function saveLog({
           ${id}, ${analysis.output}, ${analysis.kind}, ${analysis.lineCount},
           ${analysis.bytes}, ${analysis.errorCount}, ${analysis.warnCount},
           ${hidePrivate}, ${ipHash}, ${source}, ${hashToken(deleteToken)},
-          now() + make_interval(days => ${RETENTION_DAYS})
+          now() + make_interval(hours => ${retentionHours(hidePrivate)})
         from (
           select
             count(*) filter (where created_at > now() - interval '1 minute') as last_minute,

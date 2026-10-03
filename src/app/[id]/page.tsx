@@ -2,7 +2,7 @@ import { DeleteLog } from "@/components/delete-log";
 import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { DownloadSimple, WarningCircle } from "@phosphor-icons/react/dist/ssr";
+import { DownloadSimple, Eye, ShieldCheck, WarningCircle } from "@phosphor-icons/react/dist/ssr";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ShareLink } from "@/components/share-link";
@@ -17,6 +17,7 @@ import { classifyLine, formatBytes, kindLabel, type LogKind } from "@/lib/log";
 import { getCachedLog } from "@/lib/log-cache";
 import { openGraphFor, logEmbedDescription } from "@/lib/seo";
 import { rawUrl } from "@/lib/site";
+import { timeLeft } from "@/lib/retention";
 import { formatUtc, timeAgo } from "@/lib/time";
 
 export const dynamic = "force-dynamic";
@@ -30,12 +31,6 @@ const isGameLog = (kind: LogKind) =>
 
 const number = (value: number) => value.toLocaleString("en");
 const isoDate = (date: Date) => date.toISOString().slice(0, 10);
-
-function daysLeft(expires: Date): string {
-  const days = Math.ceil((expires.getTime() - Date.now()) / 86_400_000);
-  if (days <= 1) return "within a day";
-  return `in ${days} days`;
-}
 
 const ASK_AI_LINES = 40;
 const ASK_AI_CHARS = 2000;
@@ -110,6 +105,23 @@ export default async function LogPage({ params }: PageProps<"/[id]">) {
                   {source}
                 </span>
               )}
+              {log.privacyApplied ? (
+                <span
+                  className="source-badge"
+                  data-tip="IP addresses, tokens, emails and user folder names were hidden before saving"
+                >
+                  <ShieldCheck weight="bold" aria-hidden="true" />
+                  Private details hidden
+                </span>
+              ) : (
+                <span
+                  className="source-badge source-badge--warn"
+                  data-tip="Nothing was hidden in this log. It is deleted early to limit the risk."
+                >
+                  <Eye weight="bold" aria-hidden="true" />
+                  Not hidden
+                </span>
+              )}
               <span>
                 {number(log.lineCount)} lines, {formatBytes(log.byteSize)}.
                 Saved{" "}
@@ -143,7 +155,11 @@ export default async function LogPage({ params }: PageProps<"/[id]">) {
         {!log.privacyApplied && (
           <div className="callout warning log-head__notice">
             <WarningCircle aria-hidden="true" />
-            <span>Private details weren&apos;t hidden in this log.</span>
+            <span>
+              Private details weren&apos;t hidden in this log, so it&apos;s
+              deleted early, {timeLeft(log.expiresAt)}. Anyone with the link
+              can see everything in it.
+            </span>
           </div>
         )}
 
@@ -162,7 +178,7 @@ export default async function LogPage({ params }: PageProps<"/[id]">) {
           >
             {isoDate(log.expiresAt)}
           </time>{" "}
-          ({daysLeft(log.expiresAt)}).
+          ({timeLeft(log.expiresAt)}).
         </p>
 
         <DeleteLog logId={log.id} />

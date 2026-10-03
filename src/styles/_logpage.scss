@@ -110,6 +110,16 @@ body:has(.workspace[data-wide="true"]) {
   }
 }
 
+.source-badge--warn {
+  border-color: color-mix(in srgb, var(--lv-warn) 45%, var(--line));
+  background: color-mix(in srgb, var(--lv-warn) 8%, transparent);
+  color: var(--lv-warn);
+
+  svg {
+    color: inherit;
+  }
+}
+
 .share-link {
   display: inline-flex;
   align-items: stretch;

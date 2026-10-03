@@ -1,4 +1,4 @@
-import { RETENTION_DAYS } from "@/lib/config";
+import { RETENTION_DAYS, UNHIDDEN_RETENTION_HOURS } from "@/lib/config";
 
 export type HomeFaq = { question: string; answer: string };
 
@@ -19,7 +19,7 @@ export const HOME_FAQ: HomeFaq[] = [
   },
   {
     question: "How long is a log kept?",
-    answer: `Every log is deleted ${RETENTION_DAYS} days after you save it. You can delete it yourself in the first hour, from the button at the bottom of its page. After that it stays until it expires, so check the preview before you press Get link.`,
+    answer: `Every log is deleted ${RETENTION_DAYS} days after you save it. If you turn off Hide private details, it's deleted after ${UNHIDDEN_RETENTION_HOURS} hours instead. You can delete it yourself in the first hour, from the button at the bottom of its page. After that it stays until it expires, so check the preview before you press Get link.`,
   },
   {
     question: "Who can see my log?",

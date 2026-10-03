@@ -1,5 +1,7 @@
 export const RETENTION_DAYS = 120;
 
+export const UNHIDDEN_RETENTION_HOURS = 48;
+
 export const MAX_LOG_BYTES = 15 * 1024 * 1024;
 
 export const MAX_LOG_LINES = 30_000;

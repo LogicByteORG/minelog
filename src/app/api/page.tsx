@@ -38,6 +38,7 @@ import {
   API_BASE,
   DELETE_WINDOW_MINUTES,
   RETENTION_DAYS,
+  UNHIDDEN_RETENTION_HOURS,
   SITE_BASE,
   UPLOADS_PER_DAY,
   UPLOADS_PER_MINUTE,
@@ -260,7 +261,10 @@ export default function ApiPage() {
                 To turn it off, send <code>hidePrivate: false</code>. The log is
                 then saved as sent, <code>privacyApplied</code> is{" "}
                 <code>false</code> in the response, and the log page shows a
-                warning to everyone who opens it. Leave it on unless you have a
+                warning to everyone who opens it. Because nothing was removed,
+                it is also deleted after {UNHIDDEN_RETENTION_HOURS} hours
+                instead of {RETENTION_DAYS} days, and <code>expiresAt</code>{" "}
+                says so. Leave it on unless you have a
                 reason not to.
               </p>
             </section>
@@ -641,7 +645,8 @@ export default function ApiPage() {
                 </li>
                 <li>
                   Logs are deleted after {RETENTION_DAYS} days, whichever
-                  protocol saved them.
+                  protocol saved them. Only a <code>/v2</code> log saved with{" "}
+                  <code>hidePrivate: false</code> is deleted sooner.
                 </li>
               </ul>
             </section>

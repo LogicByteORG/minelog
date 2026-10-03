@@ -2,12 +2,18 @@ import { Analytics } from "@/components/analytics";
 import type { Metadata } from "next";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { RETENTION_DAYS, UPLOADS_PER_DAY, UPLOADS_PER_MINUTE } from "@/lib/config";
+import {
+  RETENTION_DAYS,
+  UNHIDDEN_RETENTION_HOURS,
+  UPLOADS_PER_DAY,
+  UPLOADS_PER_MINUTE,
+} from "@/lib/config";
 import content from "@/content/privacy.json";
 
 function fill(text: string): string {
   return text
     .replaceAll("{days}", String(RETENTION_DAYS))
+    .replaceAll("{hours}", String(UNHIDDEN_RETENTION_HOURS))
     .replaceAll("{uploads}", String(UPLOADS_PER_MINUTE))
     .replaceAll("{perDay}", String(UPLOADS_PER_DAY));
 }

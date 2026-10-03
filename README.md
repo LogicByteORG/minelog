@@ -19,7 +19,7 @@ short address back, and send it to whoever is helping you.
 - Reads the log for you: Minecraft and Java versions, the mod list, and the usual causes
   of a crash, each with the lines that back it up.
 - Highlights errors and warnings, lets you link to single lines, search and filter.
-- Deletes every log automatically after 120 days.
+- Deletes every log automatically after 120 days, or after 2 days if private details weren't hidden.
 - Has a small public API for uploading and reading logs. The docs are at `/api`.
 
 ## Source available

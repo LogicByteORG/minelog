@@ -1,4 +1,4 @@
-import { RETENTION_DAYS } from "@/lib/config";
+import { RETENTION_DAYS, UNHIDDEN_RETENTION_HOURS } from "@/lib/config";
 import type { Guide } from "./types";
 
 export const SHARE_SAFELY: Guide = {
@@ -77,7 +77,7 @@ export const SHARE_SAFELY: Guide = {
         },
         {
           type: "p",
-          text: `A link works for ${RETENTION_DAYS} days and then the log is deleted. You can delete a log yourself in the first hour, with the button at the bottom of its page. After that it stays until it expires, so read the preview before you press Get link. The [privacy page](/privacy) has the details.`,
+          text: `A link works for ${RETENTION_DAYS} days and then the log is deleted, or after ${UNHIDDEN_RETENTION_HOURS} hours if you turn hiding off. You can delete a log yourself in the first hour, with the button at the bottom of its page. After that it stays until it expires, so read the preview before you press Get link. The [privacy page](/privacy) has the details.`,
         },
       ],
     },

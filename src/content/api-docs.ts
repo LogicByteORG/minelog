@@ -10,6 +10,7 @@ import {
   MAX_LOG_BYTES,
   MAX_LOG_LINES,
   RETENTION_DAYS,
+  UNHIDDEN_RETENTION_HOURS,
   SITE_BASE,
   UPLOADS_PER_DAY,
   UPLOADS_PER_MINUTE,
@@ -123,6 +124,11 @@ export const LIMITS = [
     text: "Every log deletes itself after this long. You can't extend it.",
   },
   {
+    label: "Kept for, not hidden",
+    value: `${UNHIDDEN_RETENTION_HOURS} hours`,
+    text: "A log saved with hidePrivate turned off is deleted after this long instead, because nothing was removed from it.",
+  },
+  {
     label: "Delete window",
     value: `${DELETE_WINDOW_MINUTES} minutes`,
     text: "The person who saved a log can delete it with its delete token during this time. After that it stays until it expires.",
@@ -162,6 +168,7 @@ export const LIMITS = [
 export const LIMITS_JSON = JSON.stringify(
   {
     retentionDays: RETENTION_DAYS,
+    unhiddenRetentionHours: UNHIDDEN_RETENTION_HOURS,
     maxBytes: MAX_LOG_BYTES,
     maxLines: MAX_LOG_LINES,
     uploadsPerMinute: UPLOADS_PER_MINUTE,
@@ -186,7 +193,7 @@ export const CREATE_PARAMS: Param[] = [
     type: "boolean",
     need: "default true",
     where: "JSON body or query",
-    text: "Hides IP addresses, MAC addresses, user folder names, tokens and emails before saving. The server does it again on its own copy, so a client that skips it can't leak anything.",
+    text: "Hides IP addresses, MAC addresses, user folder names, tokens and emails before saving. The server does it again on its own copy, so a client that skips it can't leak anything. Turning it off shortens how long the log is kept.",
   },
   {
     name: "source",
@@ -209,7 +216,7 @@ export const LOG_FIELDS: Param[] = [
   { name: "warnings", type: "number", need: "", text: "Number of warning entries." },
   { name: "privacyApplied", type: "boolean", need: "", text: "False if hidePrivate was turned off for this log." },
   { name: "createdAt", type: "string", need: "", text: "When it was saved, in ISO 8601 UTC." },
-  { name: "expiresAt", type: "string", need: "", text: "When it will be deleted, in ISO 8601 UTC." },
+  { name: "expiresAt", type: "string", need: "", text: "When it will be deleted, in ISO 8601 UTC. Sooner for logs saved with hidePrivate turned off." },
   { name: "deleteToken", type: "string", need: "", text: "Only in the answer to saving a log, and never shown again: we keep a hash, not the token. Keep it if the log may need deleting. See Delete a log." },
   { name: "deletableUntil", type: "string", need: "", text: "Only in the answer to saving. Until when the token can delete the log, in ISO 8601 UTC." },
 ];

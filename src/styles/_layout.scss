@@ -385,6 +385,12 @@
   @include breakpoint(large) {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  &--pairs {
+    @include breakpoint(large) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
 }
 
 .filetype-card {

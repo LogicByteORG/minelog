@@ -15,7 +15,7 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
   {
     kind: "Server log",
     example: "logs/latest.log",
-    note: "Vanilla, Paper, Spigot, Fabric or Forge — they all look the same to us.",
+    note: "Vanilla, Paper, Spigot, Fabric, Forge and NeoForge servers all work.",
   },
   {
     kind: "Crash report",

@@ -28,6 +28,10 @@ export const CASES: Record<string, () => string> = {
   "markdown link starts": () => rep("![a](", 800_000),
   "table pipes": () => rep("| a ", 900_000),
   "exception dots": () => rep("a.", 2 * MB),
+  "near-miss mod dependency lines": () => rep("Mod 'a' (b) 1 requires x of mod 'c' (d), but\n", 80_000),
+  "mandatory dependency list": () => HEADER + "Missing mandatory dependencies: " + rep("a, ", 1_000_000),
+  "plugin dependency brackets": () => HEADER + "Unknown/missing dependency plugins: [" + rep("a, ", 1_000_000),
+  "mod id detail run": () => rep("Mod ID: '", 400_000),
 };
 
 export const STAGES: Record<string, (text: string) => unknown> = {

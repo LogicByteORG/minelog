@@ -9,6 +9,19 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_IS_PREVIEW: process.env.VERCEL_ENV === "preview" ? "1" : "",
   },
   distDir: API_MODE && !process.env.VERCEL ? ".next-api" : ".next",
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     return {
       beforeFiles: API_MODE

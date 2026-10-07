@@ -10,12 +10,18 @@ export const HOME_FAQ: HomeFaq[] = [
   },
   {
     question: "Is minelog free, and do I need an account?",
-    answer: "It's free and there are no accounts. Paste your log, get a link.",
+    answer:
+      "It's free and there are no accounts. Paste your log, get a link, and that's all there is to it.",
   },
   {
     question: "What private details are hidden?",
     answer:
       "IP addresses, MAC addresses, user folder names, access tokens, passwords and email addresses are replaced in your browser before anything is uploaded, and again on our server. Player names stay, so the log is still useful for debugging.",
+  },
+  {
+    question: "What problems can minelog find?",
+    answer:
+      "After you save, the log page lists known problems in plain words, like running out of memory, a mod that needs another mod, a port that is already in use or a plugin made for a newer server. Each one comes with something to try. It also reads your game version, loader, Java version and mods. It won't explain every crash, so an error it doesn't know is shown as it is.",
   },
   {
     question: "How long is a log kept?",
@@ -24,7 +30,12 @@ export const HOME_FAQ: HomeFaq[] = [
   {
     question: "Who can see my log?",
     answer:
-      "Anyone who has the link. Links are random and can't be guessed, and log pages are kept out of search engines.",
+      "Anyone who has the link. Links are random and can't be guessed, and log pages are kept out of search engines. Share the link only where you'd be fine with the log being read.",
+  },
+  {
+    question: "Can I share a log straight from my server?",
+    answer:
+      "Yes. The minelog plugin adds /minelog share to Paper, Spigot, Purpur, Folia, BungeeCord, Waterfall and Velocity, and gives you the link in chat. Use the Download button at the top of the page to get it.",
   },
   {
     question: "Is there an API?",

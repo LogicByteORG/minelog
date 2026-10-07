@@ -12,7 +12,7 @@ import {
   HIGHLIGHTED_LANGUAGES,
   SUPPORTED_FILE_TYPES,
 } from "@/content/supported-files";
-import { RETENTION_DAYS } from "@/lib/config";
+import { RETENTION_DAYS, UNHIDDEN_RETENTION_HOURS } from "@/lib/config";
 import {
   SITE_NAME,
   SITE_TAGLINE,
@@ -21,7 +21,7 @@ import {
   openGraphFor,
 } from "@/lib/seo";
 
-const DESCRIPTION = `Paste a Minecraft server log, client log or crash report and get a link to share. IP addresses and tokens are hidden. Logs delete after ${RETENTION_DAYS} days.`;
+const DESCRIPTION = `Paste a Minecraft server log, client log or crash report. minelog hides private details, points out known problems and gives you a link to share. Free, no account.`;
 
 export const metadata: Metadata = {
   description: DESCRIPTION,
@@ -57,11 +57,34 @@ const APP_LD = [
   },
 ];
 
+const FEATURES = [
+  {
+    name: "Private by default",
+    note: "IP addresses, tokens, passwords, email addresses and user folder names are replaced before anything is saved.",
+    example: "203.0.113.42 becomes [redacted]",
+  },
+  {
+    name: "Problems explained",
+    note: "Known errors are listed in plain words, each with something to try first. It also reads your game version, loader, Java and mods.",
+    example: "OutOfMemoryError: raise -Xmx",
+  },
+  {
+    name: "Easy to read",
+    note: "Errors and warnings are colored, long stack traces fold away, and you can search or filter to reach the right line fast.",
+    example: "Errors only, one click",
+  },
+  {
+    name: "Gone when it should be",
+    note: `Links stop working after ${RETENTION_DAYS} days, or ${UNHIDDEN_RETENTION_HOURS} hours if you keep private details. No account needed.`,
+    example: "Delete it in the first hour",
+  },
+];
+
 const WHERE_TO_LOOK = [
   {
     name: "Client log",
     path: ".minecraft/logs/latest.log",
-    note: "Open the game folder from your launcher. The logs folder is inside.",
+    note: "Open the game folder from your launcher and look for logs. On Windows, press Win + R, type %appdata% and open .minecraft.",
   },
   {
     name: "Server log",
@@ -93,11 +116,40 @@ export default function Home() {
               link.
             </h1>
             <p className="hero__lead">
-              Paste a server log, client log or crash report.
+              Paste a server log, client log or crash report. We hide your
+              private details, point out what went wrong and give you a link
+              to share.
             </p>
           </div>
           <div className="settle settle--late">
             <PasteEditor />
+          </div>
+        </section>
+
+        <section id="features" className="section">
+          <div className="grid-container reveal">
+            <div className="grid-x grid-margin-x">
+              <div className="cell small-12 large-4 section__intro">
+                <h2 className="section__title">What you get with every link</h2>
+                <p className="section__text">
+                  Saving a log does more than store it. Here is what the link
+                  gives you and the people you send it to.
+                </p>
+              </div>
+              <div className="cell small-12 large-8">
+                <ul className="filetype-grid filetype-grid--pairs">
+                  {FEATURES.map((item) => (
+                    <li key={item.name} className="filetype-card">
+                      <h3 className="filetype-card__name">{item.name}</h3>
+                      <p className="filetype-card__note">{item.note}</p>
+                      <code className="filetype-card__example">
+                        {item.example}
+                      </code>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -109,9 +161,15 @@ export default function Home() {
                   We hide private details before upload
                 </h2>
                 <p className="section__text">
-                  IP addresses, MAC addresses, user folder names, tokens and
-                  email addresses get replaced in your browser before anything is sent.
+                  IP addresses, MAC addresses, user folder names, tokens,
+                  passwords and email addresses are replaced in your browser
+                  before anything is sent, and checked again on our server.
                   Player names stay, because you usually need them to debug.
+                </p>
+                <p className="section__text">
+                  The preview shows exactly what will be saved. A secret that
+                  only you would recognize can&apos;t be spotted for you, so
+                  give it a quick read.
                 </p>
               </div>
               <div className="cell small-12 large-7">
@@ -127,8 +185,9 @@ export default function Home() {
               <div className="cell small-12 large-4 section__intro">
                 <h2 className="section__title">Where to find your log</h2>
                 <p className="section__text">
-                  Most launchers and hosts have a button for this. If yours
-                  doesn&apos;t, look here.
+                  Most launchers and hosting panels have a share or copy
+                  button. If yours doesn&apos;t, the file is in one of these
+                  places.
                 </p>
               </div>
               <div className="cell small-12 large-8">
@@ -154,10 +213,10 @@ export default function Home() {
               <div className="cell small-12 large-4 section__intro">
                 <h2 className="section__title">Supported file types</h2>
                 <p className="section__text">
-                  minelog reads plain text. Logs, crash reports and config
-                  files get spotted on their own, and shown the way
-                  they&apos;re meant to look — no need to tell us what
-                  you&apos;re pasting.
+                  minelog reads plain text and works out what it is on its own.
+                  Logs, crash reports and config files each get a view that
+                  suits them, so you never have to say what you&apos;re
+                  pasting.
                 </p>
               </div>
               <div className="cell small-12 large-8">
@@ -201,8 +260,8 @@ export default function Home() {
               <div className="cell small-12 large-4 section__intro">
                 <h2 className="section__title">Questions people ask</h2>
                 <p className="section__text">
-                  Quick answers. If something is broken, the guides go into
-                  more detail.
+                  Short answers. If your game or server is misbehaving, the
+                  guides walk through the common errors step by step.
                 </p>
               </div>
               <div className="cell small-12 large-8">

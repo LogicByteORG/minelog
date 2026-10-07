@@ -7,7 +7,7 @@ import { RedactionDemo } from "@/components/redaction-demo";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { GUIDES } from "@/content/guides";
-import { HOME_FAQ } from "@/content/home-faq";
+import { FAQ_GROUPS, HOME_FAQ } from "@/content/home-faq";
 import {
   HIGHLIGHTED_LANGUAGES,
   SUPPORTED_FILE_TYPES,
@@ -260,28 +260,42 @@ export default function Home() {
               <div className="cell small-12 large-4 section__intro">
                 <h2 className="section__title">Questions people ask</h2>
                 <p className="section__text">
-                  Short answers. If your game or server is misbehaving, the
+                  Short answers. If your game or server is misbehaving, these
                   guides walk through the common errors step by step.
                 </p>
+                <h3 className="faq__label faq__label--guides">Guides</h3>
+                <ul className="faq-guides">
+                  {GUIDES.map((guide) => (
+                    <li key={guide.slug}>
+                      <Link href={guide.path}>{guide.title}</Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
               <div className="cell small-12 large-8">
-                <div className="home-faq">
-                  {HOME_FAQ.map((item) => (
-                    <div key={item.question} className="home-faq__item">
-                      <h3>{item.question}</h3>
-                      <p>{item.answer}</p>
-                    </div>
+                <div className="faq">
+                  {FAQ_GROUPS.map((group, groupIndex) => (
+                    <section key={group} className="faq__group" aria-label={group}>
+                      <h3 className="faq__label">{group}</h3>
+                      {HOME_FAQ.filter((item) => item.group === group).map(
+                        (item, index) => (
+                          <details
+                            key={item.question}
+                            className="faq__item"
+                            open={groupIndex === 0 && index === 0}
+                          >
+                            <summary className="faq__question">
+                              <span>{item.question}</span>
+                              <span className="faq__icon" aria-hidden="true" />
+                            </summary>
+                            <div className="faq__answer">
+                              <p>{item.answer}</p>
+                            </div>
+                          </details>
+                        ),
+                      )}
+                    </section>
                   ))}
-                  <p className="home-faq__more">
-                    More in the guides:{" "}
-                    {GUIDES.map((guide, index) => (
-                      <span key={guide.slug}>
-                        {index > 0 && ", "}
-                        <Link href={guide.path}>{guide.title}</Link>
-                      </span>
-                    ))}
-                    .
-                  </p>
                 </div>
               </div>
             </div>

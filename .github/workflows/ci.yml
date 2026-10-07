@@ -28,8 +28,12 @@ jobs:
       - name: Install
         run: npm ci
 
+      # PageProps and LayoutProps come from files Next writes on dev and build,
+      # so a fresh checkout has to generate them before the type check.
       - name: Types
-        run: npx tsc --noEmit
+        run: |
+          npx next typegen
+          npx tsc --noEmit
 
       - name: Lint
         run: npm run lint

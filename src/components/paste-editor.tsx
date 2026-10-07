@@ -25,8 +25,8 @@ import {
   MAX_LOG_BYTES,
   MAX_LOG_LINES,
   PREVIEW_LINE_LIMIT,
-  UNHIDDEN_RETENTION_HOURS,
 } from "@/lib/config";
+import { retentionHours } from "@/lib/retention";
 import { analyze, formatBytes, kindLabel, type Analysis } from "@/lib/log";
 import { readInsights } from "@/lib/diagnose/insights";
 import { moderationMessage } from "@/lib/moderation";
@@ -645,7 +645,9 @@ function PrivacySwitch({
       {!checked && (
         <Message tone="warn">
           Anyone with the link will see everything in this log. Because nothing
-          is hidden, it&apos;s deleted after {UNHIDDEN_RETENTION_HOURS} hours.
+          is hidden, it&apos;s deleted after{" "}
+          {retentionHours(false)}{" "}
+          {retentionHours(false) === 1 ? "hour" : "hours"}.
         </Message>
       )}
     </div>

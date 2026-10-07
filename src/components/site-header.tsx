@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GITHUB_URL, MODRINTH_URL } from "@/lib/config";
+import { GITHUB_URL, IS_PREVIEW, MODRINTH_URL } from "@/lib/config";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -7,7 +7,10 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="grid-container site-header__bar">
-        <Link href="/" aria-label="minelog home">
+        <Link
+          href="/"
+          aria-label={IS_PREVIEW ? "minelog home, preview build" : "minelog home"}
+        >
           <Logo />
         </Link>
         <nav aria-label="Main">

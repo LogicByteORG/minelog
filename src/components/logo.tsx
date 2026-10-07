@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { IS_PREVIEW } from "@/lib/config";
 
 export function Logo() {
   return (
@@ -26,6 +27,14 @@ export function Logo() {
         />
       </span>
       <span className="logo__word">minelog</span>
+      {IS_PREVIEW && (
+        <span
+          className="logo__preview"
+          data-tip="Preview build. Logs saved here are deleted after 1 hour"
+        >
+          Preview
+        </span>
+      )}
     </span>
   );
 }

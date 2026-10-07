@@ -15,7 +15,7 @@ export const HOME_FAQ: HomeFaq[] = [
   {
     question: "What private details are hidden?",
     answer:
-      "IP addresses, MAC addresses, user folder names, access tokens and email addresses are replaced in your browser before anything is uploaded, and again on our server. Player names stay, so the log is still useful for debugging.",
+      "IP addresses, MAC addresses, user folder names, access tokens, passwords and email addresses are replaced in your browser before anything is uploaded, and again on our server. Player names stay, so the log is still useful for debugging.",
   },
   {
     question: "How long is a log kept?",

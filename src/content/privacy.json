@@ -7,9 +7,9 @@
       "id": "hiding",
       "heading": "What gets hidden",
       "paragraphs": [
-        "Before your log is uploaded, minelog replaces IP addresses, MAC addresses, user folder names, access tokens and email addresses. The switch next to Get link turns this on and off. With it off, the log is saved exactly as you pasted it, and it's deleted after {hours} hours instead of {days} days.",
+        "Before your log is uploaded, minelog replaces IP addresses, MAC addresses, user folder names, access tokens, passwords, webhook links and email addresses. The switch next to Get link turns this on and off. With it off, the log is saved exactly as you pasted it, and it's deleted after {hours} hours instead of {days} days.",
         "It happens twice: once in your browser, so the preview shows what will be saved, and again on our server before anything is stored. Skipping the browser step doesn't get around it.",
-        "Two things it doesn't cover. Player names stay in on purpose, since you need them to debug. IPv6 addresses aren't hidden yet, so look for them before you share."
+        "Two things it doesn't cover. Player names stay in on purpose, since you need them to debug. It also can't know what a secret of your own looks like, so read the preview before you share."
       ]
     },
     {

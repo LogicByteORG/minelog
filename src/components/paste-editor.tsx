@@ -614,7 +614,7 @@ function PrivacySwitch({
             Hide private details
           </label>
           <p id={`${id}-hint`} className="privacy-toggle__hint">
-            IP addresses, MAC addresses, user folder names, tokens and email addresses.
+            IP addresses, MAC addresses, user folder names, tokens, passwords and email addresses.
           </p>
         </div>
         <div className="switch">

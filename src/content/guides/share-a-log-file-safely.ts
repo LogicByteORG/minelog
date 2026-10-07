@@ -73,7 +73,7 @@ export const SHARE_SAFELY: Guide = {
       blocks: [
         {
           type: "p",
-          text: "[minelog](/) replaces IPv4 addresses, MAC addresses, user folder names, tokens and email addresses in your browser before anything is uploaded, then again on the server. The preview shows exactly what will be saved. It doesn't hide player names or IPv6 addresses.",
+          text: "[minelog](/) replaces IP addresses, MAC addresses, user folder names, tokens, passwords and email addresses in your browser before anything is uploaded, then again on the server. The preview shows exactly what will be saved. It doesn't hide player names, and it can't know what a secret of your own looks like, so read it before you share.",
         },
         {
           type: "p",

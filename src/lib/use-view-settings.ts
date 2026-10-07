@@ -51,10 +51,13 @@ function subscribe(listener: () => void) {
   };
 }
 
-function parse(raw: string): ViewSettings {
+export function parseViewSettings(raw: string): ViewSettings {
   let saved: Partial<Record<keyof ViewSettings, unknown>> = {};
   try {
-    saved = raw ? JSON.parse(raw) : {};
+    const value: unknown = raw ? JSON.parse(raw) : {};
+    if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+      saved = value as Partial<Record<keyof ViewSettings, unknown>>;
+    }
   } catch {
     saved = {};
   }
@@ -86,10 +89,10 @@ function parse(raw: string): ViewSettings {
 
 export function useViewSettings() {
   const raw = useSyncExternalStore(subscribe, readRaw, () => "");
-  const settings = useMemo(() => parse(raw), [raw]);
+  const settings = useMemo(() => parseViewSettings(raw), [raw]);
 
   const update = useCallback((patch: Partial<ViewSettings>) => {
-    const next = JSON.stringify({ ...parse(readRaw()), ...patch });
+    const next = JSON.stringify({ ...parseViewSettings(readRaw()), ...patch });
     memory = next;
     try {
       window.localStorage.setItem(KEY, next);

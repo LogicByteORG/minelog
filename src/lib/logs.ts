@@ -64,6 +64,19 @@ async function whyRefused(ipHash: string): Promise<RateLimitedError> {
   return new RateLimitedError("minute", Math.max(1, row?.minuteWait ?? 60));
 }
 
+async function assertUnderLimit(ipHash: string): Promise<void> {
+  const [row] = await db()<{ lastMinute: number; lastDay: number }[]>`
+    select
+      (count(*) filter (where created_at > now() - interval '1 minute'))::int as last_minute,
+      count(*)::int as last_day
+    from public.logs
+    where ip_hash = ${ipHash} and created_at > now() - interval '1 day'
+  `;
+  if (row && (row.lastMinute >= UPLOADS_PER_MINUTE || row.lastDay >= UPLOADS_PER_DAY)) {
+    throw await whyRefused(ipHash);
+  }
+}
+
 export type StoredLog = {
   id: string;
   content: string;
@@ -117,6 +130,12 @@ export async function saveLog({
   ipHash,
   source,
 }: SaveInput): Promise<SavedLog> {
+  // Check the limits first. Scanning and hiding private details in a big log is
+  // the expensive part, and a connection that is already over its limit should
+  // not get to spend it. The insert below still checks again, so two uploads
+  // arriving together cannot both squeeze through.
+  await assertUnderLimit(ipHash);
+
   const cleaned = content.replaceAll("\u0000", "");
 
   const analysis = analyze(cleaned, hidePrivate);

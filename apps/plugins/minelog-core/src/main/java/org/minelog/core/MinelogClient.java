@@ -11,9 +11,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
 public final class MinelogClient {
+    private static final Pattern LOG_ID = Pattern.compile("[A-Za-z0-9]{8,9}");
+
     private final MinelogConfig config;
     private final String userAgent;
 
@@ -73,6 +76,9 @@ public final class MinelogClient {
     }
 
     public void delete(String id, String token) throws IOException {
+        if (id == null || !LOG_ID.matcher(id).matches()) {
+            throw new IOException("That is not a log id: " + id);
+        }
         HttpURLConnection connection =
                 (HttpURLConnection) url(config.apiBase + "/v2/logs/" + id).openConnection();
         connection.setRequestMethod("DELETE");
@@ -212,8 +218,11 @@ public final class MinelogClient {
         if (colon < 0) {
             return "";
         }
-        int firstQuote = json.indexOf('"', colon + 1);
-        if (firstQuote < 0) {
+        int firstQuote = colon + 1;
+        while (firstQuote < json.length() && Character.isWhitespace(json.charAt(firstQuote))) {
+            firstQuote++;
+        }
+        if (firstQuote >= json.length() || json.charAt(firstQuote) != '"') {
             return "";
         }
         StringBuilder out = new StringBuilder();

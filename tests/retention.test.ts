@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { RETENTION_DAYS, UNHIDDEN_RETENTION_HOURS } from "../src/lib/config";
+import {
+  PREVIEW_RETENTION_HOURS,
+  RETENTION_DAYS,
+  UNHIDDEN_RETENTION_HOURS,
+} from "../src/lib/config";
 import { retentionHours, timeLeft } from "../src/lib/retention";
 
 test("hidden logs keep the full retention, unhidden logs only two days", () => {
@@ -18,4 +22,11 @@ test("time left switches from days to hours in the last two days", () => {
   assert.equal(timeLeft(at(48), now), "in 48 hours");
   assert.equal(timeLeft(at(49), now), "in 3 days");
   assert.equal(timeLeft(at(24 * 120), now), "in 120 days");
+});
+
+test("preview builds keep every log for one hour, hidden or not", () => {
+  assert.equal(PREVIEW_RETENTION_HOURS, 1);
+  assert.equal(retentionHours(true, true), 1);
+  assert.equal(retentionHours(false, true), 1);
+  assert.equal(retentionHours(true, false), RETENTION_DAYS * 24);
 });

@@ -1,6 +1,15 @@
-import { RETENTION_DAYS, UNHIDDEN_RETENTION_HOURS } from "./config";
+import {
+  IS_PREVIEW,
+  PREVIEW_RETENTION_HOURS,
+  RETENTION_DAYS,
+  UNHIDDEN_RETENTION_HOURS,
+} from "./config";
 
-export function retentionHours(hidePrivate: boolean): number {
+export function retentionHours(
+  hidePrivate: boolean,
+  preview: boolean = IS_PREVIEW,
+): number {
+  if (preview) return PREVIEW_RETENTION_HOURS;
   return hidePrivate ? RETENTION_DAYS * 24 : UNHIDDEN_RETENTION_HOURS;
 }
 

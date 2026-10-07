@@ -198,6 +198,7 @@ test("a mixin that fails to apply", () => {
   assert.deepEqual(ids(fixture("real-neoforge-server-1.21.1.log")), [
     "client-code-on-server",
     "unknown-error",
+    "crash-report-saved",
   ]);
 });
 

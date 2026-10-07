@@ -8,8 +8,8 @@ export const MINELOG_AND_MCLOGS: Guide = {
   title: "minelog and mclo.gs",
   metaTitle: "minelog vs mclo.gs: how they compare",
   description:
-    "A bigger size limit, a longer window before logs expire, and redaction that happens in your browser first. See how minelog compares to mclo.gs, and how mclo.gs tools work with minelog too.",
-  lead: "mclo.gs is a log sharing service built by Aternos, and the one most Minecraft launchers, mods and Discord bots already point at. minelog does the same basic job — paste a log, get a link — with a bigger size limit, a longer window before logs expire, and private details stripped in your browser before anything is even uploaded. Its API is also built so tools written for mclo.gs work with minelog by changing one address.",
+    "A bigger size limit, a longer expiry window and redaction in your browser first. See how minelog compares to mclo.gs and how mclo.gs tools work with it.",
+  lead: "mclo.gs is a log sharing service built by Aternos, and the one most Minecraft launchers, mods and Discord bots already point at. minelog does the same basic job (paste a log, get a link) with a bigger size limit, a longer window before logs expire, and private details stripped in your browser before anything is even uploaded. Its API is also built so tools written for mclo.gs work with minelog by changing one address.",
   updated: "2026-09-28",
   related: ["minelog-and-mclogs-minestrator", "minelog-and-pastebin", "share-a-log-file-safely"],
   sections: [
@@ -35,12 +35,12 @@ export const MINELOG_AND_MCLOGS: Guide = {
             ["Most lines", MAX_LOG_LINES_LABEL, "25,000"],
             [
               "Hidden before saving",
-              "IP addresses, MAC addresses, user folder names, tokens and email addresses — stripped in your browser before upload, then checked again on the server",
+              "IP addresses, MAC addresses, user folder names, tokens and email addresses, stripped in your browser before upload, then checked again on the server",
               "IP addresses and other sensitive details",
             ],
             [
               "Finding the problem for you",
-              "Yes. It reads the game version, loader, Java, launcher and mods, then flags specific problems — out of memory, a port already in use, a plugin needing a newer server and more — each with something to try",
+              "Yes. It reads the game version, loader, Java, launcher and mods, then flags specific problems, like running out of memory, a port already in use or a plugin that needs a newer server, each with something to try",
               "Yes, it detects common problems and version info",
             ],
             [
@@ -63,7 +63,7 @@ export const MINELOG_AND_MCLOGS: Guide = {
       blocks: [
         {
           type: "p",
-          text: "If a launcher, mod or bot already uploads to mclo.gs, change `api.mclo.gs` to `api.minelog.org` and keep the `/1` paths. Uploads, reading a log, raw text, limits, deleting and log analysis all work the same way. One thing worth knowing for bots: minelog's `problems` list is shorter and pattern-based rather than exhaustive, so it can come back empty on a log mclo.gs would flag something on. In exchange, minelog's `information` reads more out of the log itself — loader, Java version, launcher and mods — so there's usually still something to show. The details are in the [API docs](/api#mclogs).",
+          text: "If a launcher, mod or bot already uploads to mclo.gs, change `api.mclo.gs` to `api.minelog.org` and keep the `/1` paths. Uploads, reading a log, raw text, limits, deleting and log analysis all work the same way. One thing worth knowing for bots: minelog's `problems` list is shorter and pattern-based rather than exhaustive, so it can come back empty on a log mclo.gs would flag something on. In exchange, minelog's `information` reads more out of the log itself (loader, Java version, launcher and mods), so there's usually still something to show. The details are in the [API docs](/api#mclogs).",
         },
       ],
     },
@@ -73,7 +73,7 @@ export const MINELOG_AND_MCLOGS: Guide = {
       blocks: [
         {
           type: "p",
-          text: `You don't have to pick one — a log saved on one doesn't need to be on the other, and links from either keep working. If you're choosing, minelog gives you a bigger size limit (${MAX_LOG_MB} MB against 10 MiB), a longer window before a log expires (${RETENTION_DAYS} days against mclo.gs's 90), and redaction that happens before anything leaves your browser. mclo.gs has been around longer and its problem detection reflects that. Most people just use whichever one their launcher, host or Discord bot already points at — and switching later is a one-line change either way.`,
+          text: `You don't have to pick one. A log saved on one doesn't need to be on the other, and links from either keep working. If you're choosing, minelog gives you a bigger size limit (${MAX_LOG_MB} MB against 10 MiB), a longer window before a log expires (${RETENTION_DAYS} days against mclo.gs's 90), and redaction that happens before anything leaves your browser. mclo.gs has been around longer and its problem detection reflects that. Most people just use whichever one their launcher, host or Discord bot already points at, and switching later is a one-line change either way.`,
         },
       ],
     },
@@ -106,7 +106,7 @@ export const MINELOG_AND_MCLOGS: Guide = {
     {
       question: "Does minelog analyse logs?",
       answer:
-        "Yes. The Analyze menu on a saved log shows the game version, loader, Java version, launcher and mods, and flags known problems — like running out of memory, a port already in use, or a plugin needing a newer server — each with something to try. It won't explain every crash, but it covers the common ones.",
+        "Yes. The Analyze menu on a saved log shows the game version, loader, Java version, launcher and mods, and flags known problems, like running out of memory, a port already in use or a plugin that needs a newer server, each with something to try. It won't explain every crash, but it covers the common ones.",
     },
   ],
 };

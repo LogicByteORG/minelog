@@ -13,6 +13,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "preview": "node scripts/preview.mjs",
     "build": "next build",
     "start": "next start",
     "dev:api": "node scripts/service.mjs dev",

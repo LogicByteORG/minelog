@@ -54,7 +54,10 @@ export function absoluteUrl(path = "/"): string {
 }
 
 export function jsonLdString(data: unknown): string {
-  return JSON.stringify(data).replace(/</g, "\u003c");
+  return JSON.stringify(data).replace(
+    /[<>&\u2028\u2029]/g,
+    (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`,
+  );
 }
 
 export type Crumb = { name: string; path: string };

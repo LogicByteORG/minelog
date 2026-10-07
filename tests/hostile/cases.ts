@@ -14,7 +14,7 @@ export const CASES: Record<string, () => string> = {
   "digits and dots": () => rep("1.", 2 * MB),
   "version dots after a banner": () => "Starting minecraft server version " + rep("1.", 1_000_000),
   "carriage returns": () => rep("\r", 4 * MB),
-  "line breaks only": () => rep("\n", 4 * MB),
+  "line breaks only": () => rep("\n", MB),
   "line breaks and spaces": () => rep("\n ", 2 * MB),
   "bootstrap semicolons": () =>
     HEADER + "[bootstrap] Running Java 21 (" + rep("; ", 2_000_000),

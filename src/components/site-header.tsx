@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GITHUB_URL, MODRINTH_URL } from "@/lib/config";
+import { GITHUB_URL, IS_PREVIEW, MODRINTH_URL } from "@/lib/config";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -10,6 +10,14 @@ export function SiteHeader() {
         <Link href="/" aria-label="minelog home">
           <Logo />
         </Link>
+        {IS_PREVIEW && (
+          <span
+            className="site-header__preview"
+            data-tip="Preview build. Logs saved here are deleted after 1 hour"
+          >
+            Preview
+          </span>
+        )}
         <nav aria-label="Main">
           <Link href="/api" className="nav-button">
             API

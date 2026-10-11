@@ -7,7 +7,7 @@ export const FAILED_TO_BIND: Guide = {
   metaTitle: "Fix Minecraft \"Failed to bind to port\" error",
   description:
     "A Minecraft server that says FAILED TO BIND TO PORT can't use its port. The usual causes are another program on the port or a wrong server-ip. Here is the fix.",
-  lead: "The server tried to use a port and couldn't. The cause is almost always on the same computer, not your router or your internet.",
+  lead: "The server asked for a port and didn't get it. The cause is almost always on the same machine, so leave the router alone for now.",
   updated: "2026-09-26",
   related: ["find-minecraft-logs", "share-a-log-file-safely"],
   sections: [
@@ -23,7 +23,7 @@ Perhaps a server is already running on that port?`,
         },
         {
           type: "p",
-          text: "A server listens on a port, 25565 unless you changed it. Only one program can listen on a port at a time. The error means the server asked for it and the computer said no. The exact wording after `BindException` changes with the system, and Windows adds `: bind` at the end.",
+          text: "A server listens on port 25565 unless `server-port` in `server.properties` says otherwise, and a port can belong to only one program at a time. If something already holds it, the server gets `java.net.BindException: Address already in use` and prints the banner above. On Windows the last line ends in `Address already in use: bind`.",
         },
       ],
     },
@@ -33,18 +33,18 @@ Perhaps a server is already running on that port?`,
       blocks: [
         {
           type: "p",
-          text: "The usual cause is a server you started earlier that never closed, or a second copy of the same one. Find what's using the port and stop it:",
+          text: "Another server, still running: a second `java.exe` or `javaw.exe` in the taskbar, usually from an earlier session. Find what holds the port and stop it:",
         },
         {
           type: "list",
           items: [
-            "Windows: run `netstat -ano | findstr :25565` in a terminal. The last number is the process ID. Find it in Task Manager under Details and end that Java process.",
-            "Linux and macOS: run `lsof -i :25565`, or `ss -ltnp | grep 25565` on Linux, then stop the process it lists.",
+            "Windows: `netstat -ano | findstr :25565` lists it, and the last column of the `LISTENING` line is the PID (say, `8412`); Task Manager > Details matches that to the process you can end.",
+            "Linux and macOS: `lsof -i :25565` names the owner (on Linux `ss -ltnp | grep 25565` does too), and `kill <pid>` stops it.",
           ],
         },
         {
           type: "p",
-          text: "If nothing is listed and you don't see a Java process, restart the computer once. It clears a port that a crashed program left open.",
+          text: "Nothing listed? Reboot. A crashed program can leave the port wedged.",
         },
       ],
     },
@@ -54,7 +54,7 @@ Perhaps a server is already running on that port?`,
       blocks: [
         {
           type: "p",
-          text: "Open `server.properties` and look at the `server-ip` line. It should be empty:",
+          text: "Next, open `server.properties` and find the `server-ip` line. For most setups it should be blank:",
         },
         {
           type: "code",
@@ -62,7 +62,7 @@ Perhaps a server is already running on that port?`,
         },
         {
           type: "p",
-          text: "If it holds an address that doesn't belong to this computer, for example your public address, the server can't bind to it. Empty means it listens on all of them.",
+          text: "A filled-in address that isn't this computer's own, say your public one such as `203.0.113.7`, is something the server can never bind to. Leave it blank and it listens on every address the machine has.",
         },
       ],
     },
@@ -72,7 +72,7 @@ Perhaps a server is already running on that port?`,
       blocks: [
         {
           type: "p",
-          text: "If something else needs 25565, change `server-port` in `server.properties` to another number, like 25566, and restart. Players then join with the port added to the address, like `example.com:25566`. On a hosting panel the port is assigned to you, so leave it and contact support if it fails.",
+          text: "Sometimes another program legitimately needs 25565. Change `server-port` in `server.properties` to something else, like 25566, and restart. Players then add the port to the address, as in `example.com:25566`. On a hosting panel the port is handed to you, so don't touch it; ask support if it fails.",
         },
       ],
     },
@@ -82,7 +82,7 @@ Perhaps a server is already running on that port?`,
       blocks: [
         {
           type: "p",
-          text: "Port forwarding and firewalls decide whether other people can reach your server. They don't cause this error, which happens before anyone connects. Fix the local cause first, then look at forwarding if friends still can't join.",
+          text: "Forwarding and firewalls aren't it. The Windows Defender prompt that pops up the first time `java.exe` listens, and the 25565 rule on your router, both control who can connect from outside, and this error fires at startup, before anyone has tried. Get the server running first. Friends still can't join? Then forward 25565 (TCP) to the server's local address, which is a separate job.",
         },
       ],
     },
@@ -92,7 +92,7 @@ Perhaps a server is already running on that port?`,
       blocks: [
         {
           type: "p",
-          text: "If it still fails, send `latest.log` and your `server.properties`. Drop them onto [minelog](/) for a link. IP addresses are hidden before upload.",
+          text: "For help, `latest.log` plus `server.properties`. Both can go onto [minelog](/), which hides IP addresses before upload.",
         },
       ],
     },
@@ -101,17 +101,17 @@ Perhaps a server is already running on that port?`,
     {
       question: "What port does a Minecraft server use?",
       answer:
-        "25565 by default. You can change it with server-port in server.properties.",
+        "25565, unless you've changed it. The setting is server-port in server.properties.",
     },
     {
       question: "Do I need to forward a port to fix this error?",
       answer:
-        "No. This error is about the computer the server runs on. Forwarding only decides whether people outside your network can join.",
+        "No. The problem is on the machine running the server. Forwarding only decides whether people outside your network can get in.",
     },
     {
       question: "Why does it say Address already in use when nothing else is running?",
       answer:
-        "A crashed server or another Java process may still hold the port. Check with netstat or lsof, or restart the computer.",
+        "A crashed server or a stray Java process may still be holding it. Look with netstat or lsof, or just restart the computer.",
     },
   ],
 };

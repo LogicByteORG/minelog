@@ -65,17 +65,17 @@ const FEATURES = [
   },
   {
     name: "Problems explained",
-    note: "Known errors are listed in plain words, each with something to try first. It also reads your game version, loader, Java and mods.",
+    note: "When we recognize an error, we say what it means and what to try first. The log page also shows your game version, loader, Java and mods.",
     example: "OutOfMemoryError: raise -Xmx",
   },
   {
     name: "Easy to read",
-    note: "Errors and warnings are colored, long stack traces fold away, and you can search or filter to reach the right line fast.",
+    note: "Errors and warnings get their own colors and long stack traces fold shut. Search or filter when the file is huge and you just want one line.",
     example: "Errors only, one click",
   },
   {
     name: "Gone when it should be",
-    note: `Links stop working after ${RETENTION_DAYS} days, or ${UNHIDDEN_RETENTION_HOURS} hours if you keep private details. No account needed.`,
+    note: `A link works for ${RETENTION_DAYS} days. Turn off hiding and it's ${UNHIDDEN_RETENTION_HOURS} hours. You never make an account.`,
     example: "Delete it in the first hour",
   },
 ];
@@ -84,22 +84,22 @@ const WHERE_TO_LOOK = [
   {
     name: "Client log",
     path: ".minecraft/logs/latest.log",
-    note: "Open the game folder from your launcher and look for logs. On Windows, press Win + R, type %appdata% and open .minecraft.",
+    note: "Your launcher can open the game folder for you, and logs is inside it. On Windows you can also hit Win + R, type %appdata% and open .minecraft.",
   },
   {
     name: "Server log",
     path: "logs/latest.log",
-    note: "In the folder your server runs from. Hosting panels usually list it under Files or Console.",
+    note: "Next to the server jar. On a hosting panel it's usually under Files, or you can watch it in Console.",
   },
   {
     name: "Crash report",
     path: "crash-reports/",
-    note: "Take the newest file. The name ends in -client or -server, which tells you where it crashed.",
+    note: "Grab the newest file. A name ending in -client or -server tells you which side crashed.",
   },
   {
     name: "Java crash report",
     path: "hs_err_pid12345.log",
-    note: "Java writes this when it crashes outright. Look in the game or server folder.",
+    note: "Java drops this file when it dies outright. It sits in the game or server folder.",
   },
 ];
 

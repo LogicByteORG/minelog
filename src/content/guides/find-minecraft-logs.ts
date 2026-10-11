@@ -25,18 +25,18 @@ export const FIND_LOGS: Guide = {
       id: "client-logs",
       heading: "Client logs on Windows, macOS and Linux",
       blocks: [
-        { type: "p", text: "The default game folder depends on your system:" },
+        { type: "p", text: "Where the game folder lives depends on what you run it on:" },
         {
           type: "list",
           items: [
-            "Windows: `%APPDATA%\\.minecraft\\logs\\latest.log`. To get there fast, press Win+R, type `%appdata%\\.minecraft` and press Enter.",
+            "Windows: `%APPDATA%\\.minecraft\\logs\\latest.log`. The quickest way in is Win+R, then `%appdata%\\.minecraft`, then Enter.",
             "macOS: `~/Library/Application Support/minecraft/logs/latest.log`",
             "Linux: `~/.minecraft/logs/latest.log`",
           ],
         },
         {
           type: "p",
-          text: "Launchers like Prism Launcher, Modrinth App and CurseForge often keep every instance in its own folder. Open the instance's folder from the launcher (look for a Folder or Open folder button) and go into `logs`. Many launchers can also show or copy the log for you, no folders needed.",
+          text: "Prism Launcher, Modrinth App and CurseForge usually give each instance its own folder, so the path above won't match. Use the launcher's Folder or Open folder button on the instance, then go into `logs`. A lot of them can also show or copy the log for you, which saves the digging.",
         },
       ],
     },
@@ -46,7 +46,7 @@ export const FIND_LOGS: Guide = {
       blocks: [
         {
           type: "p",
-          text: "On a server it's `logs/latest.log`, in the folder the server starts from. Hosting panels usually list it under Files, and the Console tab shows the same text as it's written.",
+          text: "A server keeps it at `logs/latest.log`, next to the jar you start. On a hosting panel, look under Files. The Console tab prints the same text as it happens.",
         },
       ],
     },
@@ -70,7 +70,7 @@ export const FIND_LOGS: Guide = {
       blocks: [
         {
           type: "p",
-          text: "Sometimes the game just vanishes and there's no crash report. Look for a file called `hs_err_pid` plus a number, like `hs_err_pid12345.log`, in the game folder or the server folder. Java writes it when it crashes itself. Send that too.",
+          text: "Every so often the game disappears without leaving a crash report. Check the game or server folder for a file named `hs_err_pid` followed by a number, such as `hs_err_pid12345.log`. Java writes that one when it goes down itself, so send it along.",
         },
       ],
     },
@@ -80,11 +80,11 @@ export const FIND_LOGS: Guide = {
       blocks: [
         {
           type: "p",
-          text: "Every launch replaces `latest.log`. The old ones get compressed and named after the date, like `2026-09-20-1.log.gz`. Some versions also write a `debug.log` with more detail. Start with `latest.log`, and only dig out the dated ones if the problem happened in an earlier session.",
+          text: "Every launch replaces `latest.log`. Old ones are zipped up and renamed with the date, like `2026-09-20-1.log.gz`. Some versions also write a `debug.log` with more detail. Begin with `latest.log`. You only need the dated ones when the trouble happened in an earlier session.",
         },
         {
           type: "p",
-          text: "minelog can't open `.gz` files, so unpack the file first.",
+          text: "minelog can't read `.gz` files, so unpack one before you paste it.",
         },
       ],
     },
@@ -95,9 +95,9 @@ export const FIND_LOGS: Guide = {
         {
           type: "steps",
           items: [
-            "Open the file in a text editor, select everything and copy it. Or skip that and drop the file onto [minelog](/).",
+            "Open the file in any text editor, select all and copy. Or skip the editor and drop the file straight onto [minelog](/).",
             "Look at the preview. IP addresses, MAC addresses, user folder names, tokens and email addresses are replaced before anything is uploaded.",
-            "Press Get link and send the link to whoever is helping you.",
+            "Hit Get link and pass the address to whoever is helping.",
           ],
         },
         {
@@ -111,7 +111,7 @@ export const FIND_LOGS: Guide = {
     {
       question: "Where is latest.log on Windows?",
       answer:
-        "In %APPDATA%\\.minecraft\\logs, unless your launcher keeps the game in its own instance folder. Press Win+R, type %appdata%\\.minecraft and press Enter to open the game folder.",
+        "Inside %APPDATA%\\.minecraft\\logs, unless your launcher gave the game its own instance folder. Win+R, then %appdata%\\.minecraft, then Enter gets you to the game folder.",
     },
     {
       question: "Which file should I send, latest.log or the crash report?",
@@ -121,12 +121,12 @@ export const FIND_LOGS: Guide = {
     {
       question: "Should I send a screenshot of the error?",
       answer:
-        "No. A screenshot cuts off the lines that matter and can't be searched. Send the whole file, or a link to it.",
+        "Please don't. A screenshot chops off the lines people need and nobody can search it. Send the whole file, or a link to it.",
     },
     {
       question: "Where do I find logs on a hosting panel?",
       answer:
-        "Open the Files tab and go to the logs folder for latest.log, or the crash-reports folder for crash reports. The Console tab shows the same output live.",
+        "Open Files and look in the logs folder for latest.log, or in crash-reports for crash reports. The Console tab streams the same output live.",
     },
   ],
 };

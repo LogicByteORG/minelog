@@ -7,9 +7,9 @@ export const CANT_KEEP_UP: Guide = {
   metaTitle: "Minecraft \"Can't keep up\" warning: causes and fixes",
   description:
     "The server logs Can't keep up! Is the server overloaded? when a tick takes too long. Learn what it means, when to ignore it and how to find what causes the lag.",
-  lead: "This warning means the server fell behind. It's a lag message, not a crash, and one line of it isn't a problem.",
+  lead: "The server fell behind, that's all. It's a lag message, not a crash, and a single line of it is nothing to worry about.",
   updated: "2026-09-26",
-  related: ["find-minecraft-logs", "share-a-log-file-safely"],
+  related: ["find-minecraft-logs", "minecraft-exception-in-server-tick-loop", "share-a-log-file-safely"],
   sections: [
     {
       id: "what-it-means",
@@ -25,11 +25,11 @@ export const CANT_KEEP_UP: Guide = {
         },
         {
           type: "p",
-          text: "The numbers say how far behind it got. While it's late, everything slows down for every player at once: blocks break late, mobs stutter and players get pulled back.",
+          text: "The numbers say how far behind it got: 2345ms is about 46 ticks of 50 ms. While it's late, everything slows down for every player at once. Blocks break late, mobs stutter, players rubber-band back.",
         },
         {
           type: "p",
-          text: "You may also see `Did the system time change, or is the server overloaded?`. It's the same warning, worded for when the clock jumped, which can happen when a computer wakes from sleep.",
+          text: "You may also see `Did the system time change, or is the server overloaded?`. Same warning, worded for a clock that jumped, which happens when a laptop wakes from sleep.",
         },
       ],
     },
@@ -39,7 +39,7 @@ export const CANT_KEEP_UP: Guide = {
       blocks: [
         {
           type: "p",
-          text: "One or two lines while the server starts, while a world loads, or when a lot of new land is being generated aren't worth chasing. It's a problem when the warning keeps repeating during normal play, or when players complain about lag.",
+          text: "A line or two while the server is starting, while a world loads, or while a lot of new land is being generated isn't worth chasing. The warning matters when it repeats during normal play, say every few seconds, or when players start complaining about lag.",
         },
       ],
     },
@@ -50,11 +50,11 @@ export const CANT_KEEP_UP: Guide = {
         {
           type: "list",
           items: [
-            "Generating new chunks, for example when several players fly or explore into new land at once.",
-            "Too many entities: big mob farms, piles of dropped items, animals crowded into one pen.",
-            "Large redstone machines and long hopper chains.",
-            "A slow processor. A Minecraft server does most of its work on one thread, so a fast single core matters more than many slow ones.",
-            "A plugin or mod that does heavy work on the main thread.",
+            "Generating new chunks, for example when several players fly off in different directions with elytra.",
+            "Too many entities: a big mob farm, hundreds of dropped items, forty cows in one pen.",
+            "Large redstone machines and long hopper chains, which tick every single tick.",
+            "A slow processor. The server does most of its work on one thread (the `Server thread` in the log), so one fast core beats many slow ones.",
+            "A plugin or mod that does heavy work on that same main thread.",
             "Long memory clean-up pauses, when the server has too little memory or far too much. See [OutOfMemoryError](/guides/minecraft-out-of-memory-error).",
           ],
         },
@@ -66,7 +66,7 @@ export const CANT_KEEP_UP: Guide = {
       blocks: [
         {
           type: "p",
-          text: "Guessing wastes time, so measure. The spark plugin and mod can profile a running server. Its `/spark profiler` command records for a while, then gives you a page that shows which plugin, mod or activity used the most tick time. On Paper and its forks, `/tps` shows the current ticks per second. A healthy server stays at 20.",
+          text: "Guessing wastes time, so measure. Install spark, run `/spark profiler start`, let it record while the lag is happening, then run `/spark profiler stop`. You get a page that shows which plugin, mod or activity used the most tick time. On Paper and its forks, `/tps` prints the current ticks per second; a healthy server sits at 20.0.",
         },
       ],
     },
@@ -77,11 +77,11 @@ export const CANT_KEEP_UP: Guide = {
         {
           type: "steps",
           items: [
-            "Lower `view-distance` and `simulation-distance` in `server.properties`. They're the quickest way to cut the work per tick.",
-            "Generate the world in advance with a tool like Chunky, so nobody triggers it during play.",
-            "Reduce entities: smaller farms, fewer animals per pen, and remove item piles.",
+            "Lower `view-distance` and `simulation-distance` in `server.properties`; both default to 10, and 8 or 6 is a common first step. It's the quickest way to cut the work per tick.",
+            "Pre-generate the world with Chunky (`/chunky radius 5000`, then `/chunky start`) so nobody triggers it during play.",
+            "Reduce entities: smaller farms, fewer animals per pen, and clear the item piles.",
             "Remove plugins and mods you don't use, and update the ones you do.",
-            "Check the memory setting, and move to a host with a faster processor if the profiler shows the server is simply too busy.",
+            "Check the memory setting. If the profiler shows the server is just busy, the answer is a host with a faster processor.",
           ],
         },
       ],
@@ -101,17 +101,17 @@ export const CANT_KEEP_UP: Guide = {
     {
       question: "Is \"Can't keep up\" a crash?",
       answer:
-        "No. The server keeps running, it's only running behind. It becomes a problem when it repeats and players notice lag.",
+        "No. The server keeps running; it's only behind. It becomes a problem when it repeats and players notice lag.",
     },
     {
       question: "How many ticks per second should a server have?",
       answer:
-        "Twenty. Each tick then takes 50 milliseconds. Below 20 the game slows down.",
+        "Twenty, so each tick gets 50 milliseconds. Below 20 the game slows down.",
     },
     {
       question: "Will more RAM stop the warning?",
       answer:
-        "Only if the server was short of memory. Most of the time the limit is processor speed or a heavy farm, plugin or mod, so measure with a profiler before buying more.",
+        "Only if the server was short of memory. Usually the limit is processor speed, or one heavy farm, plugin or mod, so profile before you buy more.",
     },
   ],
 };

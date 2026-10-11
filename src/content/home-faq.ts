@@ -11,19 +11,19 @@ export const HOME_FAQ: HomeFaq[] = [
     group: "Getting started",
     question: "Where do I find my Minecraft log?",
     answer:
-      "The game log is latest.log, in the logs folder inside your game folder. Servers keep theirs in logs/latest.log too, and crash reports go in a folder called crash-reports. The guides have the exact paths for Windows, macOS, Linux and hosting panels.",
+      "Look for latest.log inside the logs folder of your game folder. A server has the same logs/latest.log, and crash reports land in crash-reports. The guides spell out the exact paths for Windows, macOS, Linux and hosting panels.",
   },
   {
     group: "Getting started",
     question: "Is minelog free, and do I need an account?",
     answer:
-      "It's free and there are no accounts. Paste your log, get a link, and that's all there is to it.",
+      "Free, and there are no accounts. Paste your log, get a link, done.",
   },
   {
     group: "Getting started",
     question: "What problems can minelog find?",
     answer:
-      "After you save, the log page lists known problems in plain words, like running out of memory, a mod that needs another mod, a port that is already in use or a plugin made for a newer server. Each one comes with something to try. It also reads your game version, loader, Java version and mods. It won't explain every crash, so an error it doesn't know is shown as it is.",
+      "Once you save, the log page lists the problems it knows, in plain words. Running out of memory, a mod that needs another mod, a port that's already taken, a plugin built for a newer server. Each comes with something to try. It also picks up your game version, loader, Java version and mods. It doesn't know every crash, and when it meets one it doesn't, the error is shown as written.",
   },
   {
     group: "Privacy and storage",

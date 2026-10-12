@@ -133,6 +133,68 @@ code {
   background: transparent;
 }
 
+::-webkit-scrollbar-button:single-button {
+  display: block;
+  height: 12px;
+  border-style: solid;
+  border-width: 0;
+  border-color: transparent;
+  background: transparent;
+  transition: border-color 140ms ease;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement {
+  border-width: 0 5px 6px 5px;
+  border-color: transparent transparent var(--muted) transparent;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:increment {
+  border-width: 6px 5px 0 5px;
+  border-color: var(--muted) transparent transparent transparent;
+}
+
+::-webkit-scrollbar-button:single-button:horizontal:decrement {
+  border-width: 5px 6px 5px 0;
+  border-color: transparent var(--muted) transparent transparent;
+}
+
+::-webkit-scrollbar-button:single-button:horizontal:increment {
+  border-width: 5px 0 5px 6px;
+  border-color: transparent transparent transparent var(--muted);
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
+  border-color: transparent transparent var(--ink) transparent;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:increment:hover {
+  border-color: var(--ink) transparent transparent transparent;
+}
+
+::-webkit-scrollbar-button:single-button:horizontal:decrement:hover {
+  border-color: transparent var(--ink) transparent transparent;
+}
+
+::-webkit-scrollbar-button:single-button:horizontal:increment:hover {
+  border-color: transparent transparent transparent var(--ink);
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement:active {
+  border-color: transparent transparent color-mix(in srgb, var(--ink) 65%, var(--muted)) transparent;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:increment:active {
+  border-color: color-mix(in srgb, var(--ink) 65%, var(--muted)) transparent transparent transparent;
+}
+
+::-webkit-scrollbar-button:single-button:horizontal:decrement:active {
+  border-color: transparent color-mix(in srgb, var(--ink) 65%, var(--muted)) transparent transparent;
+}
+
+::-webkit-scrollbar-button:single-button:horizontal:increment:active {
+  border-color: transparent transparent transparent color-mix(in srgb, var(--ink) 65%, var(--muted));
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .settle {
     animation: settle 520ms cubic-bezier(0.16, 1, 0.3, 1) both;

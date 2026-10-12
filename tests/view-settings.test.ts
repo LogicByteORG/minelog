@@ -16,3 +16,33 @@ test("only valid values are taken from saved view settings", () => {
     textSize: "large",
   });
 });
+
+test("new view settings fall back to defaults on bad values", () => {
+  const saved = JSON.stringify({
+    hideChat: "yes",
+    hideEmpty: 1,
+    markedOnly: null,
+    linkify: true,
+    fontFamily: "comic-sans",
+  });
+  assert.deepEqual(parseViewSettings(saved), {
+    ...DEFAULT_SETTINGS,
+    linkify: true,
+  });
+});
+
+test("new view settings round-trip", () => {
+  const saved = JSON.stringify({
+    hideChat: true,
+    hideEmpty: true,
+    markedOnly: true,
+    linkify: true,
+    fontFamily: "fira-code",
+  });
+  const parsed = parseViewSettings(saved);
+  assert.equal(parsed.hideChat, true);
+  assert.equal(parsed.hideEmpty, true);
+  assert.equal(parsed.markedOnly, true);
+  assert.equal(parsed.linkify, true);
+  assert.equal(parsed.fontFamily, "fira-code");
+});

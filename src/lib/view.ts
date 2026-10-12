@@ -162,7 +162,35 @@ export function overlayMatches(
 export type Filters = {
   levels: Record<LevelGroup, boolean>;
   onlyMatches: boolean;
+  hideChat?: boolean;
+  hideEmpty?: boolean;
+  markedOnly?: boolean;
+  marks?: Set<number>;
 };
+
+const CHAT_MESSAGE =
+  /^(?:\[Not Secure\] )?<[^<>\s]{1,40}> |^\[(?:Server|Rcon)\] |^\[@\]|^\S{1,40} issued server command: /;
+
+const CHAT_THREAD = /Async Chat Thread\//;
+
+const MAX_FILTER_LINE = 4000;
+
+export function messageOf(line: string): string {
+  const text = line.length > MAX_FILTER_LINE ? line.slice(0, MAX_FILTER_LINE) : line;
+  const cut = text.indexOf("]: ");
+  if (cut !== -1 && cut < 160) return text.slice(cut + 3);
+  return text;
+}
+
+export function isChatLine(line: string): boolean {
+  const text = line.length > MAX_FILTER_LINE ? line.slice(0, MAX_FILTER_LINE) : line;
+  if (CHAT_THREAD.test(text.slice(0, 160))) return true;
+  return CHAT_MESSAGE.test(messageOf(text));
+}
+
+export function isEmptyLine(line: string): boolean {
+  return line.trim() === "";
+}
 
 export const ALL_LEVELS_ON: Record<LevelGroup, boolean> = {
   error: true,
@@ -177,13 +205,20 @@ export function filterLines(
   filters: Filters,
   query: Query,
 ): ViewLine[] {
-  const shown = (line: ViewLine) => filters.levels[line.group];
   const test = query.test;
+  const hideChat = filters.hideChat === true;
+  const hideEmpty = filters.hideEmpty === true;
+  const markedOnly = filters.markedOnly === true;
+  const marks = filters.marks;
 
-  if (filters.onlyMatches && test) {
-    return lines.filter((line) => shown(line) && test.test(line.text));
-  }
-  return lines.filter(shown);
+  return lines.filter((line) => {
+    if (!filters.levels[line.group]) return false;
+    if (hideChat && isChatLine(line.text)) return false;
+    if (hideEmpty && isEmptyLine(line.text)) return false;
+    if (markedOnly && !(marks?.has(line.n) ?? false)) return false;
+    if (filters.onlyMatches && test) return test.test(line.text);
+    return true;
+  });
 }
 
 export function findMatches(lines: ViewLine[], query: Query): number[] {
@@ -315,5 +350,59 @@ const TIMESTAMP = /^\[(?:\d{1,2}[A-Za-z]{3}\d{4} )?\d{2}:\d{2}:\d{2}(?:[.,]\d+)?
 
 export function stripTimestamp(text: string): string {
   return text.replace(TIMESTAMP, "");
+}
+
+const LINK_FIND = /https?:\/\/[^\s<>"')\]]+|www\.[^\s<>"')\]]+/g;
+
+const MAX_LINK_LEN = 2000;
+
+export type LinkPart = {
+  text: string;
+  url: string | null;
+};
+
+function cleanLink(raw: string): string | null {
+  if (raw.length === 0 || raw.length > MAX_LINK_LEN) return null;
+  let end = raw.length;
+  while (end > 0 && ".,;:!?".includes(raw.charAt(end - 1))) end -= 1;
+  while (end > 0 && ")]}>".includes(raw.charAt(end - 1))) {
+    const close = raw.charAt(end - 1);
+    const open = close === ")" ? "(" : close === "]" ? "[" : "<";
+    const body = raw.slice(0, end - 1);
+    if (body.includes(open)) break;
+    end -= 1;
+  }
+  const cleaned = raw.slice(0, end);
+  if (cleaned.length === 0) return null;
+  const href = cleaned.startsWith("www.") ? `https://${cleaned}` : cleaned;
+  if (!/^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(href)) return null;
+  return href;
+}
+
+export function splitLinks(text: string): LinkPart[] {
+  if (text === "" || (!text.includes("http") && !text.includes("www."))) {
+    return [{ text, url: null }];
+  }
+  const parts: LinkPart[] = [];
+  let cursor = 0;
+  LINK_FIND.lastIndex = 0;
+  for (let found = LINK_FIND.exec(text); found; found = LINK_FIND.exec(text)) {
+    if (found[0] === "") {
+      LINK_FIND.lastIndex += 1;
+      continue;
+    }
+    const start = found.index;
+    const href = cleanLink(found[0]);
+    if (!href) continue;
+    const label = found[0].startsWith("www.")
+      ? href.slice("https://".length)
+      : href;
+    if (start > cursor) parts.push({ text: text.slice(cursor, start), url: null });
+    parts.push({ text: label, url: href });
+    cursor = start + label.length;
+    LINK_FIND.lastIndex = cursor;
+  }
+  if (cursor < text.length) parts.push({ text: text.slice(cursor), url: null });
+  return parts.length > 0 ? parts : [{ text, url: null }];
 }
 

@@ -4,11 +4,13 @@ import {
   Fragment,
   memo,
   type CSSProperties,
+  type ReactNode,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { CaretDown, CaretRight } from "@phosphor-icons/react";
 import {
   overlayMatches,
+  splitLinks,
   splitMatches,
   stripTimestamp,
   type Row,
@@ -23,6 +25,7 @@ type LogRowsProps = {
   rows: Row[];
   highlight: RegExp | null;
   timestamps: boolean;
+  linkify: boolean;
   expanded: Set<number>;
   onToggleFold: (key: number) => void;
   marked: Set<number>;
@@ -37,6 +40,7 @@ export function LogRows({
   rows,
   highlight,
   timestamps,
+  linkify,
   expanded,
   onToggleFold,
   marked,
@@ -56,6 +60,7 @@ export function LogRows({
               line={row.line}
               highlight={highlight}
               timestamps={timestamps}
+              linkify={linkify}
               marked={marked.has(row.line.n)}
               onToggleMark={onToggleMark}
               onMarkPointerDown={onMarkPointerDown}
@@ -73,6 +78,7 @@ export function LogRows({
             lines={row.lines}
             highlight={highlight}
             timestamps={timestamps}
+            linkify={linkify}
             marked={marked}
             onToggleMark={onToggleMark}
             onMarkPointerDown={onMarkPointerDown}
@@ -87,10 +93,81 @@ export function LogRows({
   );
 }
 
+function LinkedText({
+  text,
+  match,
+  linkify,
+}: {
+  text: string;
+  match: boolean;
+  linkify: boolean;
+}) {
+  if (!linkify) return match ? <mark>{text}</mark> : <>{text}</>;
+  const parts = splitLinks(text);
+  if (parts.length === 1 && parts[0].url === null) {
+    return match ? <mark>{text}</mark> : <>{text}</>;
+  }
+  return (
+    <>
+      {parts.map((part, index) => {
+        if (!part.url) {
+          return match ? (
+            <mark key={index}>{part.text}</mark>
+          ) : (
+            <Fragment key={index}>{part.text}</Fragment>
+          );
+        }
+        const inner = match ? <mark>{part.text}</mark> : part.text;
+        return (
+          <a
+            key={index}
+            href={part.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {inner}
+          </a>
+        );
+      })}
+    </>
+  );
+}
+
+function renderPieces(
+  pieces: { text: string; match: boolean }[],
+  linkify: boolean,
+): ReactNode {
+  return pieces.map((piece, index) => (
+    <Fragment key={index}>
+      <LinkedText text={piece.text} match={piece.match} linkify={linkify} />
+    </Fragment>
+  ));
+}
+
+function renderColored(
+  colored: { text: string; kind: string; match: boolean }[],
+  linkify: boolean,
+): ReactNode {
+  return colored.map((piece, index) => {
+    const inner = (
+      <LinkedText text={piece.text} match={piece.match} linkify={linkify} />
+    );
+    return piece.kind === "plain" ? (
+      <Fragment key={index}>{inner}</Fragment>
+    ) : (
+      <span key={index} className={`tok tok--${piece.kind}`}>
+        {inner}
+      </span>
+    );
+  });
+}
+
 function LineRow({
   line,
   highlight,
   timestamps,
+  linkify,
   marked,
   onToggleMark,
   onMarkPointerDown,
@@ -101,6 +178,7 @@ function LineRow({
   line: ViewLine;
   highlight: RegExp | null;
   timestamps: boolean;
+  linkify: boolean;
   marked: boolean;
   onToggleMark: (n: number) => void;
   onMarkPointerDown: (n: number, event: ReactPointerEvent<HTMLButtonElement>) => void;
@@ -145,27 +223,8 @@ function LineRow({
         {shown === ""
           ? " "
           : colored
-            ? colored.map((piece, index) => {
-                const inner = piece.match ? (
-                  <mark>{piece.text}</mark>
-                ) : (
-                  piece.text
-                );
-                return piece.kind === "plain" ? (
-                  <Fragment key={index}>{inner}</Fragment>
-                ) : (
-                  <span key={index} className={`tok tok--${piece.kind}`}>
-                    {inner}
-                  </span>
-                );
-              })
-            : pieces.map((piece, index) =>
-              piece.match ? (
-                <mark key={index}>{piece.text}</mark>
-              ) : (
-                piece.text
-              ),
-            )}
+            ? renderColored(colored, linkify)
+            : renderPieces(pieces, linkify)}
       </span>
     </li>
   );
@@ -178,6 +237,7 @@ function FoldRows({
   lines,
   highlight,
   timestamps,
+  linkify,
   marked,
   onToggleMark,
   onMarkPointerDown,
@@ -190,6 +250,7 @@ function FoldRows({
   lines: ViewLine[];
   highlight: RegExp | null;
   timestamps: boolean;
+  linkify: boolean;
   marked: Set<number>;
   onToggleMark: (n: number) => void;
   onMarkPointerDown: (n: number, event: ReactPointerEvent<HTMLButtonElement>) => void;
@@ -227,6 +288,7 @@ function FoldRows({
             line={line}
             highlight={highlight}
             timestamps={timestamps}
+            linkify={linkify}
             marked={marked.has(line.n)}
             onToggleMark={onToggleMark}
             onMarkPointerDown={onMarkPointerDown}
@@ -238,4 +300,3 @@ function FoldRows({
     </>
   );
 }
-

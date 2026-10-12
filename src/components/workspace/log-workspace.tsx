@@ -25,7 +25,7 @@ import { GOTO_LINE_EVENT } from "../line-link";
 import { VIEW_CHUNK_LINES } from "@/lib/config";
 import { detectLanguage } from "@/lib/highlight";
 import type { LogKind } from "@/lib/log";
-import { useViewSettings } from "@/lib/use-view-settings";
+import { fontStackOf, useViewSettings } from "@/lib/use-view-settings";
 import { ReadmeView } from "../readme-view";
 import { Segmented } from "./segmented";
 import {
@@ -251,10 +251,31 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
     () => compileQuery(deferredSearch, useRegex, matchCase),
     [deferredSearch, useRegex, matchCase],
   );
-  const visible = useMemo(
-    () => filterLines(lines, { levels, onlyMatches }, query),
-    [lines, levels, onlyMatches, query],
-  );
+  const visible = useMemo(() => {
+    const gameLog = kind === "server" || kind === "client" || kind === "unknown";
+    return filterLines(
+      lines,
+      {
+        levels,
+        onlyMatches,
+        hideChat: settings.hideChat && gameLog,
+        hideEmpty: settings.hideEmpty,
+        markedOnly: settings.markedOnly,
+        marks: marked,
+      },
+      query,
+    );
+  }, [
+    lines,
+    levels,
+    onlyMatches,
+    query,
+    kind,
+    settings.hideChat,
+    settings.hideEmpty,
+    settings.markedOnly,
+    marked,
+  ]);
   const rows = useMemo(
     () => buildRows(visible, settings.foldStacks),
     [visible, settings.foldStacks],
@@ -280,7 +301,10 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
   const currentN = nav ? stopsFor(nav.target)[nav.index] : undefined;
 
   const levelsChanged = LEVEL_KEYS.some((group) => !levels[group]);
-  const filtering = levelsChanged || (onlyMatches && search !== "");
+  const viewFiltered =
+    settings.hideChat || settings.hideEmpty || settings.markedOnly;
+  const filtering =
+    levelsChanged || (onlyMatches && search !== "") || viewFiltered;
   const canReset =
     search !== "" || levelsChanged || useRegex || matchCase || onlyMatches;
 
@@ -568,9 +592,22 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
     ? `Showing ${number(visible.length)} of ${number(lines.length)} lines`
     : `${number(lines.length)} lines`;
 
+  function updateView(patch: Partial<typeof settings>) {
+    update(patch);
+    if (
+      patch.hideChat !== undefined ||
+      patch.hideEmpty !== undefined ||
+      patch.markedOnly !== undefined
+    ) {
+      setChunks(1);
+      setNav(null);
+    }
+  }
+
   const viewStyle = {
     "--log-size": TEXT_SIZE[settings.textSize],
     "--log-lh": ROW_HEIGHT[settings.spacing],
+    "--log-font": fontStackOf(settings.fontFamily),
   } as CSSProperties;
 
   if (kind === "readme") {
@@ -707,6 +744,7 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
                   rows={shownRows}
                   highlight={query.highlight}
                   timestamps={settings.timestamps}
+                  linkify={settings.linkify}
                   expanded={expanded}
                   onToggleFold={toggleFold}
                   marked={marked}
@@ -755,6 +793,15 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
       </div>
     );
   }
+
+  const emptyTitle =
+    settings.markedOnly && marked.size === 0
+      ? "No marked lines yet."
+      : "No lines match these filters.";
+  const emptyHint =
+    settings.markedOnly && marked.size === 0
+      ? "Mark a line with its number to pin it here."
+      : null;
 
   return (
     <div
@@ -830,7 +877,8 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
           >
             {rows.length === 0 ? (
               <div className="workspace__empty">
-                <p>No lines match these filters.</p>
+                <p>{emptyTitle}</p>
+                {emptyHint && <p>{emptyHint}</p>}
                 {canReset && (
                   <button
                     type="button"
@@ -847,6 +895,7 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
                   rows={shownRows}
                   highlight={query.highlight}
                   timestamps={settings.timestamps}
+                  linkify={settings.linkify}
                   expanded={expanded}
                   onToggleFold={toggleFold}
                   marked={marked}
@@ -877,8 +926,9 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
           <div className="workspace__side-inner">
             <SettingsPanel
               id={panelId}
+              kind={kind}
               settings={settings}
-              onChange={update}
+              onChange={updateView}
               onReset={reset}
             />
           </div>

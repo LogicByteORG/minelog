@@ -291,7 +291,7 @@
 .log {
   height: 100%;
   overflow: auto;
-  font-family: $font-mono;
+  font-family: var(--log-font, $font-mono);
   font-size: var(--log-size, 13px);
   line-height: var(--log-lh, 1.5rem);
 
@@ -304,6 +304,21 @@
     padding: 0 1px;
     background: color-mix(in srgb, var(--accent) 35%, transparent);
     color: inherit;
+  }
+
+  .log__text a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 140ms ease;
+
+    &:hover {
+      color: var(--accent);
+    }
+
+    &:active {
+      color: color-mix(in srgb, var(--accent) 70%, var(--ink));
+    }
   }
 
   .log__line[data-current] {

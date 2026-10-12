@@ -79,24 +79,40 @@ code {
   outline-offset: 2px;
 }
 
-.theme-anim,
-.theme-anim *,
-.theme-anim *::before,
-.theme-anim *::after {
-  transition:
-    background-color 300ms ease,
-    border-color 300ms ease,
-    color 300ms ease,
-    fill 300ms ease,
-    stroke 300ms ease !important;
+::view-transition {
+  background: var(--bg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(root) {
+    z-index: 1;
+  }
+
+  ::view-transition-new(root) {
+    z-index: 2;
+    animation: theme-reveal 320ms $ease both;
+  }
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+  to {
+    clip-path: circle(var(--theme-r, 150vmax) at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .theme-anim,
-  .theme-anim *,
-  .theme-anim *::before,
-  .theme-anim *::after {
-    transition: none !important;
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
   }
 }
 

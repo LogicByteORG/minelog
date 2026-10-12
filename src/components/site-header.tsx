@@ -4,7 +4,26 @@ import { HeaderMenu } from "./header-menu";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 
-export function SiteHeader() {
+export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
+  if (minimal) {
+    return (
+      <header className="site-header site-header--minimal">
+        <div className="grid-container site-header__bar">
+          <Link
+            href="/"
+            aria-label={IS_PREVIEW ? "minelog home, preview build" : "minelog home"}
+            data-tip="Share your own log"
+          >
+            <Logo />
+          </Link>
+          <div className="site-header__actions">
+            <ThemeToggle />
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header className="site-header">
       <div className="grid-container site-header__bar">

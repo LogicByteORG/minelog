@@ -88,6 +88,12 @@ body:has(.workspace[data-wide="true"]) {
   &__notice {
     margin-bottom: 1.25rem;
   }
+  &__notice--single {
+    align-items: center;
+  }
+  &__notice--single > svg {
+    margin-top: 0;
+  }
 }
 
 .source-badge {

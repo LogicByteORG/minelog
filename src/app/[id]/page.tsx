@@ -2,10 +2,11 @@ import { DeleteLog } from "@/components/delete-log";
 import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { DownloadSimple, Eye, ShieldCheck, WarningCircle } from "@phosphor-icons/react/dist/ssr";
+import { BookOpen, DownloadSimple, Eye, ShieldCheck, WarningCircle } from "@phosphor-icons/react/dist/ssr";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ShareLink } from "@/components/share-link";
+import { ViewNotice } from "@/components/view-notice";
 import { AskAiMenu } from "@/components/ask-ai";
 import { AnalyzeMenu } from "@/components/analyze-menu";
 import { ProblemsPanel } from "@/components/problems-panel";
@@ -77,10 +78,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function LogPage({ params }: PageProps<"/[id]">) {
+export default async function LogPage({
+  params,
+  searchParams,
+}: PageProps<"/[id]">) {
   const { id } = await params;
   const log = await getLog(id);
   if (!log) notFound();
+
+  const notice = (await searchParams)?.notice === "readme-view-only";
 
   const source = log.source;
   const insights = isGameLog(log.kind) ? readInsights(log.content, log.kind) : null;
@@ -140,6 +146,16 @@ export default async function LogPage({ params }: PageProps<"/[id]">) {
             {insights && <AnalyzeMenu env={insights.environment} />}
             {insights && <ProblemsPanel problems={insights.problems} />}
             <AskAiMenu excerpt={errorExcerpt(log.content, log.kind)} />
+            {log.kind === "readme" && (
+              <a
+                href={`/${log.id}/view`}
+                className="button hollow button--sm"
+                data-tip="Read this README without the surrounding controls"
+              >
+                <BookOpen aria-hidden="true" />
+                Clean view
+              </a>
+            )}
             <a
               href={rawUrl(log.id)}
               target="_blank"
@@ -162,6 +178,8 @@ export default async function LogPage({ params }: PageProps<"/[id]">) {
             </span>
           </div>
         )}
+
+        {notice && <ViewNotice />}
 
         <LogWorkspace
           content={log.content}

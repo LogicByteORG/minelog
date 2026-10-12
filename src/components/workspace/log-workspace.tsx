@@ -776,6 +776,7 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
           onClose={() => setQrOpen(false)}
           logId={logId}
           rawUrl={rawUrl}
+          viewPath={`/${logId}/view`}
         />
 
         <button

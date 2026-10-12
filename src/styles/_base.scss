@@ -509,3 +509,34 @@ kbd {
   }
 }
 
+.callout__close {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-left: auto;
+  color: inherit;
+  opacity: 0.8;
+  transition:
+    opacity 140ms ease,
+    background-color 140ms ease;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+  }
+
+  &:hover {
+    background: var(--hover-bg);
+    opacity: 1;
+  }
+
+  &:active {
+    background: var(--press-bg);
+    opacity: 1;
+  }
+}
+

@@ -6,7 +6,7 @@ import { DownloadSimple, X } from "@phosphor-icons/react";
 import { CopyLink } from "../copy-link";
 import { Segmented } from "./segmented";
 
-type Target = "page" | "raw";
+type Target = "page" | "raw" | "view";
 
 const QUIET_ZONE = 2;
 const DARK = "#0e1013";
@@ -79,15 +79,17 @@ type QrDialogProps = {
   onClose: () => void;
   logId: string;
   rawUrl: string;
+  viewPath?: string;
 };
 
-export function QrDialog({ open, onClose, logId, rawUrl }: QrDialogProps) {
+export function QrDialog({ open, onClose, logId, rawUrl, viewPath }: QrDialogProps) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [target, setTarget] = useState<Target>("page");
   const [problem, setProblem] = useState<string | null>(null);
 
   const origin = open ? window.location.origin : "";
-  const url = target === "raw" ? rawUrl : `${origin}/${logId}`;
+  const url =
+    target === "raw" ? rawUrl : target === "view" && viewPath ? `${origin}${viewPath}` : `${origin}/${logId}`;
 
   const qr = useMemo(() => {
     if (!open) return null;
@@ -160,6 +162,7 @@ export function QrDialog({ open, onClose, logId, rawUrl }: QrDialogProps) {
           options={[
             { value: "page", label: "Log page" },
             { value: "raw", label: "Raw text" },
+            ...(viewPath ? [{ value: "view" as const, label: "Clean view" }] : []),
           ]}
           value={target}
           onChange={(next) => {

@@ -264,6 +264,59 @@
   }
 }
 
+.readme-view-page {
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+.readme-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.readme-view__find {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding-block: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
+}
+
+.readme-view__find .search {
+  flex: 0 1 26rem;
+  min-width: min(100%, 16rem);
+  max-width: 26rem;
+}
+
+@include breakpoint(large) {
+  .readme-view[data-wide="true"] {
+    margin-inline: calc(50% - 50vw + 1.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.layout-motion .readme-view {
+    transition: margin-inline 700ms $ease-move;
+  }
+}
+
+.readme-view__error {
+  margin: 0;
+  color: var(--lv-error);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
 ::highlight(readme-find) {
   background-color: color-mix(in srgb, var(--accent) 35%, transparent);
   color: inherit;

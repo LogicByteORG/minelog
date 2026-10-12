@@ -14,7 +14,11 @@ export function ShareLink() {
         window.removeEventListener(MARKS_EVENT, notify);
       };
     },
-    () => window.location.href,
+    () => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("notice");
+      return url.toString();
+    },
     () => "",
   );
 

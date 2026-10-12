@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GITHUB_URL, LOGICBYTE_URL } from "@/lib/config";
+import { GITHUB_URL, LOGICBYTE_URL, REPORT_EMAIL } from "@/lib/config";
 
 const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
 const COMMIT_SHA = process.env.VERCEL_GIT_COMMIT_SHA ?? null;
@@ -63,6 +63,11 @@ export function SiteFooter() {
               <Link href="/terms" className="footer-link">
                 Terms
               </Link>
+            </li>
+            <li>
+              <a href={`mailto:${REPORT_EMAIL}`} className="footer-link">
+                Report abuse
+              </a>
             </li>
           </ul>
         </nav>

@@ -113,11 +113,11 @@ jobs:
       - name: Resolve Hangar channel
         id: hangar
         run: |
-          if [ "${{ steps.meta.outputs.channel }}" = "release" ]; then
-            echo "channel=Release" >> "$GITHUB_OUTPUT"
-          else
-            echo "channel=Beta" >> "$GITHUB_OUTPUT"
-          fi
+          case "${{ steps.meta.outputs.channel }}" in
+            release) echo "channel=Release" >> "$GITHUB_OUTPUT" ;;
+            beta) echo "channel=Beta" >> "$GITHUB_OUTPUT" ;;
+            *) echo "channel=Alpha" >> "$GITHUB_OUTPUT" ;;
+          esac
 
       - name: Check Hangar for this version
         id: hangar-check

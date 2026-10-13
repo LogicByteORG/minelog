@@ -76,9 +76,9 @@ Releases are cut from a tag and published by CI, no manual uploads.
    `minelog` Modrinth project with loaders, game versions and channel
    filled in, and finally publishes one `minelog` Hangar version with
    Paper, Waterfall and Velocity downloads. Tag suffix decides the
-   channel on all three sides (`-alpha` and `-beta`/`-rc` both land on
-   Hangar's Beta channel, since the project only keeps Release and
-   Beta). A version already on Hangar is skipped so re-runs stay green.
+   channel on all three sides (plain tags to Release, `-beta`/`-rc` to
+   Beta, `-alpha` to Alpha). A version already on Hangar is skipped so
+   re-runs stay green.
 
 Secrets: `MODRINTH_TOKEN` (repository secret), `MODRINTH_PROJECT_ID`
 (repository variable, defaults to `minelog`), `HANGAR_API_TOKEN`

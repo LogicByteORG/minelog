@@ -6,6 +6,15 @@ Release notes and the Modrinth changelog.
 
 ## Unreleased
 
+## 1.0.1 - 2026-10-14
+
+Small hardening release. The same three jars are now also published to
+Hangar (Paper, Waterfall, Velocity) alongside Modrinth.
+
+- `/minelog delete` refuses anything that is not a log id before it talks
+  to the site, so a typo can no longer turn into a strange request.
+- Answer parsing tolerates spacing differences in the site reply.
+
 ## 1.0.0 - 2026-10-03
 
 First public plugin release.

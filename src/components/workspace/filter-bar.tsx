@@ -7,6 +7,7 @@ import {
   CaretUp,
   Check,
   Copy,
+  DownloadSimple,
   QrCode,
   SlidersHorizontal,
   WarningCircle,
@@ -56,6 +57,7 @@ type FilterBarProps = {
   actions: {
     copyState: CopyState;
     onCopy: () => void;
+    onDownload: () => void;
     onQr: () => void;
     fullWidth: boolean;
     onToggleFullWidth: () => void;
@@ -83,6 +85,7 @@ export function FilterBar({
             type="button"
             className="action action--copy"
             data-tip="Copy the whole log"
+            aria-label="Copy the whole log"
             onClick={actions.onCopy}
             data-state={actions.copyState}
           >
@@ -93,11 +96,13 @@ export function FilterBar({
             ) : (
               <Copy aria-hidden="true" />
             )}
-            {actions.copyState === "done"
-              ? "Copied"
-              : actions.copyState === "failed"
-                ? "Copy failed"
-                : "Copy"}
+            <span className="action__label">
+              {actions.copyState === "done"
+                ? "Copied"
+                : actions.copyState === "failed"
+                  ? "Copy failed"
+                  : "Copy"}
+            </span>
           </button>
           <span className="show-for-sr" role="status">
             {actions.copyState === "done" ? "Copied to the clipboard." : ""}
@@ -105,11 +110,22 @@ export function FilterBar({
           <button
             type="button"
             className="action"
+            data-tip="Download this log as a .txt file"
+            aria-label="Download this log as a .txt file"
+            onClick={actions.onDownload}
+          >
+            <DownloadSimple aria-hidden="true" />
+            <span className="action__label">Download</span>
+          </button>
+          <button
+            type="button"
+            className="action"
             data-tip="Show a QR code for this log"
+            aria-label="Show a QR code for this log"
             onClick={actions.onQr}
           >
             <QrCode aria-hidden="true" />
-            QR code
+            <span className="action__label">QR code</span>
           </button>
           <button
             type="button"
@@ -129,12 +145,13 @@ export function FilterBar({
             type="button"
             className="action"
             aria-expanded={actions.panelOpen}
+            aria-label={actions.panelOpen ? "Hide settings" : "Show settings"}
             data-tip={actions.panelOpen ? "Hide settings" : "Show settings"}
             aria-controls={actions.panelId}
             onClick={actions.onTogglePanel}
           >
             <SlidersHorizontal aria-hidden="true" />
-            Settings
+            <span className="action__label">Settings</span>
           </button>
         </div>
       </div>

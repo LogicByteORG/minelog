@@ -331,3 +331,12 @@
   }
 }
 
+@media (max-width: 40em) {
+  .toolbar {
+    &__row:first-child .search {
+      flex: 1 1 100%;
+      max-width: none;
+    }
+  }
+}
+

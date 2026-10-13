@@ -27,7 +27,7 @@
       "id": "never",
       "heading": "What we don't collect",
       "paragraphs": [
-        "No accounts. A log page sets no cookies and loads nothing from anyone else: your browser only talks to minelog, and the fonts and icons come from our own server. Log addresses are never sent to any analytics service.",
+        "No accounts. A log page sets no cookies and loads nothing from anyone else: your browser only talks to minelog. Fonts and brand marks ship inside our own pages (the marks come from the Simple Icons set, bundled at build time), so no icon service ever sees your visit. Log addresses are never sent to any analytics service.",
         "The home page, the guides, the API docs and this page do use Google Analytics, to count visits and see which pages people read. Google Analytics sets cookies on those pages. It sees the page, roughly where you are and your device type, and never anything from a log. It doesn't run at all for visitors in the European Union, the wider European Economic Area, the United Kingdom or Switzerland, because it would need your consent first. We work out where you are from your connection when the page loads, and we don't store it.",
         "The other exception is the Ask AI button. When you click it, it opens Claude or ChatGPT with the error lines from your log in the question. Nothing is sent unless you click."
       ]

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GITHUB_URL, IS_PREVIEW, MODRINTH_URL } from "@/lib/config";
+import { BrandIcon } from "./brand-icon";
 import { HeaderMenu } from "./header-menu";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
@@ -45,7 +46,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
               rel="noopener noreferrer"
               data-tip="Get the server plugin on Modrinth"
             >
-              <span className="modrinth-icon" aria-hidden="true" />
+              <BrandIcon slug="modrinth" size={18} />
               Download
             </a>
             <a
@@ -56,7 +57,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
               aria-label="minelog on GitHub"
               data-tip="View the source on GitHub"
             >
-              <span className="github-icon" aria-hidden="true" />
+              <BrandIcon slug="github" size={22} />
             </a>
           </nav>
           <ThemeToggle />

@@ -288,46 +288,9 @@
   }
 }
 
-.modrinth-icon {
+.brand-icon {
   flex: none;
-  width: 1.125rem;
-  height: 1.125rem;
-  background-color: currentColor;
-  -webkit-mask-image: url("/vendor/modrinth-light.svg");
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-image: url("/vendor/modrinth-light.svg");
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
-}
-
-.github-icon {
-  flex: none;
-  width: 1.375rem;
-  height: 1.375rem;
-  background-color: currentColor;
-  -webkit-mask-image: url("/brand/github-black.svg");
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-image: url("/brand/github-black.svg");
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
-}
-
-:root[data-theme="dark"] .github-icon {
-  -webkit-mask-image: url("/brand/github-white.svg");
-  mask-image: url("/brand/github-white.svg");
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .github-icon {
-    -webkit-mask-image: url("/brand/github-white.svg");
-    mask-image: url("/brand/github-white.svg");
-  }
+  color: currentColor;
 }
 
 .site-header__modrinth {
@@ -688,6 +651,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-width: 2.5rem;
   height: 2.5rem;
   padding: 0 0.75rem;

@@ -317,6 +317,17 @@
   text-align: center;
 }
 
+@media (max-width: 40em) {
+  .readme-view__find {
+    flex-wrap: wrap;
+
+    .search {
+      flex: 1 1 100%;
+      max-width: none;
+    }
+  }
+}
+
 ::highlight(readme-find) {
   background-color: color-mix(in srgb, var(--accent) 35%, transparent);
   color: inherit;

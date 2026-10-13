@@ -21,6 +21,7 @@ import {
 } from "@phosphor-icons/react";
 import { createLog } from "@/lib/api";
 import { saveDeleteToken } from "@/lib/delete-token";
+import { recordSave } from "@/lib/donate";
 import {
   MAX_LOG_BYTES,
   MAX_LOG_LINES,
@@ -250,6 +251,7 @@ export function PasteEditor() {
       if (log.deleteToken && log.deleteUntil) {
         saveDeleteToken(log.id, log.deleteToken, log.deleteUntil);
       }
+      recordSave();
       setPhase({ status: "opening" });
       router.push(`/${log.id}`);
     } catch (error) {

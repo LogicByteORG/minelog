@@ -1,4 +1,5 @@
 import { DeleteLog } from "@/components/delete-log";
+import { DonateNudge } from "@/components/donate-nudge";
 import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -200,6 +201,8 @@ export default async function LogPage({
         </p>
 
         <DeleteLog logId={log.id} />
+
+        <DonateNudge />
 
         <p className="log-page__report">
           Is this log harmful or upsetting? Write to{" "}

@@ -59,7 +59,7 @@ export default async function ReadmeViewPage({
       <SiteHeader minimal />
 
       <main className="grid-container readme-view-page">
-        <ReadmeMiniView content={log.content} />
+        <ReadmeMiniView content={log.content} logId={log.id} />
       </main>
 
       <SiteFooter />

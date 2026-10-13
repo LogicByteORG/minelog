@@ -5,13 +5,15 @@ import {
   ArrowUp,
   ArrowsInLineHorizontal,
   ArrowsOutLineHorizontal,
+  DownloadSimple,
 } from "@phosphor-icons/react";
 import { ReadmeView } from "./readme-view";
 import { SearchBox } from "./workspace/search-box";
 import { compileQuery } from "@/lib/view";
+import { downloadTextFile, logDownloadName } from "@/lib/download";
 import { useViewSettings } from "@/lib/use-view-settings";
 
-export function ReadmeMiniView({ content }: { content: string }) {
+export function ReadmeMiniView({ content, logId }: { content: string; logId: string }) {
   const [search, setSearch] = useState("");
   const [useRegex, setUseRegex] = useState(false);
   const [matchCase, setMatchCase] = useState(false);
@@ -97,6 +99,16 @@ export function ReadmeMiniView({ content }: { content: string }) {
             },
           }}
         />
+        <button
+          type="button"
+          className="action"
+          data-tip="Download this file as a .txt file"
+          aria-label="Download this file as a .txt file"
+          onClick={() => downloadTextFile(logDownloadName(logId), content)}
+        >
+          <DownloadSimple aria-hidden="true" />
+          <span className="action__label">Download</span>
+        </button>
         <button
           type="button"
           className="action action--wide-toggle"

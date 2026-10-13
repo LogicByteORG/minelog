@@ -138,6 +138,20 @@ const listeners = new Set<() => void>();
 
 let memory = "";
 
+function smallScreen(): boolean {
+  return window.matchMedia("(max-width: 40em)").matches;
+}
+
+function subscribeSmallScreen(notify: () => void) {
+  const query = window.matchMedia("(max-width: 40em)");
+  query.addEventListener("change", notify);
+  return () => query.removeEventListener("change", notify);
+}
+
+function readSmallScreenServer(): boolean {
+  return false;
+}
+
 function readRaw(): string {
   try {
     return window.localStorage.getItem(KEY) ?? memory;
@@ -202,7 +216,16 @@ export function parseViewSettings(raw: string): ViewSettings {
 
 export function useViewSettings() {
   const raw = useSyncExternalStore(subscribe, readRaw, () => "");
-  const settings = useMemo(() => parseViewSettings(raw), [raw]);
+  const small = useSyncExternalStore(
+    subscribeSmallScreen,
+    smallScreen,
+    readSmallScreenServer,
+  );
+  const settings = useMemo(() => {
+    const parsed = parseViewSettings(raw);
+    if (small && raw === "") parsed.wrap = true;
+    return parsed;
+  }, [raw, small]);
 
   const update = useCallback((patch: Partial<ViewSettings>) => {
     const next = JSON.stringify({ ...parseViewSettings(readRaw()), ...patch });

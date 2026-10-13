@@ -519,3 +519,21 @@
   }
 }
 
+@media (max-width: 40em) {
+  .search {
+    min-width: 0;
+  }
+
+  .action {
+    padding: 0 0.625rem;
+
+    &__label {
+      display: none;
+    }
+
+    &--copy {
+      min-width: 0;
+    }
+  }
+}
+

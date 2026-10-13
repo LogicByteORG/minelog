@@ -574,6 +574,24 @@
   }
 }
 
+@media (max-width: 40em) {
+  .log {
+    &__line,
+    &__fold-row {
+      grid-template-columns: 3rem 1fr;
+    }
+
+    &__num,
+    button.log__num {
+      padding-right: 0.5rem;
+    }
+
+    &__text {
+      padding: 0 0.75rem 0 0.5rem;
+    }
+  }
+}
+
 .drop-overlay {
   position: fixed;
   inset: 0;

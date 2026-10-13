@@ -46,6 +46,8 @@ export const GA_MEASUREMENT_ID = "G-W37H1VPCS1";
 
 export const MODRINTH_URL = "https://modrinth.com/project/minelog";
 
+export const BUYMEACOFFEE_URL = "https://buymeacoffee.com/pozii";
+
 export const LOGICBYTE_URL = "https://logicbyte.org";
 
 export const GITHUB_URL = "https://github.com/LogicByteORG/minelog";

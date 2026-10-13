@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { GITHUB_URL, LOGICBYTE_URL, REPORT_EMAIL } from "@/lib/config";
+import { BUYMEACOFFEE_URL, GITHUB_URL, LOGICBYTE_URL, REPORT_EMAIL } from "@/lib/config";
+import { BrandIcon } from "./brand-icon";
 
 const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
 const COMMIT_SHA = process.env.VERCEL_GIT_COMMIT_SHA ?? null;
@@ -67,6 +68,17 @@ export function SiteFooter() {
             <li>
               <a href={`mailto:${REPORT_EMAIL}`} className="footer-link">
                 Report abuse
+              </a>
+            </li>
+            <li>
+              <a
+                href={BUYMEACOFFEE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-link"
+              >
+                <BrandIcon slug="buymeacoffee" size={16} />
+                Buy me a coffee
               </a>
             </li>
           </ul>

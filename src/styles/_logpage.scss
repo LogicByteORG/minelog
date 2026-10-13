@@ -306,3 +306,20 @@ body:has(.workspace[data-wide="true"]) {
   }
 }
 
+.donate-nudge {
+  a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    transition: color 140ms ease;
+
+    &:hover {
+      color: var(--accent-hover);
+    }
+
+    &:active {
+      color: var(--accent-active);
+    }
+  }
+}
+

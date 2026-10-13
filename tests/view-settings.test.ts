@@ -46,3 +46,16 @@ test("new view settings round-trip", () => {
   assert.equal(parsed.linkify, true);
   assert.equal(parsed.fontFamily, "fira-code");
 });
+
+test("wrap stays off in the parsed defaults whatever the screen says", () => {
+  const holder = globalThis as { window?: unknown };
+  const before = holder.window;
+  holder.window = { matchMedia: () => ({ matches: true }) };
+  try {
+    assert.equal(parseViewSettings("").wrap, false);
+    assert.equal(parseViewSettings(JSON.stringify({ wrap: false })).wrap, false);
+  } finally {
+    if (before === undefined) delete holder.window;
+    else holder.window = before;
+  }
+});

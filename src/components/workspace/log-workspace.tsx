@@ -18,11 +18,13 @@ import {
   ArrowsOutLineHorizontal,
   Check,
   Copy,
+  DownloadSimple,
   QrCode,
   WarningCircle,
 } from "@phosphor-icons/react";
 import { GOTO_LINE_EVENT } from "../line-link";
 import { VIEW_CHUNK_LINES } from "@/lib/config";
+import { downloadTextFile, logDownloadName } from "@/lib/download";
 import { detectLanguage } from "@/lib/highlight";
 import type { LogKind } from "@/lib/log";
 import { fontStackOf, useViewSettings } from "@/lib/use-view-settings";
@@ -584,6 +586,10 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
     copyTimer.current = window.setTimeout(() => setCopyState("idle"), 2200);
   }
 
+  function download() {
+    downloadTextFile(logDownloadName(logId), content);
+  }
+
   function enableLayoutMotion() {
     document.documentElement.classList.add("layout-motion");
   }
@@ -665,6 +671,7 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
                 type="button"
                 className="action action--copy"
                 data-tip="Copy the whole file"
+                aria-label="Copy the whole file"
                 onClick={() => void copy()}
                 data-state={copyState}
               >
@@ -675,20 +682,33 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
                 ) : (
                   <Copy aria-hidden="true" />
                 )}
-                {copyState === "done"
-                  ? "Copied"
-                  : copyState === "failed"
-                    ? "Copy failed"
-                    : "Copy"}
+                <span className="action__label">
+                  {copyState === "done"
+                    ? "Copied"
+                    : copyState === "failed"
+                      ? "Copy failed"
+                      : "Copy"}
+                </span>
+              </button>
+              <button
+                type="button"
+                className="action"
+                data-tip="Download this file as a .txt file"
+                aria-label="Download this file as a .txt file"
+                onClick={download}
+              >
+                <DownloadSimple aria-hidden="true" />
+                <span className="action__label">Download</span>
               </button>
               <button
                 type="button"
                 className="action"
                 data-tip="Show a QR code for this page"
+                aria-label="Show a QR code for this page"
                 onClick={() => setQrOpen(true)}
               >
                 <QrCode aria-hidden="true" />
-                QR code
+                <span className="action__label">QR code</span>
               </button>
               <button
                 type="button"
@@ -846,6 +866,7 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
         actions={{
           copyState,
           onCopy: () => void copy(),
+          onDownload: download,
           onQr: () => setQrOpen(true),
           fullWidth: settings.fullWidth,
           onToggleFullWidth: () => {

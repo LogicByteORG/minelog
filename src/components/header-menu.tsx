@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { List, X } from "@phosphor-icons/react";
 import { GITHUB_URL, MODRINTH_URL } from "@/lib/config";
 import { useFloatingMenu } from "@/lib/use-floating-menu";
+import { BrandIcon } from "./brand-icon";
 
 export function HeaderMenu() {
   const { open, pos, button, menu, toggle, close } = useFloatingMenu<HTMLDivElement>();
@@ -53,7 +54,7 @@ export function HeaderMenu() {
               rel="noopener noreferrer"
               onClick={close}
             >
-              <span className="modrinth-icon" aria-hidden="true" />
+              <BrandIcon slug="modrinth" size={18} />
               Download plugin
             </a>
             <a
@@ -63,7 +64,7 @@ export function HeaderMenu() {
               rel="noopener noreferrer"
               onClick={close}
             >
-              <span className="github-icon" aria-hidden="true" />
+              <BrandIcon slug="github" size={20} />
               Source on GitHub
             </a>
           </div>,

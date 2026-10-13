@@ -55,6 +55,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geist.variable} ${bricolage.variable} ${jetbrains.variable} ${minecraft.variable}`}
     >
       <head>
+        <link rel="icon" type="image/png" href="/favicon.ico/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.ico/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.ico/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="minelog" />
+        <link rel="manifest" href="/favicon.ico/site.webmanifest" />
         <script
           dangerouslySetInnerHTML={{
             __html: `try{var s=localStorage.getItem("minelog:theme");var t=s==="light"||s==="dark"?s:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){}`,

@@ -74,7 +74,12 @@ Releases are cut from a tag and published by CI, no manual uploads.
    `minelog plugins vX.Y.Z` with the CHANGELOG section as notes and the
    three jars attached, then uploads the same three jars to the
    `minelog` Modrinth project with loaders, game versions and channel
-   filled in. Tag suffix decides the channel on both sides.
+   filled in, and finally publishes one `minelog` Hangar version with
+   Paper, Waterfall and Velocity downloads. Tag suffix decides the
+   channel on all three sides (`-alpha` and `-beta`/`-rc` both land on
+   Hangar's Beta channel, since the project only keeps Release and
+   Beta). A version already on Hangar is skipped so re-runs stay green.
 
 Secrets: `MODRINTH_TOKEN` (repository secret), `MODRINTH_PROJECT_ID`
-(repository variable, defaults to `minelog`).
+(repository variable, defaults to `minelog`), `HANGAR_API_TOKEN`
+(repository secret, needs the `create_version` permission).

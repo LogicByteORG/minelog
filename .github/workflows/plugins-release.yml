@@ -109,3 +109,33 @@ jobs:
             --file "bukkit=$BUKKIT_JAR" \
             --file "bungee=$BUNGEE_JAR" \
             --file "velocity=$VELOCITY_JAR"
+
+      - name: Resolve Hangar channel
+        id: hangar
+        run: |
+          if [ "${{ steps.meta.outputs.channel }}" = "release" ]; then
+            echo "channel=Release" >> "$GITHUB_OUTPUT"
+          else
+            echo "channel=Beta" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check Hangar for this version
+        id: hangar-check
+        run: |
+          FULL="${{ steps.meta.outputs.full }}"
+          LIST="$(curl -s "https://hangar.papermc.io/api/v1/projects/LogicByteStudios/minelog/versions?limit=25&offset=0" || true)"
+          if echo "$LIST" | jq -e --arg v "$FULL" '.result // [] | map(.name) | index($v)' >/dev/null 2>&1; then
+            echo "Version $FULL is already on Hangar, skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish to Hangar
+        if: steps.hangar-check.outputs.skip != 'true'
+        working-directory: apps/plugins
+        env:
+          HANGAR_API_TOKEN: ${{ secrets.HANGAR_API_TOKEN }}
+          HANGAR_VERSION: ${{ steps.meta.outputs.full }}
+          HANGAR_CHANNEL: ${{ steps.hangar.outputs.channel }}
+        run: ./gradlew publishPluginPublicationToHangar --stacktrace

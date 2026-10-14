@@ -3,8 +3,8 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
-import { List, X } from "@phosphor-icons/react";
-import { GITHUB_URL, MODRINTH_URL } from "@/lib/config";
+import { List, Package, X } from "@phosphor-icons/react";
+import { GITHUB_URL, HANGAR_URL } from "@/lib/config";
 import { useFloatingMenu } from "@/lib/use-floating-menu";
 import { BrandIcon } from "./brand-icon";
 
@@ -48,15 +48,33 @@ export function HeaderMenu() {
               API
             </Link>
             <a
-              href={MODRINTH_URL}
+              href={HANGAR_URL}
               className="site-menu__link"
               target="_blank"
               rel="noopener noreferrer"
               onClick={close}
             >
-              <BrandIcon slug="modrinth" size={18} />
-              Download plugin
+              <Package size={18} aria-hidden="true" />
+              Get it on Paper Hangar
             </a>
+            <span
+              className="site-menu__link site-menu__link--soon"
+              aria-disabled="true"
+              data-tip="Coming soon"
+            >
+              <BrandIcon slug="modrinth" size={18} />
+              Get it on Modrinth
+              <span className="site-menu__soon">Soon</span>
+            </span>
+            <span
+              className="site-menu__link site-menu__link--soon"
+              aria-disabled="true"
+              data-tip="Coming soon"
+            >
+              <BrandIcon slug="curseforge" size={18} />
+              Get it on CurseForge
+              <span className="site-menu__soon">Soon</span>
+            </span>
             <a
               href={GITHUB_URL}
               className="site-menu__link"

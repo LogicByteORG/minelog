@@ -2,6 +2,8 @@
 // Publishes one minelog plugin release to CurseForge, one file per platform jar.
 // Needs CURSEFORGE_TOKEN (repository secret) and CURSEFORGE_PROJECT_ID
 // (repository variable, the numeric project id) in the environment.
+// CURSEFORGE_API is optional (repository variable, defaults to the
+// minecraft endpoint) for projects living under another game endpoint.
 //
 // Usage:
 //   node scripts/publish-curseforge.mjs --version 1.0.1 --title "minelog plugins v1.0.1" \
@@ -16,7 +18,11 @@
 import { readFileSync, statSync } from "node:fs";
 import { parseInvalidVersionId, pickVersionIds } from "./cf-versions.mjs";
 
-const API = "https://minecraft.curseforge.com/api";
+const API = (process.env.CURSEFORGE_API ?? "https://minecraft.curseforge.com/api").replace(/\/+$/, "");
+const OTHER_API =
+  API === "https://minecraft.curseforge.com/api"
+    ? "https://bukkit.curseforge.com/api"
+    : "https://minecraft.curseforge.com/api";
 
 const LABEL_BY_PART = {
   bukkit: "Paper, Spigot, Purpur, Folia",
@@ -126,6 +132,44 @@ const headers = {
   "User-Agent": "minelog/1.0 (https://minelog.org)",
 };
 
+async function probe() {
+  for (const base of [API, OTHER_API]) {
+    try {
+      const types = await fetch(`${base}/game/version-types`, { headers });
+      if (!types.ok) {
+        console.log(`probe ${base} version-types: ${types.status}`);
+      } else {
+        const body = await types.json();
+        const rows = (Array.isArray(body) ? body : (body.data ?? [])).map(
+          (type) => `${type.id}=${type.name ?? type.slug}`,
+        );
+        console.log(`probe ${base} version-types (${rows.length}): ${rows.join(", ")}`);
+      }
+    } catch {
+      console.log(`probe ${base} version-types: failed`);
+    }
+    try {
+      const versions = await fetch(`${base}/game/versions`, { headers });
+      if (!versions.ok) {
+        console.log(`probe ${base} versions: ${versions.status}`);
+      } else {
+        const body = await versions.json();
+        const list = Array.isArray(body) ? body : (body.data ?? []);
+        const { ids } = pickVersionIds(GAME_VERSIONS, list);
+        console.log(`probe ${base} versions: ${list.length} records, ${ids.length} match our range`);
+      }
+    } catch {
+      console.log(`probe ${base} versions: failed`);
+    }
+    try {
+      const project = await fetch(`${base}/projects/${projectId}`, { headers });
+      console.log(`probe ${base} project: ${project.status}`);
+    } catch {
+      console.log(`probe ${base} project: failed`);
+    }
+  }
+}
+
 async function resolveGameVersionIds() {
   const response = await fetch(`${API}/game/versions`, { headers });
   if (!response.ok) {
@@ -166,6 +210,7 @@ async function alreadyUploaded(name, jarName) {
   }
 }
 
+await probe();
 const { ids: gameVersionIds, names: versionNames, types: versionTypes } = await resolveGameVersionIds();
 
 async function uploadFile(file, name, jarName) {

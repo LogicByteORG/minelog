@@ -86,4 +86,6 @@ Secrets: `MODRINTH_TOKEN` (repository secret), `MODRINTH_PROJECT_ID`
 (repository variable, defaults to `minelog`), `HANGAR_API_TOKEN`
 (repository secret, needs the `create_version` permission),
 `CURSEFORGE_TOKEN` (repository secret), `CURSEFORGE_PROJECT_ID`
-(repository variable, the numeric project id).
+(repository variable, the numeric project id), `CURSEFORGE_API`
+(optional repository variable, only if the project lives under another
+game endpoint than minecraft).

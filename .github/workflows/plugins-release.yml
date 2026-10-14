@@ -144,6 +144,7 @@ jobs:
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          CURSEFORGE_API: ${{ vars.CURSEFORGE_API }}
         run: |
           BUKKIT_JAR=(apps/plugins/platform-bukkit/build/libs/minelog-bukkit-*.jar)
           BUNGEE_JAR=(apps/plugins/platform-bungee/build/libs/minelog-bungee-*.jar)

@@ -16,7 +16,7 @@
 // --channel is one of: release, beta, alpha. CurseForge uses the same words.
 
 import { readFileSync, statSync } from "node:fs";
-import { apiBase, parseInvalidVersionId, pickEnvironmentIds, pickVersionIds } from "./cf-versions.mjs";
+import { apiBase, cloneVersions, parseInvalidVersionId, pickEnvironmentIds, pickVersionIds } from "./cf-versions.mjs";
 
 const API = apiBase(process.env.CURSEFORGE_API);
 const OTHER_API =
@@ -161,6 +161,12 @@ async function probe() {
           .map((entry) => `${entry.id}=${entry.name}(${entry.gameVersionTypeID})`);
         console.log(`probe ${base} versions: ${list.length} records, ${ids.length} match our range`);
         console.log(`probe ${base} platform records: ${platforms.join(", ")}`);
+        if (base === OTHER_API) {
+          console.log(`probe ${base} raw: ${JSON.stringify(body).slice(0, 500)}`);
+        } else {
+          const sample = list.filter((entry) => /^1\.2\d\./.test(entry?.name ?? "")).slice(0, 2);
+          console.log(`probe ${base} sample records: ${JSON.stringify(sample).slice(0, 800)}`);
+        }
       }
     } catch {
       console.log(`probe ${base} versions: failed`);
@@ -217,22 +223,42 @@ async function resolveGameVersionIds() {
   return { ids, names, types };
 }
 
-async function alreadyUploaded(name, jarName) {
+async function listProjectFiles() {
   try {
     const response = await fetch(`${API}/projects/${projectId}/files/`, { headers });
-    if (!response.ok) return false;
+    if (!response.ok) {
+      console.log(`Could not list project files: ${response.status}`);
+      return [];
+    }
     const body = await response.json();
     const entries = Array.isArray(body) ? body : (body.data ?? []);
-    return entries.some((entry) =>
-      entry.displayName === name || entry.fileName === jarName || entry.fileNameOnDisk === jarName,
-    );
+    console.log(`Project has ${entries.length} file(s).`);
+    if (entries.length > 0) {
+      console.log(`First file keys: ${Object.keys(entries[0] ?? {}).join(", ")}`);
+    }
+    return entries;
   } catch {
-    return false;
+    console.log("Could not list project files.");
+    return [];
   }
 }
 
+function alreadyUploaded(entries, name, jarName) {
+  return entries.some((entry) =>
+    entry.displayName === name || entry.fileName === jarName || entry.fileNameOnDisk === jarName,
+  );
+}
+
 await probe();
-const { ids: gameVersionIds, names: versionNames, types: versionTypes } = await resolveGameVersionIds();
+const projectFiles = await listProjectFiles();
+const cloned = cloneVersions(projectFiles);
+if (cloned) {
+  console.log(`Reusing game versions from the latest project file (${cloned.length} ids).`);
+}
+const resolved = cloned
+  ? { ids: cloned, names: {}, types: {} }
+  : await resolveGameVersionIds();
+const { ids: gameVersionIds, names: versionNames, types: versionTypes } = resolved;
 
 async function uploadFile(file, name, jarName) {
   let ids = [...gameVersionIds];
@@ -290,7 +316,7 @@ let failed = false;
 for (const file of files) {
   const name = displayName(file);
   const jarName = file.path.split("/").pop();
-  if (await alreadyUploaded(name, jarName)) {
+  if (alreadyUploaded(projectFiles, name, jarName)) {
     console.log(`Skipping ${file.part}: ${version} is already on CurseForge as "${name}"`);
     continue;
   }

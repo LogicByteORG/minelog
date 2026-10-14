@@ -8,6 +8,17 @@ export function apiBase(value) {
 const typeOf = (entry) =>
   typeof entry.gameVersionTypeID === "number" ? entry.gameVersionTypeID : null;
 
+export function cloneVersions(files) {
+  const list = Array.isArray(files) ? files : (files?.data ?? []);
+  for (const file of list) {
+    const ids = file?.gameVersions ?? file?.gameVersionIds ?? file?.versions;
+    if (Array.isArray(ids) && ids.length > 0 && ids.every((id) => typeof id === "number")) {
+      return ids;
+    }
+  }
+  return null;
+}
+
 export function pickEnvironmentIds(types, entries) {
   const list = Array.isArray(types) ? types : (types?.data ?? []);
   const env = list.find(

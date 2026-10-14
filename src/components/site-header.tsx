@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { GITHUB_URL, IS_PREVIEW, MODRINTH_URL } from "@/lib/config";
+import { GITHUB_URL, IS_PREVIEW } from "@/lib/config";
 import { BrandIcon } from "./brand-icon";
+import { DownloadMenu } from "./download-menu";
 import { HeaderMenu } from "./header-menu";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
@@ -39,16 +40,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
             <Link href="/api" className="nav-button">
               API
             </Link>
-            <a
-              href={MODRINTH_URL}
-              className="nav-button site-header__modrinth"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-tip="Get the server plugin on Modrinth"
-            >
-              <BrandIcon slug="modrinth" size={18} />
-              Download
-            </a>
+            <DownloadMenu />
             <a
               href={GITHUB_URL}
               className="nav-button nav-button--icon"

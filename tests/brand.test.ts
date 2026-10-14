@@ -3,7 +3,7 @@ import test from "node:test";
 import { brandMark, knownBrands } from "../src/lib/brand";
 
 test("brand marks ship inline with path data", () => {
-  assert.deepEqual([...knownBrands()].sort(), ["buymeacoffee", "github", "modrinth"]);
+  assert.deepEqual([...knownBrands()].sort(), ["buymeacoffee", "curseforge", "github", "modrinth"]);
   for (const slug of knownBrands()) {
     const mark = brandMark(slug);
     assert.ok(mark.title.length > 0);

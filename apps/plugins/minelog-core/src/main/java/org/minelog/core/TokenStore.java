@@ -47,7 +47,6 @@ public final class TokenStore {
                 try {
                     in.close();
                 } catch (IOException ignored) {
-                    // Keep the in-memory map as is.
                 }
             }
         }
@@ -66,7 +65,6 @@ public final class TokenStore {
                 out.close();
             }
         } catch (IOException ignored) {
-            // Tokens stay in memory for this session.
         }
     }
 }

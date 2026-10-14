@@ -1,6 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
 /node_modules
 /.pnp
 .pnp.*
@@ -9,48 +6,26 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
-# testing
 /coverage
-
-# next.js
 /.next/
 /.next-api/
 /out/
-
-# production
 /build
-
-# misc
 .DS_Store
 *.pem
-
-# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
 .env*
 !.env.example
-
-# vercel
 .vercel
-
-# typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# python bytecode from the bundled skills
 __pycache__/
-
-# gradle (apps/plugins)
 .gradle/
 **/build/
 **/bin/
-
-# local notes and tooling that stay out of the public repo
 /AGENT.md
 /AGENTS.md
 /CLAUDE.md

@@ -1,27 +1,8 @@
 #!/usr/bin/env node
-// Publishes one minelog plugin release to Modrinth, one version per platform jar.
-// Needs MODRINTH_TOKEN in the environment and optionally MODRINTH_PROJECT_ID
-// (defaults to "minelog").
-//
-// Usage:
-//   node scripts/publish-modrinth.mjs --version 1.0.0 --title "minelog plugins v1.0.0" \
-//     --channel release --changelog-file CHANGELOG.1.0.0.md \
-//     --file bukkit=../platform-bukkit/build/libs/minelog-bukkit-1.0.0.jar \
-//     --file bungee=../platform-bungee/build/libs/minelog-bungee-1.0.0.jar \
-//     --file velocity=../platform-velocity/build/libs/minelog-velocity-1.0.0.jar \
-//     [--dry-run]
-//
-// --channel is one of: release, beta, alpha.
-
 import { readFileSync, statSync } from "node:fs";
 
 const API = "https://api.modrinth.com/v2";
 
-// Loaders validated against GET /v2/tag/loader on 2026-10-03. Every entry
-// below supports the "plugin" project type. Modrinth checks a jar against every
-// loader of its version (a proxy jar must carry velocity-plugin.json for the
-// velocity loader, and so on), so each jar becomes its own version with only
-// the loaders it actually supports.
 const LOADERS_BY_PART = {
   bukkit: ["bukkit", "paper", "purpur", "spigot", "folia"],
   bungee: ["bungeecord", "waterfall"],
@@ -33,8 +14,6 @@ const LABEL_BY_PART = {
   velocity: "Velocity",
 };
 
-// Explicit game versions validated against GET /v2/tag/game_version on
-// 2026-10-03. Extend the top end when new Minecraft releases come out.
 const GAME_VERSIONS = [
   "1.8", "1.8.1", "1.8.2", "1.8.3", "1.8.4", "1.8.5", "1.8.6", "1.8.7", "1.8.8", "1.8.9",
   "1.9", "1.9.1", "1.9.2", "1.9.3", "1.9.4",
@@ -132,8 +111,6 @@ if (!token) {
   process.exit(1);
 }
 
-// The version endpoint wants the base62 project ID, not the slug, and answers a
-// slug with a misleading 401. Resolve it first (the token also lets us see drafts).
 const projectRef = process.env.MODRINTH_PROJECT_ID ?? "minelog";
 const headers = { Authorization: token, "User-Agent": "minelog/1.0 (https://minelog.org)" };
 const projectResponse = await fetch(`${API}/project/${encodeURIComponent(projectRef)}`, { headers });
@@ -144,8 +121,6 @@ if (!projectResponse.ok) {
 }
 const projectId = (await projectResponse.json()).id;
 
-// Re-runs must not duplicate a platform that already went up, so skip any jar
-// whose loaders already have a version with this number.
 const existingResponse = await fetch(`${API}/project/${projectId}/version`, { headers });
 const existing = existingResponse.ok ? await existingResponse.json() : [];
 

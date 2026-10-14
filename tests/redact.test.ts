@@ -4,8 +4,6 @@ import { redact } from "../src/lib/redact";
 
 const hidden = (text: string) => redact(text).text;
 
-// Built from pieces so that no complete webhook address sits in the source,
-// which keeps secret scanners from mistaking this made up value for a real one.
 const SLACK_HOOK = ["https://hooks.slack", ".com/services/", "TFAKE0001", "/", "BFAKE0001", "/"].join("");
 
 test("launch arguments and JSON style secrets are hidden, whatever the key is called", () => {

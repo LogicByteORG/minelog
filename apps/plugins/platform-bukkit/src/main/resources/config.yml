@@ -1,4 +1,3 @@
-# minelog settings. Same keys on every platform.
 api-base: "https://api.minelog.org"
 site-base: "https://minelog.org"
 timeout-seconds: 15

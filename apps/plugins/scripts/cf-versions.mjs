@@ -22,20 +22,6 @@ export function cloneVersions(files) {
   return null;
 }
 
-export function pickEnvironmentIds(types, entries) {
-  const list = Array.isArray(types) ? types : (types?.data ?? []);
-  const env = list.find(
-    (type) => String(type?.name ?? "").toLowerCase() === "environment",
-  );
-  if (typeof env?.id !== "number") return { client: null, server: null };
-  const at = (name) =>
-    entries.find((entry) => entry?.name === name && entry?.gameVersionTypeID === env.id);
-  return {
-    client: at("Client")?.id ?? null,
-    server: at("Server")?.id ?? null,
-  };
-}
-
 export function parseInvalidVersionId(text) {
   const match = /Invalid game version ID:\s*(\d+)/.exec(text ?? "");
   return match ? Number(match[1]) : null;

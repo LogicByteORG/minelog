@@ -40,15 +40,27 @@ test("a name with two entries picks the type the other versions vote for", () =>
   assert.deepEqual(found.dropped, []);
 });
 
-test("a lone entry with an uncommon type is dropped instead of failing the upload", () => {
+test("a twin with the Addons type wins for Bukkit-class projects", () => {
+  const entries = [
+    { id: 1, name: "1.20", gameVersionTypeID: 100 },
+    { id: 2, name: "1.20.2", gameVersionTypeID: 100 },
+    { id: 9990, name: "1.20.1", gameVersionTypeID: 100 },
+    { id: 9993, name: "1.20.1", gameVersionTypeID: 615 },
+  ];
+  const found = pickVersionIds(["1.20", "1.20.2", "1.20.1"], entries);
+  assert.deepEqual(found.ids, [1, 2, 9993]);
+  assert.deepEqual(found.dropped, []);
+});
+
+test("a lone entry keeps its type, the upload decides", () => {
   const entries = [
     { id: 1, name: "1.20", gameVersionTypeID: 100 },
     { id: 2, name: "1.20.1", gameVersionTypeID: 100 },
-    { id: 7430, name: "1.8", gameVersionTypeID: 999 },
+    { id: 9970, name: "1.19", gameVersionTypeID: 999 },
   ];
-  const found = pickVersionIds(["1.20", "1.20.1", "1.8"], entries);
-  assert.deepEqual(found.ids, [1, 2]);
-  assert.deepEqual(found.dropped, ["1.8=7430"]);
+  const found = pickVersionIds(["1.20", "1.20.1", "1.19"], entries);
+  assert.deepEqual(found.ids, [1, 2, 9970]);
+  assert.deepEqual(found.dropped, []);
 });
 
 test("missing names are reported and typeless entries keep the old behavior", () => {

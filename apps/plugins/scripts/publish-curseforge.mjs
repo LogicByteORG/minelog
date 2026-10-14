@@ -14,7 +14,7 @@
 // --channel is one of: release, beta, alpha. CurseForge uses the same words.
 
 import { readFileSync, statSync } from "node:fs";
-import { pickVersionIds } from "./cf-versions.mjs";
+import { parseInvalidVersionId, pickVersionIds } from "./cf-versions.mjs";
 
 const API = "https://minecraft.curseforge.com/api";
 
@@ -135,7 +135,7 @@ async function resolveGameVersionIds() {
   }
   const body = await response.json();
   const entries = Array.isArray(body) ? body : (body.data ?? []);
-  const { ids, missing, dropped, typeCount } = pickVersionIds(GAME_VERSIONS, entries);
+  const { ids, names, missing, dropped, typeCount } = pickVersionIds(GAME_VERSIONS, entries);
   if (missing.length > 0) {
     console.log(`CurseForge has no version ids for: ${missing.join(", ")}, leaving them out.`);
   }
@@ -149,7 +149,7 @@ async function resolveGameVersionIds() {
     console.error("No game version resolved, refusing to upload untagged files.");
     process.exit(1);
   }
-  return ids;
+  return { ids, names };
 }
 
 async function alreadyUploaded(name, jarName) {
@@ -166,7 +166,49 @@ async function alreadyUploaded(name, jarName) {
   }
 }
 
-const gameVersionIds = await resolveGameVersionIds();
+const { ids: gameVersionIds, names: versionNames } = await resolveGameVersionIds();
+
+async function uploadFile(file, name, jarName) {
+  let ids = [...gameVersionIds];
+  for (let attempt = 1; attempt <= 10; attempt += 1) {
+    const form = new FormData();
+    form.append("metadata", JSON.stringify({
+      changelog,
+      changelogType: "markdown",
+      displayName: name,
+      gameVersions: ids,
+      releaseType: channel,
+    }));
+    form.append("file", new Blob([readFileSync(file.path)]), jarName);
+
+    const response = await fetch(`${API}/projects/${projectId}/upload-file`, {
+      method: "POST",
+      headers,
+      body: form,
+    });
+    if (response.ok) {
+      const created = await response.json();
+      console.log(`Published ${file.part}: ${created.id ?? "ok"}`);
+      return true;
+    }
+    const text = await response.text();
+    const rejected = response.status === 400 ? parseInvalidVersionId(text) : null;
+    if (rejected === null || !ids.includes(rejected)) {
+      console.error(`CurseForge upload failed for ${file.part}: ${response.status}`);
+      console.error(text);
+      return false;
+    }
+    ids = ids.filter((id) => id !== rejected);
+    console.log(`CurseForge rejected game version ${rejected} (${versionNames[rejected] ?? "unknown"}), retrying without it.`);
+    if (ids.length === 0) {
+      console.error(`CurseForge upload failed for ${file.part}: no game versions left.`);
+      console.error(text);
+      return false;
+    }
+  }
+  console.error(`CurseForge upload failed for ${file.part}: too many rejected versions.`);
+  return false;
+}
 
 let failed = false;
 for (const file of files) {
@@ -176,31 +218,7 @@ for (const file of files) {
     console.log(`Skipping ${file.part}: ${version} is already on CurseForge as "${name}"`);
     continue;
   }
-
-  const metadata = {
-    changelog,
-    changelogType: "markdown",
-    displayName: name,
-    gameVersions: gameVersionIds,
-    releaseType: channel,
-  };
-  const form = new FormData();
-  form.append("metadata", JSON.stringify(metadata));
-  form.append("file", new Blob([readFileSync(file.path)]), jarName);
-
-  const response = await fetch(`${API}/projects/${projectId}/upload-file`, {
-    method: "POST",
-    headers,
-    body: form,
-  });
-  if (!response.ok) {
-    console.error(`CurseForge upload failed for ${file.part}: ${response.status}`);
-    console.error(await response.text());
-    failed = true;
-    continue;
-  }
-  const created = await response.json();
-  console.log(`Published ${file.part}: ${created.id ?? "ok"}`);
+  if (!(await uploadFile(file, name, jarName))) failed = true;
 }
 
 if (failed) process.exit(1);

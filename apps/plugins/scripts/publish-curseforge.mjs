@@ -159,8 +159,12 @@ async function probe() {
         const platforms = list
           .filter((entry) => /bukkit|paper|spigot|purpur|velocity|waterfall|server|client/i.test(entry?.name ?? ""))
           .map((entry) => `${entry.id}=${entry.name}(${entry.gameVersionTypeID})`);
+        const java = list
+          .filter((entry) => entry?.gameVersionTypeID === 2)
+          .map((entry) => `${entry.id}=${entry.name}`);
         console.log(`probe ${base} versions: ${list.length} records, ${ids.length} match our range`);
         console.log(`probe ${base} platform records: ${platforms.join(", ")}`);
+        console.log(`probe ${base} java records: ${java.join(", ")}`);
         if (base === OTHER_API) {
           console.log(`probe ${base} raw: ${JSON.stringify(body).slice(0, 500)}`);
         } else {
@@ -227,7 +231,8 @@ async function listProjectFiles() {
   try {
     const response = await fetch(`${API}/projects/${projectId}/files/`, { headers });
     if (!response.ok) {
-      console.log(`Could not list project files: ${response.status}`);
+      const text = await response.text();
+      console.log(`Could not list project files: ${response.status} ${text.slice(0, 300)}`);
       return [];
     }
     const body = await response.json();

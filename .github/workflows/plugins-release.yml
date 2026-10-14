@@ -70,7 +70,6 @@ jobs:
           fi
           JARS="apps/plugins/platform-bukkit/build/libs/minelog-bukkit-*.jar apps/plugins/platform-bungee/build/libs/minelog-bungee-*.jar apps/plugins/platform-velocity/build/libs/minelog-velocity-*.jar"
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            # Re-run after a partial failure: refresh notes and files.
             gh release edit "$GITHUB_REF_NAME" \
               --title "${{ steps.meta.outputs.title }}" \
               --notes-file /tmp/plugin-notes.md $FLAGS

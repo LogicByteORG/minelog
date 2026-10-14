@@ -2,8 +2,6 @@ import { RETENTION_DAYS, UNHIDDEN_RETENTION_HOURS } from "@/lib/config";
 
 export type HomeFaq = { group: string; question: string; answer: string };
 
-// The order here is the order on the page. Each group is a real topic, so a
-// reader can skip straight to the part they came for.
 export const FAQ_GROUPS = ["Getting started", "Privacy and storage", "Beyond the website"] as const;
 
 export const HOME_FAQ: HomeFaq[] = [

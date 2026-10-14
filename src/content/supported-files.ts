@@ -4,8 +4,6 @@ export type SupportedFileType = {
   note: string;
 };
 
-// Mirrors the detection in src/lib/log.ts (detectKind / KIND_LABEL). Keep
-// this in sync if a new kind gets added there.
 export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
   {
     kind: "Client log",
@@ -54,8 +52,6 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
   },
 ];
 
-// Fallback syntax highlighting for anything that isn't one of the kinds
-// above. Mirrors src/lib/highlight/types.ts (Language / LANGUAGE_LABEL).
 export const HIGHLIGHTED_LANGUAGES = [
   "JavaScript",
   "TypeScript",

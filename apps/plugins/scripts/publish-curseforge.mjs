@@ -1,20 +1,4 @@
 #!/usr/bin/env node
-// Publishes one minelog plugin release to CurseForge, one file per platform jar.
-// Needs CURSEFORGE_TOKEN (repository secret) and CURSEFORGE_PROJECT_ID
-// (repository variable, the numeric project id) in the environment.
-// CURSEFORGE_API is optional (repository variable, defaults to the
-// minecraft endpoint) for projects living under another game endpoint.
-//
-// Usage:
-//   node scripts/publish-curseforge.mjs --version 1.0.1 --title "minelog plugins v1.0.1" \
-//     --channel release --changelog-file CHANGELOG.1.0.1.md \
-//     --file bukkit=../platform-bukkit/build/libs/minelog-bukkit-1.0.1.jar \
-//     --file bungee=../platform-bungee/build/libs/minelog-bungee-1.0.1.jar \
-//     --file velocity=../platform-velocity/build/libs/minelog-velocity-1.0.1.jar \
-//     [--dry-run]
-//
-// --channel is one of: release, beta, alpha. CurseForge uses the same words.
-
 import { readFileSync, statSync } from "node:fs";
 import { apiBase, cloneVersions, parseInvalidVersionId, pickVersionIds } from "./cf-versions.mjs";
 
@@ -26,8 +10,6 @@ const LABEL_BY_PART = {
   velocity: "Velocity",
 };
 
-// Same range as publish-modrinth.mjs. Names are resolved to CurseForge
-// version ids at publish time through GET /api/game/versions.
 const GAME_VERSIONS = [
   "1.8", "1.8.1", "1.8.2", "1.8.3", "1.8.4", "1.8.5", "1.8.6", "1.8.7", "1.8.8", "1.8.9",
   "1.9", "1.9.1", "1.9.2", "1.9.3", "1.9.4",

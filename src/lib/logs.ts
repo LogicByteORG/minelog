@@ -130,10 +130,6 @@ export async function saveLog({
   ipHash,
   source,
 }: SaveInput): Promise<SavedLog> {
-  // Check the limits first. Scanning and hiding private details in a big log is
-  // the expensive part, and a connection that is already over its limit should
-  // not get to spend it. The insert below still checks again, so two uploads
-  // arriving together cannot both squeeze through.
   await assertUnderLimit(ipHash);
 
   const cleaned = content.replaceAll("\u0000", "");

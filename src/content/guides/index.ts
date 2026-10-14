@@ -1,5 +1,3 @@
-// Each guide lives in its own file so that editing one can't risk breaking
-// or merge-conflicting with the others. This file only aggregates them.
 import { CANT_KEEP_UP } from "./minecraft-server-cant-keep-up";
 import { COULD_NOT_RESERVE } from "./minecraft-could-not-reserve-enough-space";
 import { CRASH_REPORT } from "./minecraft-crash-report";

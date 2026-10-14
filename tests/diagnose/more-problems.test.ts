@@ -211,7 +211,6 @@ test("missing classes group by package and ignore 'Could not initialize class'",
     ["unknown-error"],
   );
 
-  // A probe for an optional class is logged as a warning and is not a problem.
   assert.deepEqual(
     ids(at("WARN", "Error loading class: a/b/Config (java.lang.ClassNotFoundException: a/b/Config)")),
     [],

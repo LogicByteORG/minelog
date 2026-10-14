@@ -65,12 +65,10 @@ public final class MinelogPlugin extends Plugin {
         try {
             java.nio.file.Files.copy(in, out.toPath());
         } catch (Exception ignored) {
-            // Admin can create the file by hand.
         } finally {
             try {
                 in.close();
             } catch (Exception ignored) {
-                // Nothing to do.
             }
         }
     }
@@ -89,7 +87,6 @@ public final class MinelogPlugin extends Plugin {
                 values.put(key, read);
             }
         } catch (Exception ignored) {
-            // Defaults above stay in place.
         }
         return values;
     }

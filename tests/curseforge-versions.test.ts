@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { apiBase, parseInvalidVersionId, pickEnvironmentIds, pickVersionIds } from "../apps/plugins/scripts/cf-versions.mjs";
+import { apiBase, cloneVersions, parseInvalidVersionId, pickEnvironmentIds, pickVersionIds } from "../apps/plugins/scripts/cf-versions.mjs";
 
 test("the api base falls back when the variable is missing or blank", () => {
   assert.equal(apiBase(undefined), "https://minecraft.curseforge.com/api");
@@ -89,4 +89,14 @@ test("kept versions carry their types for group drops", () => {
   ];
   const found = pickVersionIds(["1.20", "1.20.1", "1.19", "1.19.1"], entries);
   assert.deepEqual(found.types, { 1: 100, 2: 100, 3: 200, 4: 200 });
+});
+
+test("cloneVersions reuses the version set of an existing file", () => {
+  assert.deepEqual(
+    cloneVersions([{ id: 7, displayName: "v1", gameVersions: [4455, 9638] }]),
+    [4455, 9638],
+  );
+  assert.equal(cloneVersions([{ id: 7, displayName: "v1" }]), null);
+  assert.equal(cloneVersions([]), null);
+  assert.equal(cloneVersions([{ id: 7, gameVersions: ["1.20"] }]), null);
 });

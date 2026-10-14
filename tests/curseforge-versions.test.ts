@@ -54,3 +54,14 @@ test("kept versions carry their names for the retry log", () => {
   const found = pickVersionIds(["1.20", "1.20.1"], entries);
   assert.deepEqual(found.names, { 1: "1.20", 2: "1.20.1" });
 });
+
+test("kept versions carry their types for group drops", () => {
+  const entries = [
+    { id: 1, name: "1.20", gameVersionTypeID: 100 },
+    { id: 2, name: "1.20.1", gameVersionTypeID: 100 },
+    { id: 3, name: "1.19", gameVersionTypeID: 200 },
+    { id: 4, name: "1.19.1", gameVersionTypeID: 200 },
+  ];
+  const found = pickVersionIds(["1.20", "1.20.1", "1.19", "1.19.1"], entries);
+  assert.deepEqual(found.types, { 1: 100, 2: 100, 3: 200, 4: 200 });
+});

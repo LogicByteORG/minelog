@@ -135,7 +135,7 @@ async function resolveGameVersionIds() {
   }
   const body = await response.json();
   const entries = Array.isArray(body) ? body : (body.data ?? []);
-  const { ids, names, missing, dropped, typeCount } = pickVersionIds(GAME_VERSIONS, entries);
+  const { ids, names, types, missing, dropped, typeCount } = pickVersionIds(GAME_VERSIONS, entries);
   if (missing.length > 0) {
     console.log(`CurseForge has no version ids for: ${missing.join(", ")}, leaving them out.`);
   }
@@ -149,7 +149,7 @@ async function resolveGameVersionIds() {
     console.error("No game version resolved, refusing to upload untagged files.");
     process.exit(1);
   }
-  return { ids, names };
+  return { ids, names, types };
 }
 
 async function alreadyUploaded(name, jarName) {
@@ -166,11 +166,11 @@ async function alreadyUploaded(name, jarName) {
   }
 }
 
-const { ids: gameVersionIds, names: versionNames } = await resolveGameVersionIds();
+const { ids: gameVersionIds, names: versionNames, types: versionTypes } = await resolveGameVersionIds();
 
 async function uploadFile(file, name, jarName) {
   let ids = [...gameVersionIds];
-  for (let attempt = 1; attempt <= 10; attempt += 1) {
+  for (let attempt = 1; attempt <= 15; attempt += 1) {
     const form = new FormData();
     form.append("metadata", JSON.stringify({
       changelog,
@@ -198,8 +198,18 @@ async function uploadFile(file, name, jarName) {
       console.error(text);
       return false;
     }
-    ids = ids.filter((id) => id !== rejected);
-    console.log(`CurseForge rejected game version ${rejected} (${versionNames[rejected] ?? "unknown"}), retrying without it.`);
+    const rejectedType = versionTypes[rejected];
+    const group =
+      rejectedType !== undefined
+        ? ids.filter((id) => versionTypes[id] === rejectedType)
+        : [rejected];
+    ids = ids.filter((id) => !group.includes(id));
+    const label = (id) => `${id} (${versionNames[id] ?? "unknown"})`;
+    if (group.length > 1) {
+      console.log(`CurseForge rejected game version ${label(rejected)}, dropping its whole type group: ${group.map(label).join(", ")}.`);
+    } else {
+      console.log(`CurseForge rejected game version ${label(rejected)}, retrying without it.`);
+    }
     if (ids.length === 0) {
       console.error(`CurseForge upload failed for ${file.part}: no game versions left.`);
       console.error(text);

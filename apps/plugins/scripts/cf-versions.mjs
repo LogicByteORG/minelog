@@ -47,6 +47,9 @@ export function pickVersionIds(wanted, entries) {
   return {
     ids: kept.map((item) => item.id),
     names: Object.fromEntries(kept.map((item) => [item.id, item.name])),
+    types: Object.fromEntries(
+      kept.filter((item) => item.type !== null).map((item) => [item.id, item.type]),
+    ),
     missing,
     dropped: dropped.map((item) => `${item.name}=${item.id}`),
     typeCount: [...typeCount],

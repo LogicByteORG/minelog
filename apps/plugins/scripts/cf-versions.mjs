@@ -1,6 +1,11 @@
 const typeOf = (entry) =>
   typeof entry.gameVersionTypeID === "number" ? entry.gameVersionTypeID : null;
 
+export function parseInvalidVersionId(text) {
+  const match = /Invalid game version ID:\s*(\d+)/.exec(text ?? "");
+  return match ? Number(match[1]) : null;
+}
+
 export function pickVersionIds(wanted, entries) {
   const byName = new Map();
   for (const entry of entries) {
@@ -41,6 +46,7 @@ export function pickVersionIds(wanted, entries) {
   const kept = picked.filter((item) => !dropped.includes(item));
   return {
     ids: kept.map((item) => item.id),
+    names: Object.fromEntries(kept.map((item) => [item.id, item.name])),
     missing,
     dropped: dropped.map((item) => `${item.name}=${item.id}`),
     typeCount: [...typeCount],

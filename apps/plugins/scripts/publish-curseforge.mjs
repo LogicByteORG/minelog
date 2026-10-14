@@ -203,7 +203,7 @@ async function resolveGameVersionIds() {
   }
   const body = await response.json();
   const entries = Array.isArray(body) ? body : (body.data ?? []);
-  const { ids, names, types, missing, dropped, typeCount } = pickVersionIds(GAME_VERSIONS, entries);
+  const { ids, names, types, missing, typeCount } = pickVersionIds(GAME_VERSIONS, entries);
   if (missing.length > 0) {
     console.log(`CurseForge has no version ids for: ${missing.join(", ")}, leaving them out.`);
   }
@@ -216,9 +216,6 @@ async function resolveGameVersionIds() {
   }
   if (typeCount.length > 0) {
     console.log(`Game version type counts: ${typeCount.map(([type, count]) => `${type}:${count}`).join(", ")}`);
-  }
-  if (dropped.length > 0) {
-    console.log(`Dropping versions with uncommon types: ${dropped.join(", ")}`);
   }
   if (ids.length === 0) {
     console.error("No game version resolved, refusing to upload untagged files.");

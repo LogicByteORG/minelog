@@ -5,6 +5,8 @@ export function apiBase(value) {
   return raw ? raw.replace(/\/+$/, "") : DEFAULT_API;
 }
 
+const ADDONS_TYPE = 615;
+
 const typeOf = (entry) =>
   typeof entry.gameVersionTypeID === "number" ? entry.gameVersionTypeID : null;
 
@@ -61,9 +63,11 @@ export function pickVersionIds(wanted, entries) {
     let entry = null;
     if (list.length === 1) entry = list[0];
     else if (list.length > 1) {
-      entry = [...list].sort(
-        (a, b) => (votes.get(typeOf(b)) ?? 0) - (votes.get(typeOf(a)) ?? 0),
-      )[0];
+      entry =
+        list.find((item) => typeOf(item) === ADDONS_TYPE) ??
+        [...list].sort(
+          (a, b) => (votes.get(typeOf(b)) ?? 0) - (votes.get(typeOf(a)) ?? 0),
+        )[0];
     }
     if (!entry) missing.push(name);
     else picked.push({ name, id: entry.id, type: typeOf(entry) });
@@ -72,18 +76,14 @@ export function pickVersionIds(wanted, entries) {
   for (const item of picked) {
     if (item.type !== null) typeCount.set(item.type, (typeCount.get(item.type) ?? 0) + 1);
   }
-  const dropped = picked.filter(
-    (item) => item.type !== null && typeCount.get(item.type) === 1 && picked.length > 1,
-  );
-  const kept = picked.filter((item) => !dropped.includes(item));
   return {
-    ids: kept.map((item) => item.id),
-    names: Object.fromEntries(kept.map((item) => [item.id, item.name])),
+    ids: picked.map((item) => item.id),
+    names: Object.fromEntries(picked.map((item) => [item.id, item.name])),
     types: Object.fromEntries(
-      kept.filter((item) => item.type !== null).map((item) => [item.id, item.type]),
+      picked.filter((item) => item.type !== null).map((item) => [item.id, item.type]),
     ),
     missing,
-    dropped: dropped.map((item) => `${item.name}=${item.id}`),
+    dropped: [],
     typeCount: [...typeCount],
   };
 }

@@ -139,3 +139,20 @@ jobs:
           HANGAR_VERSION: ${{ steps.meta.outputs.full }}
           HANGAR_CHANNEL: ${{ steps.hangar.outputs.channel }}
         run: ./gradlew publishPluginPublicationToHangar --stacktrace
+
+      - name: Publish to CurseForge
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
+        run: |
+          BUKKIT_JAR=(apps/plugins/platform-bukkit/build/libs/minelog-bukkit-*.jar)
+          BUNGEE_JAR=(apps/plugins/platform-bungee/build/libs/minelog-bungee-*.jar)
+          VELOCITY_JAR=(apps/plugins/platform-velocity/build/libs/minelog-velocity-*.jar)
+          node apps/plugins/scripts/publish-curseforge.mjs \
+            --version "${{ steps.meta.outputs.full }}" \
+            --title "${{ steps.meta.outputs.title }}" \
+            --channel "${{ steps.meta.outputs.channel }}" \
+            --changelog-file /tmp/plugin-notes.md \
+            --file "bukkit=$BUKKIT_JAR" \
+            --file "bungee=$BUNGEE_JAR" \
+            --file "velocity=$VELOCITY_JAR"

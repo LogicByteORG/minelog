@@ -6,6 +6,7 @@ export function apiBase(value) {
 }
 
 const ADDONS_TYPE = 615;
+const BUKKIT_TYPE = 1;
 
 const typeOf = (entry) =>
   typeof entry.gameVersionTypeID === "number" ? entry.gameVersionTypeID : null;
@@ -64,6 +65,7 @@ export function pickVersionIds(wanted, entries) {
     if (list.length === 1) entry = list[0];
     else if (list.length > 1) {
       entry =
+        list.find((item) => typeOf(item) === BUKKIT_TYPE) ??
         list.find((item) => typeOf(item) === ADDONS_TYPE) ??
         [...list].sort(
           (a, b) => (votes.get(typeOf(b)) ?? 0) - (votes.get(typeOf(a)) ?? 0),

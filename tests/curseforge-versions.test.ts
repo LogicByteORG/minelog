@@ -1,6 +1,31 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { parseInvalidVersionId, pickVersionIds } from "../apps/plugins/scripts/cf-versions.mjs";
+import { apiBase, parseInvalidVersionId, pickEnvironmentIds, pickVersionIds } from "../apps/plugins/scripts/cf-versions.mjs";
+
+test("the api base falls back when the variable is missing or blank", () => {
+  assert.equal(apiBase(undefined), "https://minecraft.curseforge.com/api");
+  assert.equal(apiBase(""), "https://minecraft.curseforge.com/api");
+  assert.equal(apiBase("   "), "https://minecraft.curseforge.com/api");
+  assert.equal(apiBase("https://bukkit.curseforge.com/api/"), "https://bukkit.curseforge.com/api");
+});
+
+test("environment markers resolve to the Client and Server records", () => {
+  const types = [
+    { id: 75208, name: "Environment" },
+    { id: 68441, name: "Modloader" },
+  ];
+  const entries = [
+    { id: 90, name: "Client", gameVersionTypeID: 75208 },
+    { id: 91, name: "Server", gameVersionTypeID: 75208 },
+    { id: 92, name: "Fabric", gameVersionTypeID: 68441 },
+  ];
+  assert.deepEqual(pickEnvironmentIds(types, entries), { client: 90, server: 91 });
+  assert.deepEqual(pickEnvironmentIds([{ id: 1, name: "Other" }], entries), {
+    client: null,
+    server: null,
+  });
+  assert.deepEqual(pickEnvironmentIds(types, []), { client: null, server: null });
+});
 
 test("a name with two entries picks the type the other versions vote for", () => {
   const entries = [

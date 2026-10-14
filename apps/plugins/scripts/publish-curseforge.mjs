@@ -16,9 +16,9 @@
 // --channel is one of: release, beta, alpha. CurseForge uses the same words.
 
 import { readFileSync, statSync } from "node:fs";
-import { parseInvalidVersionId, pickVersionIds } from "./cf-versions.mjs";
+import { apiBase, parseInvalidVersionId, pickEnvironmentIds, pickVersionIds } from "./cf-versions.mjs";
 
-const API = (process.env.CURSEFORGE_API ?? "https://minecraft.curseforge.com/api").replace(/\/+$/, "");
+const API = apiBase(process.env.CURSEFORGE_API);
 const OTHER_API =
   API === "https://minecraft.curseforge.com/api"
     ? "https://bukkit.curseforge.com/api"
@@ -156,17 +156,31 @@ async function probe() {
         const body = await versions.json();
         const list = Array.isArray(body) ? body : (body.data ?? []);
         const { ids } = pickVersionIds(GAME_VERSIONS, list);
+        const platforms = list
+          .filter((entry) => /bukkit|paper|spigot|purpur|velocity|waterfall|server|client/i.test(entry?.name ?? ""))
+          .map((entry) => `${entry.id}=${entry.name}(${entry.gameVersionTypeID})`);
         console.log(`probe ${base} versions: ${list.length} records, ${ids.length} match our range`);
+        console.log(`probe ${base} platform records: ${platforms.join(", ")}`);
       }
     } catch {
       console.log(`probe ${base} versions: failed`);
     }
-    try {
-      const project = await fetch(`${base}/projects/${projectId}`, { headers });
-      console.log(`probe ${base} project: ${project.status}`);
-    } catch {
-      console.log(`probe ${base} project: failed`);
+  }
+}
+
+async function resolveEnvironmentIds(entries) {
+  try {
+    const response = await fetch(`${API}/game/version-types`, { headers });
+    if (!response.ok) {
+      console.log(`Could not list CurseForge version types: ${response.status}, uploading without environment markers.`);
+      return { client: null, server: null };
     }
+    const found = pickEnvironmentIds(await response.json(), entries);
+    console.log(`Environment versions: Client=${found.client ?? "missing"}, Server=${found.server ?? "missing"}`);
+    return found;
+  } catch {
+    console.log("Could not list CurseForge version types, uploading without environment markers.");
+    return { client: null, server: null };
   }
 }
 
@@ -182,6 +196,13 @@ async function resolveGameVersionIds() {
   const { ids, names, types, missing, dropped, typeCount } = pickVersionIds(GAME_VERSIONS, entries);
   if (missing.length > 0) {
     console.log(`CurseForge has no version ids for: ${missing.join(", ")}, leaving them out.`);
+  }
+  const envIds = await resolveEnvironmentIds(entries);
+  for (const [label, id] of Object.entries(envIds)) {
+    if (id !== null && !ids.includes(id)) {
+      ids.push(id);
+      names[id] = label === "client" ? "Client" : "Server";
+    }
   }
   if (typeCount.length > 0) {
     console.log(`Game version type counts: ${typeCount.map(([type, count]) => `${type}:${count}`).join(", ")}`);

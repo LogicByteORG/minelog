@@ -52,6 +52,16 @@ test("a twin with the Addons type wins for Bukkit-class projects", () => {
   assert.deepEqual(found.dropped, []);
 });
 
+test("a twin with the unlisted type 1 wins over every listed type", () => {
+  const entries = [
+    { id: 9990, name: "1.20.1", gameVersionTypeID: 75125 },
+    { id: 9993, name: "1.20.1", gameVersionTypeID: 615 },
+    { id: 9994, name: "1.20.1", gameVersionTypeID: 1 },
+  ];
+  const found = pickVersionIds(["1.20.1"], entries);
+  assert.deepEqual(found.ids, [9994]);
+});
+
 test("a lone entry keeps its type, the upload decides", () => {
   const entries = [
     { id: 1, name: "1.20", gameVersionTypeID: 100 },

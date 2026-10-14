@@ -141,8 +141,6 @@ jobs:
         run: ./gradlew publishPluginPublicationToHangar --stacktrace
 
       - name: Publish to CurseForge
-        # Experimental until the first upload lands green, so it never blocks a release.
-        continue-on-error: true
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}

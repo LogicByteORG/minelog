@@ -16,13 +16,9 @@
 // --channel is one of: release, beta, alpha. CurseForge uses the same words.
 
 import { readFileSync, statSync } from "node:fs";
-import { apiBase, cloneVersions, parseInvalidVersionId, pickEnvironmentIds, pickVersionIds } from "./cf-versions.mjs";
+import { apiBase, cloneVersions, parseInvalidVersionId, pickVersionIds } from "./cf-versions.mjs";
 
 const API = apiBase(process.env.CURSEFORGE_API);
-const OTHER_API =
-  API === "https://minecraft.curseforge.com/api"
-    ? "https://bukkit.curseforge.com/api"
-    : "https://minecraft.curseforge.com/api";
 
 const LABEL_BY_PART = {
   bukkit: "Paper, Spigot, Purpur, Folia",
@@ -133,64 +129,18 @@ const headers = {
 };
 
 async function probe() {
-  for (const base of [API, OTHER_API]) {
-    try {
-      const types = await fetch(`${base}/game/version-types`, { headers });
-      if (!types.ok) {
-        console.log(`probe ${base} version-types: ${types.status}`);
-      } else {
-        const body = await types.json();
-        const rows = (Array.isArray(body) ? body : (body.data ?? [])).map(
-          (type) => `${type.id}=${type.name ?? type.slug}`,
-        );
-        console.log(`probe ${base} version-types (${rows.length}): ${rows.join(", ")}`);
-      }
-    } catch {
-      console.log(`probe ${base} version-types: failed`);
-    }
-    try {
-      const versions = await fetch(`${base}/game/versions`, { headers });
-      if (!versions.ok) {
-        console.log(`probe ${base} versions: ${versions.status}`);
-      } else {
-        const body = await versions.json();
-        const list = Array.isArray(body) ? body : (body.data ?? []);
-        const { ids } = pickVersionIds(GAME_VERSIONS, list);
-        const platforms = list
-          .filter((entry) => /bukkit|paper|spigot|purpur|velocity|waterfall|server|client/i.test(entry?.name ?? ""))
-          .map((entry) => `${entry.id}=${entry.name}(${entry.gameVersionTypeID})`);
-        const java = list
-          .filter((entry) => entry?.gameVersionTypeID === 2)
-          .map((entry) => `${entry.id}=${entry.name}`);
-        console.log(`probe ${base} versions: ${list.length} records, ${ids.length} match our range`);
-        console.log(`probe ${base} platform records: ${platforms.join(", ")}`);
-        console.log(`probe ${base} java records: ${java.join(", ")}`);
-        if (base === OTHER_API) {
-          console.log(`probe ${base} raw: ${JSON.stringify(body).slice(0, 500)}`);
-        } else {
-          const sample = list.filter((entry) => /^1\.2\d\./.test(entry?.name ?? "")).slice(0, 2);
-          console.log(`probe ${base} sample records: ${JSON.stringify(sample).slice(0, 800)}`);
-        }
-      }
-    } catch {
-      console.log(`probe ${base} versions: failed`);
-    }
-  }
-}
-
-async function resolveEnvironmentIds(entries) {
   try {
-    const response = await fetch(`${API}/game/version-types`, { headers });
+    const response = await fetch(`${API}/game/versions`, { headers });
     if (!response.ok) {
-      console.log(`Could not list CurseForge version types: ${response.status}, uploading without environment markers.`);
-      return { client: null, server: null };
+      console.log(`probe versions: ${response.status}`);
+      return;
     }
-    const found = pickEnvironmentIds(await response.json(), entries);
-    console.log(`Environment versions: Client=${found.client ?? "missing"}, Server=${found.server ?? "missing"}`);
-    return found;
+    const body = await response.json();
+    const list = Array.isArray(body) ? body : (body.data ?? []);
+    const { ids } = pickVersionIds(GAME_VERSIONS, list);
+    console.log(`probe versions: ${list.length} records, ${ids.length} match our range`);
   } catch {
-    console.log("Could not list CurseForge version types, uploading without environment markers.");
-    return { client: null, server: null };
+    console.log("probe versions: failed");
   }
 }
 
@@ -206,13 +156,6 @@ async function resolveGameVersionIds() {
   const { ids, names, types, missing, typeCount } = pickVersionIds(GAME_VERSIONS, entries);
   if (missing.length > 0) {
     console.log(`CurseForge has no version ids for: ${missing.join(", ")}, leaving them out.`);
-  }
-  const envIds = await resolveEnvironmentIds(entries);
-  for (const [label, id] of Object.entries(envIds)) {
-    if (id !== null && !ids.includes(id)) {
-      ids.push(id);
-      names[id] = label === "client" ? "Client" : "Server";
-    }
   }
   if (typeCount.length > 0) {
     console.log(`Game version type counts: ${typeCount.map(([type, count]) => `${type}:${count}`).join(", ")}`);

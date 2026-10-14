@@ -14,6 +14,7 @@
 // --channel is one of: release, beta, alpha. CurseForge uses the same words.
 
 import { readFileSync, statSync } from "node:fs";
+import { pickVersionIds } from "./cf-versions.mjs";
 
 const API = "https://minecraft.curseforge.com/api";
 
@@ -134,12 +135,16 @@ async function resolveGameVersionIds() {
   }
   const body = await response.json();
   const entries = Array.isArray(body) ? body : (body.data ?? []);
-  const byName = new Map(entries.map((entry) => [entry.name, entry.id]));
-  const missing = GAME_VERSIONS.filter((name) => !byName.has(name));
+  const { ids, missing, dropped, typeCount } = pickVersionIds(GAME_VERSIONS, entries);
   if (missing.length > 0) {
     console.log(`CurseForge has no version ids for: ${missing.join(", ")}, leaving them out.`);
   }
-  const ids = GAME_VERSIONS.filter((name) => byName.has(name)).map((name) => byName.get(name));
+  if (typeCount.length > 0) {
+    console.log(`Game version type counts: ${typeCount.map(([type, count]) => `${type}:${count}`).join(", ")}`);
+  }
+  if (dropped.length > 0) {
+    console.log(`Dropping versions with uncommon types: ${dropped.join(", ")}`);
+  }
   if (ids.length === 0) {
     console.error("No game version resolved, refusing to upload untagged files.");
     process.exit(1);

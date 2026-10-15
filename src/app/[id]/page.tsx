@@ -189,6 +189,8 @@ export default async function LogPage({
           rawUrl={rawUrl(log.id)}
         />
 
+        <DonateNudge />
+
         <p className="log-page__expiry">
           This log is deleted on{" "}
           <time
@@ -201,8 +203,6 @@ export default async function LogPage({
         </p>
 
         <DeleteLog logId={log.id} />
-
-        <DonateNudge />
 
         <p className="log-page__report">
           Is this log harmful or upsetting? Write to{" "}

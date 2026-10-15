@@ -307,6 +307,16 @@ body:has(.workspace[data-wide="true"]) {
 }
 
 .donate-nudge {
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 0;
+  padding: 0.375rem 0.375rem 0.375rem 0.875rem;
+  color: var(--muted);
+
+  > svg {
+    margin-top: 0;
+  }
+
   a {
     color: var(--accent);
     text-decoration: underline;

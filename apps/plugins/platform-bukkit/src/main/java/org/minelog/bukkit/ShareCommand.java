@@ -48,6 +48,20 @@ public final class ShareCommand implements CommandExecutor, TabCompleter {
             delete(sender, args[1]);
             return true;
         }
+        if (args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("minelog.reload")) {
+                sender.sendMessage(ChatColor.RED + Messages.noPermission());
+                return true;
+            }
+            try {
+                plugin.reload();
+                sender.sendMessage(ChatColor.GREEN + Messages.reloaded());
+            } catch (RuntimeException failed) {
+                plugin.getLogger().warning("Reload failed: " + failed.getMessage());
+                sender.sendMessage(ChatColor.RED + Messages.reloadFailed());
+            }
+            return true;
+        }
         sender.sendMessage(ChatColor.RED + Messages.usage());
         return true;
     }
@@ -141,7 +155,7 @@ public final class ShareCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return match(args[0], Arrays.asList("share", "delete"));
+            return match(args[0], Arrays.asList("share", "delete", "reload"));
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("share")) {
             File logsDir = new File(plugin.getDataFolder().getParentFile().getParentFile(), "logs");

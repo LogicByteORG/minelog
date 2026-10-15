@@ -2,31 +2,62 @@ package org.minelog.bukkit;
 
 import java.lang.reflect.Method;
 import java.util.logging.Level;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.minelog.core.MinelogClient;
 import org.minelog.core.MinelogConfig;
 import org.minelog.core.TokenStore;
 
 public final class MinelogPlugin extends JavaPlugin {
-    private MinelogClient client;
+    private static final int BSTATS_PLUGIN_ID = 34710;
+
+    private volatile MinelogClient client;
     private TokenStore tokens;
-    private MinelogConfig config;
+    private LogCommand logCommand;
+    private ShareCommand shareCommand;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        config = new MinelogConfig(
+        tokens = new TokenStore(new java.io.File(getDataFolder(), "tokens.properties"));
+
+        shareCommand = new ShareCommand(this);
+        getCommand("minelog").setExecutor(shareCommand);
+        getCommand("minelog").setTabCompleter(shareCommand);
+        applySettings();
+
+        new Metrics(this, BSTATS_PLUGIN_ID);
+
+        getLogger().info("Minelog ready. Use /minelog share to upload logs/latest.log.");
+    }
+
+    @Override
+    public void onDisable() {
+        LogCommand.unregister(logCommand);
+        logCommand = null;
+    }
+
+    /** Re-reads config.yml and applies it without restarting the server. */
+    public void reload() {
+        reloadConfig();
+        applySettings();
+    }
+
+    private void applySettings() {
+        MinelogConfig config = new MinelogConfig(
                 getConfig().getString("api-base", "https://api.minelog.org"),
                 getConfig().getString("site-base", "https://minelog.org"),
                 getConfig().getInt("timeout-seconds", 15) * 1000,
                 getConfig().getString("source-name", "minelog Service"));
         client = new MinelogClient(config, "minelog-bukkit/1.0.0");
-        tokens = new TokenStore(new java.io.File(getDataFolder(), "tokens.properties"));
 
-        ShareCommand command = new ShareCommand(this);
-        getCommand("minelog").setExecutor(command);
-        getCommand("minelog").setTabCompleter(command);
-        getLogger().info("Minelog ready. Use /minelog share to upload logs/latest.log.");
+        boolean wantLog = getConfig().getBoolean("log-command", true);
+        if (wantLog && logCommand == null) {
+            logCommand = LogCommand.register(this, shareCommand);
+        } else if (!wantLog && logCommand != null) {
+            LogCommand.unregister(logCommand);
+            logCommand = null;
+        }
     }
 
     public MinelogClient client() {

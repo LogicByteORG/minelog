@@ -7,7 +7,7 @@ website: https://minelog.org
 commands:
   minelog:
     description: Share a log on minelog.org.
-    usage: /minelog share [file]
+    usage: /minelog share [file] | delete <id> | reload
     aliases: [mlog]
     permission: minelog.share
 permissions:
@@ -17,9 +17,13 @@ permissions:
   minelog.delete:
     description: Delete own uploads from minelog.org.
     default: op
+  minelog.reload:
+    description: Reload the minelog settings.
+    default: op
   minelog.admin:
     description: Full minelog access.
     default: op
     children:
       minelog.share: true
       minelog.delete: true
+      minelog.reload: true

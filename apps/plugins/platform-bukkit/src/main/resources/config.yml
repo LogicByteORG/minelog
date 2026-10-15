@@ -1,3 +1,10 @@
+# minelog settings. Edit, save, then restart the server (or reload the plugin).
+
+# Short command: lets players with minelog.share type /log instead of /minelog.
+# Set to false if another plugin already owns /log. /minelog keeps working.
+log-command: true
+
+# Where uploads go. Leave these alone unless you host your own copy.
 api-base: "https://api.minelog.org"
 site-base: "https://minelog.org"
 timeout-seconds: 15

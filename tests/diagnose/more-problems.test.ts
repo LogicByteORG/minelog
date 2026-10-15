@@ -299,6 +299,11 @@ test("the real logs on file don't gain a rule hit that isn't about a real proble
     "extracted-mods", "jvm-heap-setup", "jvm-bad-option", "graphics-driver", "opengl-invalid-operation",
     "native-library-missing", "missing-class", "java-too-new", "plugin-enable-failed",
     "plugin-missing-dependency", "plugin-duplicate", "plugin-broken-file", "crash-report-saved",
+    "server-watchdog", "async-api-call", "version-mismatch", "not-whitelisted", "session-lock",
+    "proxy-forwarding", "connection-throttled", "plugin-event-error", "mod-set-mismatch",
+    "packet-decode-error", "client-login-failed", "profile-key-error", "flying-kick",
+    "unknown-host", "disk-full", "too-many-open-files", "ssl-certificate", "world-data-corrupt",
+    "ticking-crash",
   ]);
   const hits: string[] = [];
   for (const name of readdirSync(dir)) {

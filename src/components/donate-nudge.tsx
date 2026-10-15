@@ -40,17 +40,14 @@ export function DonateNudge() {
   }
 
   return (
-    <div
-      className="callout log-head__notice log-head__notice--single donate-nudge"
-      role="status"
-    >
+    <div className="callout donate-nudge" role="status">
       <BrandIcon slug="buymeacoffee" size={16} />
       <span>
-        Like minelog?{" "}
+        minelog is free to use. If it&apos;s been handy,{" "}
         <a href={BUYMEACOFFEE_URL} target="_blank" rel="noopener noreferrer">
-          A coffee keeps it running
-        </a>
-        .
+          a coffee
+        </a>{" "}
+        helps keep it running.
       </span>
       <button
         type="button"

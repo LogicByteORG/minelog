@@ -6,6 +6,22 @@ Release notes and the Modrinth changelog.
 
 ## Unreleased
 
+## 1.1.0 - 2026-10-15
+
+The Bukkit jar gets a short command, a reload command and a settings
+switch. The Bungee and Velocity jars carry the new version number only,
+their behaviour is the same as 1.0.1.
+
+- Bukkit jar: `/log` now works as a short form of `/minelog`, so
+  `/log`, `/log <file>` and `/log delete <id>` behave the same. It is on by
+  default and can be turned off with `log-command: false` in `config.yml`.
+- Bukkit jar: `/minelog reload` (and `/log reload`) re-reads `config.yml`
+  without a restart, including switching `/log` on or off. Needs the new
+  `minelog.reload` permission, included in `minelog.admin`.
+- Bukkit jar: anonymous usage numbers go to bStats (plugin 34710). Server
+  owners can opt out in `plugins/bStats/config.yml`.
+- Bukkit jar is now shaded so the bStats classes ship relocated inside it.
+
 ## 1.0.1 - 2026-10-14
 
 Small hardening release. The same three jars are now also published to

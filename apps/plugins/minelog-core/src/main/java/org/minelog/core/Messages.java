@@ -67,6 +67,14 @@ public final class Messages {
     }
 
     public static String usage() {
-        return "Use /minelog share [file], or /minelog delete <id>.";
+        return "Use /minelog share [file], /minelog delete <id>, or /minelog reload.";
+    }
+
+    public static String reloaded() {
+        return "Settings reloaded.";
+    }
+
+    public static String reloadFailed() {
+        return "Reload failed. Check config.yml for typos, details are in the console.";
     }
 }

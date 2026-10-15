@@ -25,7 +25,10 @@ All platforms share the same shape:
 - `/minelog share` uploads `logs/latest.log`.
 - `/minelog share <name>` uploads one file from `logs/`, for example `/minelog share 2026-10-01-1.log`.
 - `/minelog delete <id>` deletes a recent upload with its stored token.
+- `/minelog reload` re-reads `config.yml` (Bukkit, permission `minelog.reload`).
 - Alias: `/mlog`.
+- Bukkit only: `/log` does the same as `/minelog`. Set `log-command: false` in
+  `config.yml` to turn it off, for example when another plugin already owns `/log`.
 
 Only `*.log` files inside `logs/` are accepted in v1. Paths, folders and
 `*.log.gz` files are refused with a short message. This keeps a player from
@@ -58,7 +61,17 @@ timeout-seconds: 15
 source-name: "minelog-bukkit"
 ```
 
-Permissions: `minelog.share`, `minelog.delete`, `minelog.admin`.
+The Bukkit config also has `log-command: true`, which controls the short `/log`
+command. Older config files without the key behave as if it were `true`.
+
+## Metrics
+
+The Bukkit jar reports anonymous usage to [bStats](https://bstats.org/plugin/bukkit/minelog/34710)
+(plugin id 34710). Server owners can switch it off globally in
+`plugins/bStats/config.yml`. Bungee and Velocity do not report yet because
+bStats issues a separate plugin id per platform.
+
+Permissions: `minelog.share`, `minelog.delete`, `minelog.reload`, `minelog.admin`.
 
 ## Releases
 

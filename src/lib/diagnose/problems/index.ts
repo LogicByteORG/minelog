@@ -11,6 +11,8 @@ export { GENERIC_PROBLEM_IDS } from "./generic";
 
 export const MAX_PROBLEMS = 50;
 
+const HAS_TEXT = /\S/;
+
 type Input = {
   lines: string[];
   spans: Span[];
@@ -28,6 +30,7 @@ export function findProblems({ lines, spans, environment, kind }: Input, rules: 
 
     for (let number = span.from; number <= span.to; number += 1) {
       const line = clipLine(lines[number - 1]);
+      if (!HAS_TEXT.test(line)) continue;
       for (const rule of rules) {
         const finding = rule.read(line, { head, environment, kind });
         if (!finding) continue;

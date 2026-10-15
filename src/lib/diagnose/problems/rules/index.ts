@@ -1,11 +1,14 @@
 import type { Rule } from "../types";
 import { asyncApiCall } from "./async-api-call";
+import { binaryIncompatible } from "./binary-incompatible";
 import { brokenModConfig } from "./broken-mod-config";
 import { clientLoginFailed } from "./client-login-failed";
+import { configYamlError } from "./config-yaml-error";
 import { connectionRefused } from "./connection-refused";
 import { connectionThrottled } from "./connection-throttled";
 import { crashReportSaved } from "./crash-report-saved";
 import { damagedFile } from "./damaged-file";
+import { databaseConnection } from "./database-connection";
 import { datapackLoadFailed } from "./datapack-load-failed";
 import { diskFull } from "./disk-full";
 import { duplicateMod } from "./duplicate-mod";
@@ -15,23 +18,28 @@ import { fabricDependency } from "./fabric-dependency";
 import { flyingKick } from "./flying-kick";
 import { forgeDependency } from "./forge-dependency";
 import { graphicsDriver } from "./graphics-driver";
+import { graphicsDriverCrash } from "./graphics-driver-crash";
 import { invalidDist } from "./invalid-dist";
 import { javaTooNew } from "./java-too-new";
 import { javaVersion } from "./java-version";
 import { jvmBadOption } from "./jvm-bad-option";
 import { jvmHeapSetup } from "./jvm-heap-setup";
 import { loginVerificationFailed } from "./login-verification-failed";
+import { memoryRegionExhausted } from "./memory-region-exhausted";
 import { missingClass } from "./missing-class";
 import { mixinFailed } from "./mixin-failed";
 import { modCrashed } from "./mod-crashed";
 import { modSetMismatch } from "./mod-set-mismatch";
+import { nativeCrashExitCode } from "./native-crash-exit-code";
 import { nativeLibraryMissing } from "./native-library-missing";
 import { nativeThread } from "./native-thread";
+import { notAForgeMod } from "./not-a-forge-mod";
 import { notWhitelisted } from "./not-whitelisted";
 import { openglInvalidOperation } from "./opengl-invalid-operation";
 import { outOfMemory } from "./out-of-memory";
 import { overloaded } from "./overloaded";
 import { packetDecodeError } from "./packet-decode-error";
+import { pluginAlreadyInitialized } from "./plugin-already-initialized";
 import { pluginApi } from "./plugin-api";
 import { pluginBrokenFile } from "./plugin-broken-file";
 import { pluginDuplicate } from "./plugin-duplicate";
@@ -42,6 +50,7 @@ import { portBind } from "./port-bind";
 import { profileKeyError } from "./profile-key-error";
 import { proxyForwarding } from "./proxy-forwarding";
 import { serverFull } from "./server-full";
+import { serverJarInvalid } from "./server-jar-invalid";
 import { serverWatchdog } from "./server-watchdog";
 import { sessionLock } from "./session-lock";
 import { sslCertificate } from "./ssl-certificate";
@@ -109,4 +118,13 @@ export const RULES: Rule[] = [
   sslCertificate,
   worldDataCorrupt,
   tickingCrash,
+  memoryRegionExhausted,
+  graphicsDriverCrash,
+  configYamlError,
+  databaseConnection,
+  pluginAlreadyInitialized,
+  notAForgeMod,
+  serverJarInvalid,
+  nativeCrashExitCode,
+  binaryIncompatible,
 ];

@@ -303,7 +303,9 @@ test("the real logs on file don't gain a rule hit that isn't about a real proble
     "proxy-forwarding", "connection-throttled", "plugin-event-error", "mod-set-mismatch",
     "packet-decode-error", "client-login-failed", "profile-key-error", "flying-kick",
     "unknown-host", "disk-full", "too-many-open-files", "ssl-certificate", "world-data-corrupt",
-    "ticking-crash",
+    "ticking-crash", "memory-region-exhausted", "graphics-driver-crash", "config-yaml-error",
+    "database-connection", "plugin-already-initialized", "not-a-forge-mod", "server-jar-invalid",
+    "native-crash-exit-code", "binary-incompatible",
   ]);
   const hits: string[] = [];
   for (const name of readdirSync(dir)) {
@@ -315,6 +317,7 @@ test("the real logs on file don't gain a rule hit that isn't about a real proble
     "real-forge-server-1.20.1.log: crash-report-saved",
     "real-labymod-fabric-26.2.log: fabric-dependency",
     "real-neoforge-server-1.21.1.log: crash-report-saved",
+    "synthetic-jvm-crash.txt: graphics-driver-crash",
   ]);
 });
 

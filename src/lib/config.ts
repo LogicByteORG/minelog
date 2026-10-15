@@ -46,9 +46,9 @@ export const GA_MEASUREMENT_ID = "G-W37H1VPCS1";
 
 export const MODRINTH_URL = "https://modrinth.com/project/minelog";
 
-export const CURSEFORGE_URL = "https://www.curseforge.com/minecraft/bukkit-plugins/minelog";
+export const CURSEFORGE_URL = "https://curseforge.minelog.org";
 
-export const HANGAR_URL = "https://hangar.papermc.io/LogicByteStudios/minelog";
+export const HANGAR_URL = "https://hangar.minelog.org";
 
 export const BUYMEACOFFEE_URL = "https://buymeacoffee.com/pozii";
 

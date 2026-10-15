@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { CaretDown, Package } from "@phosphor-icons/react";
-import { HANGAR_URL } from "@/lib/config";
+import { CURSEFORGE_URL, HANGAR_URL } from "@/lib/config";
 import { useFloatingMenu } from "@/lib/use-floating-menu";
 import { BrandIcon } from "./brand-icon";
 
@@ -56,16 +56,17 @@ export function DownloadMenu() {
               Modrinth
               <span className="download-menu__soon">Soon</span>
             </span>
-            <span
+            <a
+              href={CURSEFORGE_URL}
               role="menuitem"
-              aria-disabled="true"
-              className="download-menu__link download-menu__link--soon"
-              data-tip="Coming soon"
+              className="download-menu__link"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={close}
             >
               <BrandIcon slug="curseforge" size={18} />
               CurseForge
-              <span className="download-menu__soon">Soon</span>
-            </span>
+            </a>
           </div>,
           document.body,
         )}

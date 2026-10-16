@@ -235,14 +235,19 @@
     height: 1rem;
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: var(--hover-bg);
     color: var(--ink);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     background: var(--press-bg);
     color: var(--ink);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 
   &[aria-pressed="true"],

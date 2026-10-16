@@ -40,6 +40,35 @@ export function plainText(body: string, status = 200): Response {
   });
 }
 
+const STREAM_CHUNK_CHARS = 256 * 1024;
+
+export function streamedText(body: string): Response {
+  let offset = 0;
+  const encoder = new TextEncoder();
+  const stream = new ReadableStream<Uint8Array>({
+    pull(controller) {
+      if (offset >= body.length) {
+        controller.close();
+        return;
+      }
+      let end = Math.min(body.length, offset + STREAM_CHUNK_CHARS);
+      const last = body.charCodeAt(end - 1);
+      if (end < body.length && last >= 0xd800 && last <= 0xdbff) end -= 1;
+      controller.enqueue(encoder.encode(body.slice(offset, end)));
+      offset = end;
+    },
+  });
+  return new Response(stream, {
+    status: 200,
+    headers: withCors({
+      "Content-Type": "text/plain; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
+      "X-Robots-Tag": "noindex, nofollow",
+      "Cache-Control": "public, max-age=60",
+    }),
+  });
+}
+
 export function v2Error(
   status: number,
   code: string,

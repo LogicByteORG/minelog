@@ -56,6 +56,7 @@ type FilterBarProps = {
   onReset: () => void;
   actions: {
     copyState: CopyState;
+    busy: boolean;
     onCopy: () => void;
     onDownload: () => void;
     onQr: () => void;
@@ -84,8 +85,9 @@ export function FilterBar({
           <button
             type="button"
             className="action action--copy"
-            data-tip="Copy the whole log"
+            data-tip={actions.busy ? "Available once the whole log has loaded" : "Copy the whole log"}
             aria-label="Copy the whole log"
+            disabled={actions.busy}
             onClick={actions.onCopy}
             data-state={actions.copyState}
           >
@@ -110,8 +112,9 @@ export function FilterBar({
           <button
             type="button"
             className="action"
-            data-tip="Download this log as a .txt file"
+            data-tip={actions.busy ? "Available once the whole log has loaded" : "Download this log as a .txt file"}
             aria-label="Download this log as a .txt file"
+            disabled={actions.busy}
             onClick={actions.onDownload}
           >
             <DownloadSimple aria-hidden="true" />

@@ -13,10 +13,9 @@ import { AnalyzeMenu } from "@/components/analyze-menu";
 import { ProblemsPanel } from "@/components/problems-panel";
 import { LogWorkspace } from "@/components/workspace/log-workspace";
 import { REPORT_EMAIL } from "@/lib/config";
-import { readInsights } from "@/lib/diagnose/insights";
 import { isValidId } from "@/lib/ids";
-import { classifyLine, formatBytes, kindLabel, type LogKind } from "@/lib/log";
-import { getCachedLog } from "@/lib/log-cache";
+import { formatBytes } from "@/lib/log";
+import { getCachedLogPage } from "@/lib/log-cache";
 import { openGraphFor, logEmbedDescription } from "@/lib/seo";
 import { rawUrl } from "@/lib/site";
 import { timeLeft } from "@/lib/retention";
@@ -25,32 +24,11 @@ import { formatUtc, timeAgo } from "@/lib/time";
 export const dynamic = "force-dynamic";
 
 const getLog = cache(async (id: string) =>
-  isValidId(id) ? getCachedLog(id) : null,
+  isValidId(id) ? getCachedLogPage(id) : null,
 );
-
-const isGameLog = (kind: LogKind) =>
-  kind === "server" || kind === "client" || kind === "crash" || kind === "jvm";
 
 const number = (value: number) => value.toLocaleString("en");
 const isoDate = (date: Date) => date.toISOString().slice(0, 10);
-
-const ASK_AI_LINES = 40;
-const ASK_AI_CHARS = 2000;
-
-function errorExcerpt(content: string, kind: LogKind): string {
-  const picked: string[] = [];
-  let chars = 0;
-  let capturing = false;
-  for (const line of content.split(/\r?\n/)) {
-    const info = classifyLine(line, kind);
-    if (info.start) capturing = info.level === "error";
-    if (!capturing) continue;
-    picked.push(line);
-    chars += line.length + 1;
-    if (picked.length >= ASK_AI_LINES || chars >= ASK_AI_CHARS) break;
-  }
-  return picked.join("\n").slice(0, ASK_AI_CHARS).trim();
-}
 
 export async function generateMetadata({
   params,
@@ -61,7 +39,7 @@ export async function generateMetadata({
     return { title: "Log not found", robots: { index: false, follow: false } };
   }
 
-  const title = `${kindLabel(log.kind, log.content)} | ${log.id}`;
+  const title = `${log.label} | ${log.id}`;
   const description = logEmbedDescription(log);
 
   return {
@@ -90,7 +68,7 @@ export default async function LogPage({
   const notice = (await searchParams)?.notice === "readme-view-only";
 
   const source = log.source;
-  const insights = isGameLog(log.kind) ? readInsights(log.content, log.kind) : null;
+  const { insights } = log;
 
   return (
     <>
@@ -100,7 +78,7 @@ export default async function LogPage({
         <div className="log-head settle">
           <div>
             <h1 className="log-head__title">
-              {kindLabel(log.kind, log.content)}
+              {log.label}
             </h1>
             <p className="log-head__meta">
               {source && (
@@ -146,7 +124,7 @@ export default async function LogPage({
             <ShareLink />
             {insights && <AnalyzeMenu env={insights.environment} />}
             {insights && <ProblemsPanel problems={insights.problems} />}
-            <AskAiMenu excerpt={errorExcerpt(log.content, log.kind)} />
+            <AskAiMenu excerpt={log.excerpt} />
             {log.kind === "readme" && (
               <a
                 href={`/${log.id}/view`}
@@ -183,7 +161,10 @@ export default async function LogPage({
         {notice && <ViewNotice />}
 
         <LogWorkspace
-          content={log.content}
+          content={log.head}
+          complete={log.complete}
+          totalLines={log.lineCount}
+          totalBytes={log.byteSize}
           kind={log.kind}
           logId={log.id}
           rawUrl={rawUrl(log.id)}

@@ -1,5 +1,6 @@
 import { revalidateTag, unstable_cache } from "next/cache";
 import { LOG_CACHE_SECONDS } from "./config";
+import { buildLogPage, type LogPageData } from "./log-page";
 import { findLog, type StoredLog } from "./logs";
 import { pageBase } from "./site";
 
@@ -28,6 +29,35 @@ export async function getCachedLog(id: string): Promise<StoredLog | null> {
   );
 
   let cached: CachedLog;
+  try {
+    cached = await load();
+  } catch (error) {
+    if (error instanceof NoSuchLog) return null;
+    throw error;
+  }
+
+  const expiresAt = new Date(cached.expiresAt);
+  if (expiresAt.getTime() <= Date.now()) return null;
+  return { ...cached, createdAt: new Date(cached.createdAt), expiresAt };
+}
+
+export type LogPage = Omit<LogPageData, "createdAt" | "expiresAt"> & {
+  createdAt: Date;
+  expiresAt: Date;
+};
+
+export async function getCachedLogPage(id: string): Promise<LogPage | null> {
+  const load = unstable_cache(
+    async (): Promise<LogPageData> => {
+      const log = await findLog(id);
+      if (!log) throw new NoSuchLog();
+      return buildLogPage(log);
+    },
+    ["log-page", id],
+    { tags: [logTag(id)], revalidate: LOG_CACHE_SECONDS },
+  );
+
+  let cached: LogPageData;
   try {
     cached = await load();
   } catch (error) {

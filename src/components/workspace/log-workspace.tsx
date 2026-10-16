@@ -26,7 +26,8 @@ import { GOTO_LINE_EVENT } from "../line-link";
 import { VIEW_CHUNK_LINES } from "@/lib/config";
 import { downloadTextFile, logDownloadName } from "@/lib/download";
 import { detectLanguage } from "@/lib/highlight";
-import type { LogKind } from "@/lib/log";
+import { formatBytes, type LogKind } from "@/lib/log";
+import { loadText } from "@/lib/load-text";
 import { fontStackOf, useViewSettings } from "@/lib/use-view-settings";
 import { ReadmeView } from "../readme-view";
 import { Segmented } from "./segmented";
@@ -134,16 +135,37 @@ function commitMarks(next: Set<number>) {
 
 type WorkspaceProps = {
   content: string;
+  complete: boolean;
+  totalLines: number;
+  totalBytes: number;
   kind: LogKind;
   logId: string;
   rawUrl: string;
 };
 
-export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
+export function LogWorkspace({
+  content,
+  complete,
+  totalLines,
+  totalBytes,
+  kind,
+  logId,
+  rawUrl,
+}: WorkspaceProps) {
   const panelId = useId();
   const viewer = useRef<HTMLDivElement>(null);
   const copyTimer = useRef<number | undefined>(undefined);
   const { settings, update, reset } = useViewSettings();
+
+  const [full, setFull] = useState<string | null>(null);
+  const [loadedBytes, setLoadedBytes] = useState(0);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const pendingGoto = useRef<number | null>(null);
+  const text = full ?? content;
+  const partial = !complete && full === null;
+  const loadPercent =
+    totalBytes > 0 ? Math.min(99, Math.floor((loadedBytes / totalBytes) * 100)) : 0;
 
   const [search, setSearch] = useState("");
   const [useRegex, setUseRegex] = useState(false);
@@ -175,6 +197,23 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
     () => () => document.documentElement.classList.remove("layout-motion"),
     [],
   );
+
+  useEffect(() => {
+    if (complete) return;
+    const controller = new AbortController();
+    loadText(`/api/log/${logId}`, setLoadedBytes, controller.signal)
+      .then(setFull)
+      .catch(() => {
+        if (!controller.signal.aborted) setLoadFailed(true);
+      });
+    return () => controller.abort();
+  }, [complete, logId, attempt]);
+
+  function retryLoad() {
+    setLoadFailed(false);
+    setLoadedBytes(0);
+    setAttempt((current) => current + 1);
+  }
 
   const topBtn = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -236,12 +275,12 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
   }
 
   const language = useMemo(
-    () => (kind === "unknown" ? detectLanguage(content) : null),
-    [content, kind],
+    () => (kind === "unknown" ? detectLanguage(text) : null),
+    [text, kind],
   );
   const lines = useMemo(
-    () => parseLines(content, kind, language),
-    [content, kind, language],
+    () => parseLines(text, kind, language),
+    [text, kind, language],
   );
   useEffect(() => {
     lineCountRef.current = lines.length;
@@ -561,7 +600,11 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
     let counter = 0;
     function onGoto(event: Event) {
       const n = (event as CustomEvent<number>).detail;
-      if (!Number.isInteger(n) || n < 1 || n > lines.length) return;
+      if (!Number.isInteger(n) || n < 1) return;
+      if (n > lines.length) {
+        if (partial && n <= totalLines) pendingGoto.current = n;
+        return;
+      }
       counter += 1;
       setSearch("");
       setUseRegex(false);
@@ -578,25 +621,36 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
     }
     window.addEventListener(GOTO_LINE_EVENT, onGoto);
     return () => window.removeEventListener(GOTO_LINE_EVENT, onGoto);
-  }, [lines, settings.foldStacks]);
+  }, [lines, partial, totalLines, settings.foldStacks]);
+
+  useEffect(() => {
+    if (full === null || pendingGoto.current === null) return;
+    const n = pendingGoto.current;
+    pendingGoto.current = null;
+    window.dispatchEvent(new CustomEvent<number>(GOTO_LINE_EVENT, { detail: n }));
+  }, [full]);
 
   async function copy() {
-    setCopyState((await writeToClipboard(content)) ? "done" : "failed");
+    setCopyState((await writeToClipboard(text)) ? "done" : "failed");
     window.clearTimeout(copyTimer.current);
     copyTimer.current = window.setTimeout(() => setCopyState("idle"), 2200);
   }
 
   function download() {
-    downloadTextFile(logDownloadName(logId), content);
+    downloadTextFile(logDownloadName(logId), text);
   }
 
   function enableLayoutMotion() {
     document.documentElement.classList.add("layout-motion");
   }
 
-  const summary = filtering
-    ? `Showing ${number(visible.length)} of ${number(lines.length)} lines`
-    : `${number(lines.length)} lines`;
+  const summary = partial
+    ? loadFailed
+      ? `First ${number(lines.length)} of ${number(totalLines)} lines`
+      : `Loading ${loadPercent}% of ${number(totalLines)} lines`
+    : filtering
+      ? `Showing ${number(visible.length)} of ${number(lines.length)} lines`
+      : `${number(lines.length)} lines`;
 
   function updateView(patch: Partial<typeof settings>) {
     update(patch);
@@ -740,7 +794,7 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
           <div className="workspace__viewer">
             {readmeMode === "rendered" ? (
               <ReadmeView
-                text={content}
+                text={text}
                 label="Rendered README"
                 find={{
                   pattern: query.highlight,
@@ -865,6 +919,7 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
         onReset={resetFilters}
         actions={{
           copyState,
+          busy: partial,
           onCopy: () => void copy(),
           onDownload: download,
           onQr: () => setQrOpen(true),
@@ -940,6 +995,30 @@ export function LogWorkspace({ content, kind, logId, rawUrl }: WorkspaceProps) {
                   </div>
                 )}
               </>
+            )}
+            {partial && (
+              <div
+                className="log__more log__more--action"
+                role={loadFailed ? "alert" : "status"}
+              >
+                {loadFailed ? (
+                  <>
+                    <span>The rest of this log didn&apos;t load.</span>
+                    <button
+                      type="button"
+                      className="button hollow button--sm"
+                      onClick={retryLoad}
+                    >
+                      Try again
+                    </button>
+                  </>
+                ) : (
+                  <span>
+                    Loading the rest of the log, {loadPercent}% of{" "}
+                    {formatBytes(totalBytes)}.
+                  </span>
+                )}
+              </div>
             )}
           </div>
         </div>

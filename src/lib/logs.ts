@@ -199,6 +199,13 @@ export async function findLog(id: string): Promise<StoredLog | null> {
   return row;
 }
 
+export async function logExists(id: string): Promise<boolean> {
+  const [row] = await db()<{ id: string }[]>`
+    select id from public.logs where id = ${id} and expires_at > now()
+  `;
+  return Boolean(row);
+}
+
 export async function findLogInfo(id: string): Promise<LogInfo | null> {
   const [row] = await db()<LogInfo[]>`
     select id, kind, line_count, byte_size, error_count, warn_count,

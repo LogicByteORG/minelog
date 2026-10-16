@@ -206,6 +206,15 @@ body:has(.workspace[data-wide="true"]) {
   }
 }
 
+// The link grows with ?marks=..., so keep its box a fixed width. Otherwise
+// the actions row wraps and pushes the log down every time a line is marked.
+@include breakpoint(medium) {
+  .log-head__actions .share-link {
+    flex: none;
+    width: 18rem;
+  }
+}
+
 .ask-ai {
   &__menu {
     min-width: 12rem;

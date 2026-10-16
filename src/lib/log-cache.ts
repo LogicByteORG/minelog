@@ -1,7 +1,7 @@
 import { revalidateTag, unstable_cache } from "next/cache";
 import { LOG_CACHE_SECONDS } from "./config";
 import { buildLogPage, type LogPageData } from "./log-page";
-import { findLog, type StoredLog } from "./logs";
+import { findLog, logExists, type StoredLog } from "./logs";
 import { pageBase } from "./site";
 
 type CachedLog = Omit<StoredLog, "createdAt" | "expiresAt"> & {
@@ -38,6 +38,7 @@ export async function getCachedLog(id: string): Promise<StoredLog | null> {
 
   const expiresAt = new Date(cached.expiresAt);
   if (expiresAt.getTime() <= Date.now()) return null;
+  if (!(await logExists(id))) return null;
   return { ...cached, createdAt: new Date(cached.createdAt), expiresAt };
 }
 
@@ -67,6 +68,7 @@ export async function getCachedLogPage(id: string): Promise<LogPage | null> {
 
   const expiresAt = new Date(cached.expiresAt);
   if (expiresAt.getTime() <= Date.now()) return null;
+  if (!(await logExists(id))) return null;
   return { ...cached, createdAt: new Date(cached.createdAt), expiresAt };
 }
 
@@ -81,7 +83,10 @@ export async function forgetLog(id: string): Promise<void> {
   }
 
   const secret = process.env.REVALIDATE_SECRET;
-  if (!secret) return;
+  if (!secret) {
+    console.warn("REVALIDATE_SECRET is not set, so the site's cached copy of a deleted log isn't cleared.");
+    return;
+  }
   try {
     await fetch(`${pageBase()}/api/revalidate`, {
       method: "POST",

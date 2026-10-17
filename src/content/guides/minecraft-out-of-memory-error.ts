@@ -6,18 +6,18 @@ export const OUT_OF_MEMORY: Guide = {
   title: "How to fix OutOfMemoryError in Minecraft",
   metaTitle: "Fix Minecraft OutOfMemoryError: Java heap space",
   description:
-    "Minecraft crashed with java.lang.OutOfMemoryError? See what the message means and how to give the game or server more memory in your launcher or start command.",
-  lead: "Java ran out of the memory it was allowed to use, and the fix is usually one number in your launcher or your start command.",
+    "Crashed with java.lang.OutOfMemoryError? Learn what it means and how to give the game or server more memory from your launcher or start command.",
+  lead: "Minecraft crashed with an OutOfMemoryError? Don't blame your RAM yet. Java only lets the game use a slice of it, and in most cases the cure is one number in your launcher or start command.",
   updated: "2026-09-26",
   related: ["minecraft-crash-report", "minecraft-could-not-reserve-enough-space", "find-minecraft-logs"],
   sections: [
     {
       id: "what-it-means",
-      heading: "What the error means",
+      heading: "What this error is actually telling you",
       blocks: [
         {
           type: "p",
-          text: "Java gives Minecraft a fixed pool of memory, the heap, and when the game asks for more than the pool holds it stops with this:",
+          text: "Java hands Minecraft a fixed pool called the heap, and when the game wants more than fits it just dies with this:",
         },
         {
           type: "code",
@@ -25,43 +25,35 @@ export const OUT_OF_MEMORY: Guide = {
         },
         {
           type: "p",
-          text: "The pool is smaller than your computer's RAM on purpose. The Minecraft Launcher starts the game with `-Xmx2G`, so 2 GB, which is plenty for vanilla and not enough for a big modpack or a busy server.",
+          text: "The default launcher caps that pool at 2 GB, which is the `-Xmx2G` you'll see in a minute. That's plenty for vanilla, but a big modpack or a busy server gets cramped fast.",
         },
         {
           type: "p",
-          text: "Two cousins. `GC overhead limit exceeded` is the same problem: Java spent nearly all its time cleaning up and got almost nothing back. `unable to create native thread` is different. It's a system limit, not the heap, and more memory usually makes it worse.",
+          text: "You'll sometimes see `GC overhead limit exceeded` instead, which is the same problem wearing a different hat, since Java spent nearly all its time cleaning up and freed almost nothing. `unable to create native thread` is another beast entirely. The operating system is refusing it, and throwing more RAM at that tends to make things worse.",
         },
       ],
     },
     {
       id: "launcher",
-      heading: "Give the game more memory",
+      heading: "Giving the game more memory",
       blocks: [
         {
           type: "p",
-          text: "Most launchers have a memory setting per instance:",
-        },
-        {
-          type: "list",
-          items: [
-            "Minecraft Launcher: Installations, the three dots on your version, Edit, More options. In JVM arguments, change `-Xmx2G` to something bigger, like `-Xmx4G`.",
-            "Prism Launcher: instance settings, Java, then raise Maximum memory allocation.",
-            "Anything else: look for Memory, RAM or Java in the instance or launcher settings.",
-          ],
+          text: "Most launchers keep a memory setting for each instance. In the Minecraft Launcher you open Installations, hit the three dots on your version, then Edit and More options, and in the JVM arguments box swap `-Xmx2G` for something larger, say `-Xmx4G`. Prism Launcher hides it in the instance settings under Java, as Maximum memory allocation, and with anything else you're looking for Memory, RAM or Java in the settings.",
         },
         {
           type: "p",
-          text: "`G` is gigabytes, so `-Xmx4G` caps the game at 4 GB. Pick a number the machine can spare. On a 16 GB computer, 6 to 8 GB for the game is a sensible ceiling; leave the rest for the system, or everything slows down.",
+          text: "That `G` is gigabytes, so `-Xmx4G` caps the game at 4. Don't hand it everything, because the system needs a few gigs of its own or the whole PC crawls. On a 16 GB machine, 6 to 8 for the game works well.",
         },
       ],
     },
     {
       id: "server",
-      heading: "Give a server more memory",
+      heading: "Giving a server more memory",
       blocks: [
         {
           type: "p",
-          text: "On a server it's the start command. Change the `-Xmx` number, and set `-Xms` to match:",
+          text: "On a server you change it in the start command by editing the `-Xmx` value and making `-Xms` the same, as in the line below.",
         },
         {
           type: "code",
@@ -69,68 +61,56 @@ export const OUT_OF_MEMORY: Guide = {
         },
         {
           type: "p",
-          text: "On a hosting panel there's usually a RAM slider instead, and your plan sets how far it goes.",
+          text: "Hosting panels usually hide all of that behind a RAM slider, which tops out wherever your plan does.",
         },
       ],
     },
     {
       id: "more-isnt-always-better",
-      heading: "When more memory doesn't help",
+      heading: "When more memory doesn't fix it",
       blocks: [
         {
           type: "p",
-          text: "Bigger isn't automatically better. Java has to sweep the heap now and then, and a very large one makes those pauses longer, which shows up as lag. If you raised the number and the error came back, it's probably something else:",
-        },
-        {
-          type: "list",
-          items: [
-            "A mod or plugin that eats more memory the longer the game runs, a leak. A crash that always arrives after an hour or two is the tell.",
-            "A high render distance, heavy shaders or a 512x resource pack on the client.",
-            "Too many loaded chunks or entities on a server.",
-          ],
-        },
-        {
-          type: "p",
-          text: "The crash report and `latest.log` show what was running when memory ran out. [How to read a Minecraft crash report](/guides/minecraft-crash-report) shows where to look.",
+          text: "If it's still crashing after you raised the number, memory probably isn't the real problem. A huge heap also means longer cleanup sweeps, so you get stutters instead. The usual suspects are a leaking mod or plugin that eats a bit more every minute (if the crash always lands after an hour or two, that's your tell), a big render distance, heavy shaders or a 512x resource pack on the client, and too many loaded chunks or entities on a server. Both the crash report and `latest.log` record what was running when memory ran out, and [the crash report guide](/guides/minecraft-crash-report) shows where to look.",
         },
       ],
     },
     {
       id: "java-crash",
-      heading: "If Java says there isn't enough memory to start",
+      heading: "When Java says it can't even start",
       blocks: [
         {
           type: "p",
-          text: "`There is insufficient memory for the Java Runtime Environment to continue`, usually inside a file named `hs_err_pid` plus a number, means the computer itself is out of memory. It's the opposite problem: you asked Java for more than the machine has free. Lower the number or close other programs.",
+          text: "The message `There is insufficient memory for the Java Runtime Environment to continue` shows up in a file called `hs_err_pid` followed by a number, and it means the machine itself ran dry because Java was promised more than the computer had free. Lower the number or close a few programs.",
         },
       ],
     },
     {
       id: "share-it",
-      heading: "Send the log",
+      heading: "Sending the log to someone",
       blocks: [
         {
           type: "p",
-          text: "Asking for help? Send `latest.log` and the newest crash report. Drop the file onto [minelog](/) for a link; IP addresses and the like are hidden first.",
+          text: "When you ask someone for help, send `latest.log` plus the newest crash report. Drop the file on [minelog](/) and you get a link, with IP addresses and similar details hidden first.",
         },
       ],
     },
   ],
   faq: [
     {
-      question: "How much RAM does Minecraft need?",
+      question: "How much RAM does Minecraft actually need?",
       answer:
-        "Vanilla is fine on a few gigabytes. Modpacks and busy servers want more, often 4 to 8 GB, and the modpack's page usually says how much. Never hand Java more than the computer can spare.",
+        "Vanilla gets by on a few gigabytes. Modpacks and busy servers want more, often 4 to 8 GB, and the modpack's own page normally tells you. Just never promise Java more than the computer can spare.",
     },
     {
-      question: "What does -Xmx mean?",
+      question: "What do -Xmx and -Xms mean in the start command?",
       answer:
-        "The largest amount of memory Java may use: -Xmx4G is 4 gigabytes at most. -Xms is how much it grabs at startup.",
+        "-Xmx is the most memory Java is allowed to take, so -Xmx4G means 4 gigabytes at most, while -Xms is what it grabs right at startup.",
     },
     {
       question: "Why does Minecraft still run out of memory after I gave it more?",
       answer:
-        "Probably something is holding on to memory, like a mod or plugin with a leak. If it always dies after about the same playing time, that's your answer.",
+        "Most likely something is hoarding it, like a mod or plugin with a leak. If it dies after about the same playing time every run, that's your answer.",
     },
   ],
 };

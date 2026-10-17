@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { DownloadSimple, X } from "@phosphor-icons/react";
+import { useBackdropClose } from "@/lib/backdrop-close";
 import { CopyLink } from "../copy-link";
 import { Segmented } from "./segmented";
 
@@ -111,6 +112,8 @@ export function QrDialog({ open, onClose, logId, rawUrl, viewPath }: QrDialogPro
     onClose();
   }
 
+  const backdrop = useBackdropClose(handleClose);
+
   async function downloadPng() {
     if (!qr) return;
     const blob = await toPngBlob(qr);
@@ -137,9 +140,7 @@ export function QrDialog({ open, onClose, logId, rawUrl, viewPath }: QrDialogPro
       className="dialog"
       aria-labelledby="qr-title"
       onClose={handleClose}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) handleClose();
-      }}
+      {...backdrop}
     >
       <div className="dialog__panel">
         <div className="dialog__head">

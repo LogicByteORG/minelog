@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { LinkGuard } from "@/components/link-guard";
 import { TooltipHost } from "@/components/tooltip-host";
 import { RETENTION_DAYS } from "@/lib/config";
 import { SITE_NAME } from "@/lib/seo";
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body>
         {children}
+        <LinkGuard />
         <TooltipHost />
       </body>
     </html>

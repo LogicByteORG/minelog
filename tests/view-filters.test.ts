@@ -102,6 +102,11 @@ test("www addresses gain https", () => {
   assert.equal(parts[1].text, "www.example.com/a");
 });
 
+test("a redacted address never becomes a link", () => {
+  const text = "get it at http://[redacted]/launcher.exe now";
+  assert.deepEqual(splitLinks(text), [{ text, url: null }]);
+});
+
 test("plain text and unsafe schemes stay unlinked", () => {
   assert.deepEqual(splitLinks("just words"), [{ text: "just words", url: null }]);
   assert.deepEqual(splitLinks("write to ops@example.com"), [

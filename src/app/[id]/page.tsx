@@ -17,7 +17,7 @@ import { isValidId } from "@/lib/ids";
 import { formatBytes } from "@/lib/log";
 import { getCachedLogPage } from "@/lib/log-cache";
 import { openGraphFor, logEmbedDescription } from "@/lib/seo";
-import { rawUrl } from "@/lib/site";
+import { downloadUrl, rawUrl } from "@/lib/site";
 import { timeLeft } from "@/lib/retention";
 import { formatUtc, timeAgo } from "@/lib/time";
 
@@ -168,6 +168,7 @@ export default async function LogPage({
           kind={log.kind}
           logId={log.id}
           rawUrl={rawUrl(log.id)}
+          downloadUrl={downloadUrl(log.id)}
         />
 
         <DonateNudge />

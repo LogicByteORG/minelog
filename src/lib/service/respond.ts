@@ -6,7 +6,8 @@ const CORS: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Content-Encoding, X-Minelog-Client, Authorization",
-  "Access-Control-Expose-Headers": "Retry-After",
+  "Access-Control-Expose-Headers": "Retry-After, Content-Disposition",
+
   "Access-Control-Max-Age": "86400",
 };
 
@@ -42,7 +43,7 @@ export function plainText(body: string, status = 200): Response {
 
 const STREAM_CHUNK_CHARS = 256 * 1024;
 
-export function streamedText(body: string): Response {
+export function streamedText(body: string, options: { saveAs?: string } = {}): Response {
   let offset = 0;
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
@@ -65,6 +66,7 @@ export function streamedText(body: string): Response {
       "X-Content-Type-Options": "nosniff",
       "X-Robots-Tag": "noindex, nofollow",
       "Cache-Control": "public, max-age=60",
+      ...(options.saveAs ? { "Content-Disposition": `attachment; filename="${options.saveAs}"` } : {}),
     }),
   });
 }

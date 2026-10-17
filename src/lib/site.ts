@@ -28,3 +28,7 @@ export function rawUrl(id: string): string {
   return `${publicApiBase()}/v2/logs/${id}/raw`;
 }
 
+
+export function downloadUrl(id: string): string {
+  return `${publicApiBase()}/v2/logs/${id}/download`;
+}

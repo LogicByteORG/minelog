@@ -24,7 +24,6 @@ import {
 } from "@phosphor-icons/react";
 import { GOTO_LINE_EVENT } from "../line-link";
 import { VIEW_CHUNK_LINES } from "@/lib/config";
-import { downloadTextFile, logDownloadName } from "@/lib/download";
 import { detectLanguage } from "@/lib/highlight";
 import { formatBytes, type LogKind } from "@/lib/log";
 import { loadText } from "@/lib/load-text";
@@ -141,6 +140,7 @@ type WorkspaceProps = {
   kind: LogKind;
   logId: string;
   rawUrl: string;
+  downloadUrl: string;
 };
 
 export function LogWorkspace({
@@ -151,6 +151,7 @@ export function LogWorkspace({
   kind,
   logId,
   rawUrl,
+  downloadUrl,
 }: WorkspaceProps) {
   const panelId = useId();
   const viewer = useRef<HTMLDivElement>(null);
@@ -636,10 +637,6 @@ export function LogWorkspace({
     copyTimer.current = window.setTimeout(() => setCopyState("idle"), 2200);
   }
 
-  function download() {
-    downloadTextFile(logDownloadName(logId), text);
-  }
-
   function enableLayoutMotion() {
     document.documentElement.classList.add("layout-motion");
   }
@@ -744,16 +741,16 @@ export function LogWorkspace({
                       : "Copy"}
                 </span>
               </button>
-              <button
-                type="button"
+              <a
                 className="action"
+                href={downloadUrl}
+                rel="noopener"
                 data-tip="Download this file as a .txt file"
                 aria-label="Download this file as a .txt file"
-                onClick={download}
               >
                 <DownloadSimple aria-hidden="true" />
                 <span className="action__label">Download</span>
-              </button>
+              </a>
               <button
                 type="button"
                 className="action"
@@ -921,7 +918,7 @@ export function LogWorkspace({
           copyState,
           busy: partial,
           onCopy: () => void copy(),
-          onDownload: download,
+          downloadUrl,
           onQr: () => setQrOpen(true),
           fullWidth: settings.fullWidth,
           onToggleFullWidth: () => {

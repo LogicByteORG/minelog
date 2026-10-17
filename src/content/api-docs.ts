@@ -564,6 +564,7 @@ export const OUTLINE: { id: string; label: string }[] = [
   { id: "read", label: "Read a log" },
   { id: "delete", label: "Delete a log" },
   { id: "raw", label: "Get the raw text" },
+  { id: "download", label: "Download as a file" },
   { id: "insights", label: "Read what we found" },
   { id: "analyse", label: "Analyse without saving" },
   { id: "get-limits", label: "Read the limits" },

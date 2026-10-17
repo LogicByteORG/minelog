@@ -310,15 +310,10 @@
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 2px;
-    transition: color 140ms ease;
-
-    &:hover {
-      color: var(--accent);
-    }
-
-    &:active {
-      color: color-mix(in srgb, var(--accent) 70%, var(--ink));
-    }
+    @include link-states(
+      color-mix(in srgb, currentColor 72%, var(--bg)),
+      color-mix(in srgb, currentColor 52%, var(--bg))
+    );
   }
 
   .log__line[data-current] {

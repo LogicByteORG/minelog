@@ -111,7 +111,7 @@ function ReadmeLink({ href, children }: { href?: string; children: ReactNode }) 
   const external = /^https?:\/\//i.test(href ?? "");
   if (!external) return <a href={href}>{children}</a>;
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer">
+    <a href={href} target="_blank" rel="noopener noreferrer nofollow ugc" data-guard="">
       {children}
     </a>
   );

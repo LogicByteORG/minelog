@@ -123,7 +123,8 @@ function LinkedText({
             key={index}
             href={part.url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer nofollow ugc"
+            data-guard=""
             onClick={(event) => event.stopPropagation()}
           >
             {inner}

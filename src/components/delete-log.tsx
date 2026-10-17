@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import { useRouter } from "next/navigation";
 import { Trash, X } from "@phosphor-icons/react";
 import { deleteLog } from "@/lib/api";
+import { useBackdropClose } from "@/lib/backdrop-close";
 import {
   forgetDeleteToken,
   parseDeleteEntry,
@@ -44,6 +45,8 @@ export function DeleteLog({ logId }: { logId: string }) {
     if (open && !element.open) element.showModal();
     if (!open && element.open) element.close();
   }, [open, entry]);
+
+  const backdrop = useBackdropClose(() => close());
 
   if (!entry) return null;
   const minutes = Math.ceil((entry.until - tick * TICK_MS) / 60_000);
@@ -105,9 +108,7 @@ export function DeleteLog({ logId }: { logId: string }) {
           setOpen(false);
           setProblem(null);
         }}
-        onClick={(event) => {
-          if (event.target === event.currentTarget) close();
-        }}
+        {...backdrop}
       >
         <div className="dialog__panel">
           <div className="dialog__head">

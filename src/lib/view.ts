@@ -376,6 +376,13 @@ function cleanLink(raw: string): string | null {
   if (cleaned.length === 0) return null;
   const href = cleaned.startsWith("www.") ? `https://${cleaned}` : cleaned;
   if (!/^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(href)) return null;
+  // Redaction can leave "http://[redacted]/path". That is not an address, so it
+  // must stay plain text instead of becoming a link to nowhere.
+  try {
+    new URL(href);
+  } catch {
+    return null;
+  }
   return href;
 }
 

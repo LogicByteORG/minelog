@@ -6,14 +6,14 @@ export const JAVA_VERSION: Guide = {
   title: "How to fix UnsupportedClassVersionError in Minecraft",
   metaTitle: "Minecraft UnsupportedClassVersionError: which Java?",
   description:
-    "UnsupportedClassVersionError means Minecraft or a mod needs a newer Java than the one running it. See which Java each version needs and how to check yours.",
-  lead: "The game, a mod or the server was built for a newer version of Java than the one you're running it with. The fix is to run it with the right Java.",
+    "Minecraft or a mod wants a newer Java than the one running it. See which Java each version needs and how to check yours.",
+  lead: "Whatever you're launching, be it the game, a mod or a server jar, was compiled for a newer Java than the one that's actually running it. Point it at the right Java and the crash goes away.",
   updated: "2026-09-26",
   related: ["minecraft-crash-report", "find-minecraft-logs"],
   sections: [
     {
       id: "what-it-means",
-      heading: "What the error says",
+      heading: "Reading the error",
       blocks: [
         {
           type: "code",
@@ -21,7 +21,7 @@ export const JAVA_VERSION: Guide = {
         },
         {
           type: "p",
-          text: "The two numbers are Java versions in disguise. The first says what the file needs, the second what you have. Subtract 44 from each: 65 is Java 21, and 61 is Java 17. So this file needs Java 21 and is being run with Java 17.",
+          text: "The message is clumsy, but the two numbers in it are the useful part. They're class file versions, each one sitting 44 above the Java release it belongs to, which makes 65 Java 21 and 61 Java 17. In this example, then, a file that needs 21 got launched on 17. The table below has the other versions you'll bump into.",
         },
         {
           type: "table",
@@ -39,7 +39,7 @@ export const JAVA_VERSION: Guide = {
     },
     {
       id: "which-java",
-      heading: "Which Java each game version needs",
+      heading: "Matching Java to Minecraft",
       blocks: [
         {
           type: "table",
@@ -54,17 +54,17 @@ export const JAVA_VERSION: Guide = {
         },
         {
           type: "p",
-          text: "Each of these means that version or newer. A mod or plugin can ask for a newer Java than the game does, so if the game itself starts and the error names a mod, check what the mod's page says.",
+          text: "Have a look at the table above before you install anything, because it saves a lot of guessing. Each row means that version or newer, so going higher is normally fine. Mods are where it gets messy: a mod or plugin may demand a newer Java than the game does, and when the game boots but the error mentions a mod, the mod's own page wins over this table.",
         },
       ],
     },
     {
       id: "check",
-      heading: "Check which Java you're running",
+      heading: "Finding out which Java you have",
       blocks: [
         {
           type: "p",
-          text: "Open a terminal and run:",
+          text: "Type this into a terminal and read the first line, which will look like `openjdk version \"21.0.5\"`:",
         },
         {
           type: "code",
@@ -72,45 +72,37 @@ export const JAVA_VERSION: Guide = {
         },
         {
           type: "p",
-          text: "The first line says the version, like `openjdk version \"21.0.5\"`. On a computer with several Javas installed, the terminal may pick a different one than the launcher does, so check the one that actually starts the game.",
+          text: "If you've collected a few Javas over the years, the terminal can grab a different one than your launcher does, and the launcher's is the one that matters, so don't trust the terminal blindly.",
         },
       ],
     },
     {
       id: "fix-client",
-      heading: "Fix it in a launcher",
+      heading: "Launchers",
       blocks: [
         {
           type: "p",
-          text: "The Minecraft Launcher brings its own Java, so you rarely see this error there. Other launchers let you pick one. In Prism Launcher, open the instance's settings, go to Java, and choose an installation that matches the table above, or let it download one. If you use a modpack, use the Java version its page asks for.",
+          text: "Mojang's own launcher bundles a Java for you, which is why you rarely see this error from it. Other launchers usually leave the choice to you. In Prism Launcher you open the instance's settings, go to Java, and pick an install that fits the table, or let Prism fetch one for you. Playing a modpack? Go by whatever Java the pack's page recommends.",
         },
       ],
     },
     {
       id: "fix-server",
-      heading: "Fix it on a server",
+      heading: "Servers",
       blocks: [
         {
-          type: "steps",
-          items: [
-            "Install the Java version the table shows for your Minecraft version.",
-            "Run `java -version` again and make sure it prints the new one. If it doesn't, start the server with the full path to the new Java, like `/usr/lib/jvm/java-21-openjdk/bin/java -jar server.jar nogui`.",
-            "On a hosting panel, look for a Java version setting or startup image and pick the right one.",
-          ],
-        },
-        {
           type: "p",
-          text: "The other direction can fail too. Old versions may not run on the newest Java, especially heavy modpacks, so use the version the game asks for, not the biggest number.",
+          text: "Install the Java that matches your Minecraft version and run `java -version` once more to see whether it really changed. If it keeps printing the old one, launch the server with the full path to the new Java instead, something like `/usr/lib/jvm/java-21-openjdk/bin/java -jar server.jar nogui`. A hosting panel will normally have a dropdown for this somewhere in the startup settings. Newest isn't always best, though, since old versions and big modpacks sometimes choke on it, so go with whatever the game asks for.",
         },
       ],
     },
     {
       id: "share-it",
-      heading: "Send the log",
+      heading: "Sending the log",
       blocks: [
         {
           type: "p",
-          text: "If you're not sure which file is the problem, send `latest.log`. Drop it onto [minelog](/) for a link. The Analyze menu on a saved log shows the Java version the log itself reports.",
+          text: "Not sure which file to hand over? `latest.log` is a safe bet. Drop it onto [minelog](/) and you'll get a link, and after it's saved the Analyze menu shows the Java version the log reports about itself.",
         },
       ],
     },
@@ -119,17 +111,17 @@ export const JAVA_VERSION: Guide = {
     {
       question: "What does class file version 65.0 mean?",
       answer:
-        "The file was built for Java 21. Subtract 44 from the class file version to get the Java version.",
+        "It means Java 21. Take 44 off the class file version and you've got the Java release.",
     },
     {
       question: "Which Java does Minecraft 1.21 need?",
       answer:
-        "Java 21 or newer. Minecraft 1.20.5 and later need Java 21, and 26.1 and later need Java 25.",
+        "Java 21 or newer, same as everything from 1.20.5 on. Versions 26.1 and later need Java 25.",
     },
     {
-      question: "Can I keep several Java versions installed?",
+      question: "Can I have more than one Java installed?",
       answer:
-        "Yes. Most launchers let each instance pick its own. For a server, start it with the full path to the Java you want.",
+        "You can, and plenty of people do. Most launchers let each instance pick its own, and for a server you just start it with the full path to the Java you want.",
     },
   ],
 };

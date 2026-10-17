@@ -244,9 +244,9 @@ export default function Home() {
                     ))}
                   </ul>
                   <p className="filetypes-excluded">
-                    Not supported: archives like .zip, .jar, .gz, .7z and
-                    .rar (unzip them and paste the file inside), plus
-                    images, audio and video.
+                    Archives such as .zip, .jar, .gz, .7z and .rar won&apos;t
+                    work (unzip them and paste the file inside), and neither
+                    will images, audio or video.
                   </p>
                 </div>
               </div>
@@ -260,8 +260,9 @@ export default function Home() {
               <div className="cell small-12 large-4 section__intro">
                 <h2 className="section__title">Questions people ask</h2>
                 <p className="section__text">
-                  Short answers. If your game or server is misbehaving, these
-                  guides walk through the common errors step by step.
+                  Quick answers are below, and if your game or server is
+                  acting up, the guides take the common errors one step at a
+                  time.
                 </p>
                 <h3 className="faq__label faq__label--guides">Guides</h3>
                 <ul className="faq-guides">

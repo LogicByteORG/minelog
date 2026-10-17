@@ -6,14 +6,14 @@ export const MOD_MISSING_DEPENDENCY: Guide = {
   title: "How to fix a mod that \"requires\" another mod",
   metaTitle: "Fix Minecraft \"requires ... which is missing\" mod error",
   description:
-    "A mod that says it requires another mod, which is missing, needs that second mod installed. Here is how to read the message and fix it on Fabric and Forge.",
-  lead: "A mod asked for another mod, or a certain version of one, and didn't find it. The message names both, so the fix is usually one download.",
+    "If a mod says another mod is missing, the fix is installing that second mod. We show how to read the message on Fabric and Forge.",
+  lead: "You installed a mod, and it went looking for another one, or for a particular version of it, and came back empty-handed. The message names exactly what's missing, which is why the cure is so often a single download.",
   updated: "2026-10-11",
   related: ["minecraft-mixin-apply-failed", "minecraft-crash-report", "minecraft-java-version-error", "find-minecraft-logs"],
   sections: [
     {
       id: "fabric",
-      heading: "What it looks like on Fabric",
+      heading: "How Fabric words it",
       blocks: [
         {
           type: "code",
@@ -22,53 +22,47 @@ export const MOD_MISSING_DEPENDENCY: Guide = {
         },
         {
           type: "p",
-          text: "The first name in quotes is the mod that's complaining. The second is the one it needs. `which is missing!` means it isn't in the `mods` folder at all. `but only the wrong versions are present: 0.5.8!` means it's there, but not a version that fits. And `is incompatible with` means the two can't run together.",
+          text: "Read the quoted names left to right: the first is the mod that's grumbling and the second is the one it wants. The end of the sentence is the real clue. If it says `which is missing!`, the mod isn't in your `mods` folder at all, and if it says `but only the wrong versions are present: 0.5.8!`, you've got it, just not a version that works. Seeing `is incompatible with` means the two simply refuse to share a game.",
         },
       ],
     },
     {
       id: "forge",
-      heading: "On Forge and NeoForge",
+      heading: "How Forge and NeoForge word it",
       blocks: [
         {
           type: "p",
-          text: "Forge and NeoForge print a list headed `Missing or unsupported mandatory dependencies:` with lines like `Mod ID: 'geckolib', Requested by: 'examplemod', Expected range: '[4.4,)', Actual version: '[MISSING]'`. Read it the same way. `Requested by` is the mod that complains, `Mod ID` is what it needs, and `[4.4,)` means 4.4 or newer.",
+          text: "They print a whole list under `Missing or unsupported mandatory dependencies:`, and each entry looks something like `Mod ID: 'geckolib', Requested by: 'examplemod', Expected range: '[4.4,)', Actual version: '[MISSING]'`. It reads the same way. The mod that complains is `Requested by`, what it needs is the `Mod ID`, and `[4.4,)` just means 4.4 or anything newer.",
         },
       ],
     },
     {
       id: "fix",
-      heading: "Fix it",
+      heading: "Sorting it out",
       blocks: [
         {
-          type: "steps",
-          items: [
-            "Find the exact name of the missing mod in the message.",
-            "Download it from Modrinth or CurseForge for your Minecraft version and your loader. Fabric files don't load on Forge, and the other way round. Then drop the `.jar` into `mods`.",
-            "If it says the wrong version is present, replace it with one inside the range, such as `0.6.0 or later`. Update the mods that depend on it to match.",
-            "Many Fabric mods need Fabric API. It's a separate download from Fabric Loader and has to sit in `mods` too.",
-            "Don't want the mod that complains? Take that one out instead.",
-          ],
+          type: "p",
+          text: "First, copy the exact name of the missing mod out of the message. Grab it from Modrinth or CurseForge, checking that it matches your Minecraft version and your loader (a Fabric file won't load on Forge and vice versa), and drop the `.jar` into `mods`. If the complaint was about a wrong version, swap in one inside the range, like `0.6.0 or later`, and update whatever depends on it. Fabric players meet this one a lot, because plenty of mods need Fabric API. It isn't bundled with Fabric Loader, so it's its own download and it has to live in `mods` as well. Or you can decide the mod that's complaining isn't worth the trouble and delete it.",
         },
       ],
     },
     {
       id: "incompatible",
-      heading: "When two mods can't be used together",
+      heading: "When two mods clash",
       blocks: [
         {
           type: "p",
-          text: "`is incompatible with` is a clash the authors know about. Remove whichever mod you need less, and check both for a newer version, because a clash is sometimes fixed in an update.",
+          text: "The words `is incompatible with` mean the authors already know these two don't get along. Pick whichever one you can live without and remove it, but peek at both for a newer release first, since clashes do get fixed.",
         },
       ],
     },
     {
       id: "share-it",
-      heading: "Send the log",
+      heading: "Getting help",
       blocks: [
         {
           type: "p",
-          text: "If you can't tell which mod it means, send `latest.log` and the newest file in `crash-reports`. Drop them onto [minelog](/) for a link; it lists the missing mod in plain words once saved.",
+          text: "Can't work out which mod it means? Send `latest.log` and the newest file in `crash-reports`. Drop them onto [minelog](/) and, once it's saved, you get a link that lists the missing mod in plain words.",
         },
       ],
     },
@@ -77,17 +71,17 @@ export const MOD_MISSING_DEPENDENCY: Guide = {
     {
       question: "What is Fabric API, and do I need it?",
       answer:
-        "It's a library most Fabric mods build on. It isn't part of Fabric Loader, so you download it on its own and put it in the mods folder.",
+        "It's a library most Fabric mods build on. Since it isn't part of Fabric Loader, you download it on its own and put it in the mods folder.",
     },
     {
       question: "What does \"or later\" mean?",
       answer:
-        "That version or any newer one. A newer download is fine unless the message says an exact version.",
+        "That version or any newer one. Unless the message asks for an exact version, a newer download is fine.",
     },
     {
       question: "Why does it say a wrong version is present?",
       answer:
-        "The mod is installed, but outside the range the other mod accepts. Update or downgrade it to fit, and update the mods that depend on it.",
+        "The mod is installed, but outside the range the other mod accepts. Update or downgrade it until it fits, and update the mods that depend on it too.",
     },
   ],
 };

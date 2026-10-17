@@ -19,7 +19,7 @@ export const MINELOG_AND_PASTEBIN: Guide = {
       blocks: [
         {
           type: "p",
-          text: "minelog and mclo.gs are both built specifically to read a Minecraft log: they highlight log levels, detect the game version and loader, and hide private details on their own. Pastebin is a general text paste site with none of that. It stores whatever text you give it, with syntax highlighting for the language you pick, and nothing more.",
+          text: "minelog and mclo.gs are both built specifically to read a Minecraft log, so they highlight log levels, detect the game version and loader, and hide private details on their own. Pastebin is a general text paste site with none of that. It stores whatever text you give it, with syntax highlighting for the language you pick, and nothing more.",
         },
       ],
     },
@@ -61,7 +61,7 @@ export const MINELOG_AND_PASTEBIN: Guide = {
         },
         {
           type: "p",
-          text: "Pastebin's numbers come from its own FAQ and developer API documentation, checked September 2026, and can change.",
+          text: "Pastebin's numbers come from its own FAQ and developer API documentation, checked September 2026, so they can change.",
         },
       ],
     },
@@ -71,7 +71,7 @@ export const MINELOG_AND_PASTEBIN: Guide = {
       blocks: [
         {
           type: "p",
-          text: "For a short config snippet, a one-off command, or code that has nothing to do with Minecraft, Pastebin's simplicity and huge syntax-highlighting list work fine, since it's built for exactly that. A full `latest.log` or crash report is what minelog and mclo.gs exist for instead: they're built to read the file, not just store it.",
+          text: "For a short config snippet, a one-off command, or code that has nothing to do with Minecraft, Pastebin's simplicity and huge syntax-highlighting list work fine, since it's built for exactly that. A full `latest.log` or crash report is what minelog and mclo.gs exist for instead, because they read the file and don't just store it.",
         },
       ],
     },
@@ -81,7 +81,7 @@ export const MINELOG_AND_PASTEBIN: Guide = {
       blocks: [
         {
           type: "p",
-          text: "See how minelog compares to [mclo.gs](/guides/minelog-and-mclogs), the log sharing tool most Minecraft launchers and bots already use, and to [mclogs.minestrator.com](/guides/minelog-and-mclogs-minestrator), a mirror of the same software under a different host.",
+          text: "You can also see how minelog compares to [mclo.gs](/guides/minelog-and-mclogs), the log sharing tool most Minecraft launchers and bots already use, and to [mclogs.minestrator.com](/guides/minelog-and-mclogs-minestrator), a mirror of the same software under a different host.",
         },
       ],
     },
@@ -90,12 +90,12 @@ export const MINELOG_AND_PASTEBIN: Guide = {
     {
       question: "Why not just paste a Minecraft log into Pastebin?",
       answer:
-        "You can, but it isn't built for it: no redaction, no log formatting, no crash detection, and a 512 KB size limit on a free account that a full log can easily exceed. minelog and mclo.gs both hide private details automatically and read the log itself for you.",
+        "You can, but it isn't built for it. There's no redaction, no log formatting, no crash detection, and the free size limit of 512 KB is one a full log can easily exceed. minelog and mclo.gs both hide private details automatically and read the log itself for you.",
     },
     {
       question: "Does Pastebin remove IP addresses or tokens from a log?",
       answer:
-        "No. Pastebin doesn't scan or redact content. Whatever you paste goes up exactly as it is, so anything private needs to be removed by hand before you post it.",
+        "No. Pastebin doesn't scan or redact content, so whatever you paste goes up exactly as it is, and anything private needs to be removed by hand before you post it.",
     },
     {
       question: "Is a Pastebin paste private?",
@@ -104,12 +104,12 @@ export const MINELOG_AND_PASTEBIN: Guide = {
     },
     {
       question: "Can I delete a log on minelog?",
-      answer: `Yes, in the first hour after you save it. Open the log in the same browser and use the button at the bottom of the page, or send the delete token to the API if you saved it from an app. After that hour the log stays until it deletes itself, ${RETENTION_DAYS} days after it was saved, so read the preview before you upload.`,
+      answer: `Yes, but only in the first hour after you save it. Open the log in the same browser and press the button at the bottom of the page, or send the delete token to the API if the upload came from an app. Past that hour the log stays until it removes itself, ${RETENTION_DAYS} days after saving, so check the preview before you upload.`,
     },
     {
       question: "Does minelog analyse logs?",
       answer:
-        "Yes. The Analyze menu on a saved log shows the game version, loader, Java version, launcher and mods, and flags known problems, like running out of memory, a port already in use or a plugin that needs a newer server, each with something to try. It won't explain every crash, but it covers the common ones.",
+        "It does. On a saved log, the Analyze menu lists the game version, loader, Java version, launcher and mods, and calls out known problems such as running out of memory, a port that's already taken or a plugin built for a newer server, each with something to try. Not every crash gets an explanation, but the common ones do.",
     },
   ],
 };

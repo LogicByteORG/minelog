@@ -9,7 +9,7 @@ export const HOME_FAQ: HomeFaq[] = [
     group: "Getting started",
     question: "Where do I find my Minecraft log?",
     answer:
-      "Look for latest.log inside the logs folder of your game folder. A server has the same logs/latest.log, and crash reports land in crash-reports. The guides spell out the exact paths for Windows, macOS, Linux and hosting panels.",
+      "Look for latest.log inside the logs folder of your game folder. A server has the same logs/latest.log, and crash reports land in crash-reports. Paths for Windows, macOS, Linux and hosting panels are spelled out in the guides.",
   },
   {
     group: "Getting started",
@@ -21,7 +21,7 @@ export const HOME_FAQ: HomeFaq[] = [
     group: "Getting started",
     question: "What problems can minelog find?",
     answer:
-      "Once you save, the log page lists the problems it knows, in plain words. Running out of memory, a mod that needs another mod, a port that's already taken, a plugin built for a newer server. Each comes with something to try. It also picks up your game version, loader, Java version and mods. It doesn't know every crash, and when it meets one it doesn't, the error is shown as written.",
+      "Once you save, the log page lists the problems it knows, in plain words. Think running out of memory, a mod that needs another mod, a port that's already taken, or a plugin built for a newer server, each with something to try. It also picks up your game version, loader, Java version and mods. It doesn't know every crash, and when it meets one it doesn't, the error is shown as written.",
   },
   {
     group: "Privacy and storage",
@@ -44,12 +44,12 @@ export const HOME_FAQ: HomeFaq[] = [
     group: "Beyond the website",
     question: "Can I share a log straight from my server?",
     answer:
-      "Yes. The minelog plugin adds /minelog share to Paper, Spigot, Purpur, Folia, BungeeCord, Waterfall and Velocity, and gives you the link in chat. Use the Download button at the top of the page to get it.",
+      "Yes. The minelog plugin adds /minelog share to Paper, Spigot, Purpur, Folia, BungeeCord, Waterfall and Velocity, and gives you the link in chat. You can get it from the Download button at the top of the page.",
   },
   {
     group: "Beyond the website",
     question: "Is there an API?",
     answer:
-      "Yes. Launchers, mods and server panels can upload a log with one request. There's also an API that matches mclo.gs, so tools built for it work after you change the address.",
+      "Yes, launchers, mods and server panels can upload a log with one request. There's also an API that matches mclo.gs, so tools built for it work after you change the address.",
   },
 ];

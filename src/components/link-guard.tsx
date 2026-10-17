@@ -6,6 +6,10 @@ import { useBackdropClose } from "@/lib/backdrop-close";
 
 export const GUARD_ATTRIBUTE = "data-guard";
 
+// Roughly three lines of the path at the dialog width. Longer paths are cut
+// with an ellipsis until the visitor asks to see the whole address.
+const LONG_PATH = 100;
+
 type Target = { href: string; host: string; rest: string; disguised: boolean };
 
 function describe(href: string): Target | null {
@@ -34,6 +38,7 @@ function guardedLink(event: Event): HTMLAnchorElement | null {
 export function LinkGuard() {
   const dialog = useRef<HTMLDialogElement>(null);
   const [target, setTarget] = useState<Target | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     function intercept(event: Event) {
@@ -44,6 +49,7 @@ export function LinkGuard() {
       if (!next) return;
       event.preventDefault();
       event.stopPropagation();
+      setExpanded(false);
       setTarget(next);
     }
     document.addEventListener("click", intercept, true);
@@ -104,7 +110,21 @@ export function LinkGuard() {
               <ShieldWarning aria-hidden="true" />
               <bdi>{target.host}</bdi>
             </p>
-            {target.rest && <p className="leave__rest">{target.rest}</p>}
+            {target.rest && (
+              <p className="leave__rest" data-open={expanded}>
+                {target.rest}
+              </p>
+            )}
+            {target.rest.length > LONG_PATH && (
+              <button
+                type="button"
+                className="leave__more"
+                aria-expanded={expanded}
+                onClick={() => setExpanded((value) => !value)}
+              >
+                {expanded ? "Show less" : "Show full address"}
+              </button>
+            )}
             {target.disguised && (
               <p className="leave__warn">
                 This address is a raw IP or uses look-alike characters, which scam links often do.

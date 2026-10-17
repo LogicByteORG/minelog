@@ -8,6 +8,7 @@ import { isValidId } from "@/lib/ids";
 import { kindLabel } from "@/lib/log";
 import { getCachedLog } from "@/lib/log-cache";
 import { openGraphFor, logEmbedDescription } from "@/lib/seo";
+import { downloadUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -59,7 +60,7 @@ export default async function ReadmeViewPage({
       <SiteHeader minimal />
 
       <main className="grid-container readme-view-page">
-        <ReadmeMiniView content={log.content} logId={log.id} />
+        <ReadmeMiniView content={log.content} downloadUrl={downloadUrl(log.id)} />
       </main>
 
       <SiteFooter />

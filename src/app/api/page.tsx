@@ -363,6 +363,20 @@ export default function ApiPage() {
               </p>
             </section>
 
+            <section id="download" className="api-section">
+              <h2>Download as a file</h2>
+              <Route method="GET" path="/v2/logs/{id}/download" />
+              <p>
+                The same text as <a href="#raw">the raw route</a>, but sent with{" "}
+                <code>Content-Disposition: attachment</code> and the file name{" "}
+                <code>minelog-{"{id}"}.txt</code>. Open it in a browser and the
+                file is saved instead of shown, which is what the Download button
+                on a log page does. The text is the whole log, even for the 15 MB
+                ones, and it is streamed in pieces. Errors are JSON, so check the
+                status code before saving the body.
+              </p>
+            </section>
+
             <section id="insights" className="api-section">
               <h2>Read what we found</h2>
               <Route method="GET" path="/v2/logs/{id}/insights" />

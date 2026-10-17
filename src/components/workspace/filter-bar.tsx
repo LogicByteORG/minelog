@@ -58,7 +58,7 @@ type FilterBarProps = {
     copyState: CopyState;
     busy: boolean;
     onCopy: () => void;
-    onDownload: () => void;
+    downloadUrl: string;
     onQr: () => void;
     fullWidth: boolean;
     onToggleFullWidth: () => void;
@@ -109,17 +109,16 @@ export function FilterBar({
           <span className="show-for-sr" role="status">
             {actions.copyState === "done" ? "Copied to the clipboard." : ""}
           </span>
-          <button
-            type="button"
+          <a
             className="action"
-            data-tip={actions.busy ? "Available once the whole log has loaded" : "Download this log as a .txt file"}
+            href={actions.downloadUrl}
+            rel="noopener"
+            data-tip="Download this log as a .txt file"
             aria-label="Download this log as a .txt file"
-            disabled={actions.busy}
-            onClick={actions.onDownload}
           >
             <DownloadSimple aria-hidden="true" />
             <span className="action__label">Download</span>
-          </button>
+          </a>
           <button
             type="button"
             className="action"

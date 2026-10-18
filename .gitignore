@@ -34,3 +34,4 @@ __pycache__/
 /.agents/
 /.claude/
 /skills-lock.json
+/apps-test-servers

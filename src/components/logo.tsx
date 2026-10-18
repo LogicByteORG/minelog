@@ -1,5 +1,25 @@
 import Image from "next/image";
+import Link from "next/link";
 import { IS_PREVIEW } from "@/lib/config";
+
+export function LogoLink({
+  className,
+  tip,
+}: {
+  className?: string;
+  tip?: string;
+}) {
+  return (
+    <Link
+      href="/"
+      className={className}
+      aria-label={IS_PREVIEW ? "minelog home, preview build" : "minelog home"}
+      data-tip={tip}
+    >
+      <Logo />
+    </Link>
+  );
+}
 
 export function Logo() {
   return (

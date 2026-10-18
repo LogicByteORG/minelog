@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { GITHUB_URL, IS_PREVIEW } from "@/lib/config";
+import { GITHUB_URL } from "@/lib/config";
 import { BrandIcon } from "./brand-icon";
 import { DownloadMenu } from "./download-menu";
 import { HeaderMenu } from "./header-menu";
-import { Logo } from "./logo";
+import { LogoLink } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 
 export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
@@ -11,13 +11,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
     return (
       <header className="site-header site-header--minimal">
         <div className="grid-container site-header__bar">
-          <Link
-            href="/"
-            aria-label={IS_PREVIEW ? "minelog home, preview build" : "minelog home"}
-            data-tip="Share your own log"
-          >
-            <Logo />
-          </Link>
+          <LogoLink tip="Share your own log" />
           <div className="site-header__actions">
             <ThemeToggle />
           </div>
@@ -29,12 +23,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
   return (
     <header className="site-header">
       <div className="grid-container site-header__bar">
-        <Link
-          href="/"
-          aria-label={IS_PREVIEW ? "minelog home, preview build" : "minelog home"}
-        >
-          <Logo />
-        </Link>
+        <LogoLink />
         <div className="site-header__actions">
           <nav aria-label="Main" className="site-header__desktop">
             <Link href="/api" className="nav-button">

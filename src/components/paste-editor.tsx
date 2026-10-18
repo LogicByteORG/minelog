@@ -268,6 +268,8 @@ export function PasteEditor() {
   useEffect(() => {
     function focusEditor() {
       setView("paste");
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
       window.setTimeout(() => pasteBox.current?.focus({ preventScroll: true }), 0);
     }
     function fillSample() {

@@ -264,14 +264,18 @@ export default function Home() {
                   acting up, the guides take the common errors one step at a
                   time.
                 </p>
-                <h3 className="faq__label faq__label--guides">Guides</h3>
+                <h3 className="faq__label faq__label--guides">Popular guides</h3>
                 <ul className="faq-guides">
-                  {GUIDES.map((guide) => (
+                  {GUIDES.slice(0, 4).map((guide) => (
                     <li key={guide.slug}>
                       <Link href={guide.path}>{guide.title}</Link>
                     </li>
                   ))}
                 </ul>
+                <Link href="/guides" className="faq-guides__all">
+                  See all {GUIDES.length} guides
+                  <span aria-hidden="true">&rarr;</span>
+                </Link>
               </div>
               <div className="cell small-12 large-8">
                 <div className="faq">

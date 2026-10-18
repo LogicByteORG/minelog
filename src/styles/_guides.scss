@@ -253,11 +253,22 @@
     margin: 1.75rem 0 0.75rem;
   }
 
-  &__item {
-    border-top: 1px solid var(--line);
+  &__group {
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
 
-    &:last-child {
-      border-bottom: 1px solid var(--line);
+  &__group > &__label {
+    margin: 0;
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  &__item {
+    margin-bottom: 0;
+
+    & + & {
+      border-top: 1px solid var(--line);
     }
   }
 
@@ -266,8 +277,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    margin: 0 -0.5rem;
-    padding: 1rem 0.5rem;
+    margin: 0;
+    padding: 1.125rem 1.25rem;
     font-size: 1.0625rem;
     font-weight: 600;
     line-height: 1.35;
@@ -323,7 +334,7 @@
   }
 
   &__answer {
-    padding: 0 2.5rem 1.25rem 0;
+    padding: 0 3.5rem 1.375rem 1.25rem;
 
     @media (prefers-reduced-motion: no-preference) {
       animation: faq-open 180ms ease both;
@@ -366,6 +377,16 @@
     text-decoration: underline;
     text-underline-offset: 0.2em;
     @include link-states(var(--ink), color-mix(in srgb, var(--ink) 70%, var(--bg)));
+  }
+
+  &__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    @include link-states;
   }
 }
 

@@ -16,10 +16,11 @@ import { REPORT_EMAIL } from "@/lib/config";
 import { isValidId } from "@/lib/ids";
 import { formatBytes } from "@/lib/log";
 import { getCachedLogPage } from "@/lib/log-cache";
-import { openGraphFor, logEmbedDescription } from "@/lib/seo";
+import { openGraphFor, logEmbedDescription, logEmbedTitle } from "@/lib/seo";
 import { downloadUrl, rawUrl } from "@/lib/site";
 import { timeLeft } from "@/lib/retention";
 import { formatUtc, timeAgo } from "@/lib/time";
+import { loaderName } from "@/lib/diagnose/present";
 
 export const dynamic = "force-dynamic";
 
@@ -39,8 +40,20 @@ export async function generateMetadata({
     return { title: "Log not found", robots: { index: false, follow: false } };
   }
 
-  const title = `${log.label} | ${log.id}`;
-  const description = logEmbedDescription(log);
+  const gameVersion = log.insights?.environment.gameVersion?.value ?? null;
+  const loaderFact = log.insights?.environment.loader;
+  const loader = loaderFact ? loaderName(loaderFact.value) : null;
+  const problem = log.insights?.problems[0]?.message ?? null;
+  const title = logEmbedTitle({ label: log.label, id: log.id, gameVersion, loader });
+  const description = logEmbedDescription({
+    kind: log.kind,
+    lineCount: log.lineCount,
+    errorCount: log.errorCount,
+    warnCount: log.warnCount,
+    gameVersion,
+    loader,
+    problem,
+  });
 
   return {
     title,

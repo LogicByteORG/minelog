@@ -36,17 +36,51 @@ const GAME_LOG_KINDS: ReadonlySet<LogKind> = new Set([
   "jvm",
 ]);
 
+const EMBED_LIMIT = 300;
+
+function cleanCause(raw: string): string {
+  return raw.trim().replace(/\s+/g, " ").replace(/[.!?]+$/, "");
+}
+
 export function logEmbedDescription(log: {
   kind: LogKind;
   lineCount: number;
   errorCount: number;
   warnCount: number;
+  gameVersion?: string | null;
+  loader?: string | null;
+  problem?: string | null;
 }): string {
   const lines = `${log.lineCount.toLocaleString("en")} ${log.lineCount === 1 ? "line" : "lines"}`;
   if (!GAME_LOG_KINDS.has(log.kind)) return `${lines}. Shared on minelog.`;
   const errors = `${log.errorCount.toLocaleString("en")} ${log.errorCount === 1 ? "error" : "errors"}`;
   const warnings = `${log.warnCount.toLocaleString("en")} ${log.warnCount === 1 ? "warning" : "warnings"}`;
-  return `${lines}, ${errors}, ${warnings}. Shared on minelog.`;
+  const base = `${lines}, ${errors}, ${warnings}.`;
+  const suffix = "Shared on minelog.";
+  const setup = [log.gameVersion?.trim(), log.loader?.trim()].filter(Boolean).join(" on ");
+  const setupSentence = setup ? `Minecraft ${setup}.` : "";
+  const cause = log.problem ? cleanCause(log.problem) : "";
+  const causeSentence = cause ? `Likely cause: ${cause}.` : "";
+  const full = [base, setupSentence, causeSentence, suffix].filter(Boolean).join(" ");
+  if (full.length <= EMBED_LIMIT) return full;
+  const withoutCause = [base, setupSentence, suffix].filter(Boolean).join(" ");
+  if (!cause || withoutCause.length >= EMBED_LIMIT) return `${base} ${suffix}`;
+  const prefix = [base, setupSentence].filter(Boolean).join(" ");
+  const budget = EMBED_LIMIT - prefix.length - suffix.length - " Likely cause: . ".length;
+  const clipped = cause.slice(0, Math.max(0, budget)).trim();
+  return `${prefix} Likely cause: ${clipped}. ${suffix}`;
+}
+
+export function logEmbedTitle(log: {
+  label: string;
+  id: string;
+  gameVersion?: string | null;
+  loader?: string | null;
+}): string {
+  const base = log.label.trim() || "Log";
+  const setup = [log.gameVersion?.trim(), log.loader?.trim()].filter(Boolean).join(" on ");
+  const title = setup ? `${base} ${setup} | ${log.id}` : `${base} | ${log.id}`;
+  return title.length <= 90 ? title : `${base} | ${log.id}`;
 }
 
 export function absoluteUrl(path = "/"): string {

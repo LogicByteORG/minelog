@@ -5,21 +5,25 @@ import { API_BASE, SITE_BASE } from "../src/lib/config";
 
 const KEYS = ["SITE_URL", "VERCEL_ENV", "VERCEL_URL", "NODE_ENV"] as const;
 
+function target(): Record<string, string | undefined> {
+  return process.env as Record<string, string | undefined>;
+}
+
 function snapshot(): Record<string, string | undefined> {
-  return Object.fromEntries(KEYS.map((key) => [key, process.env[key]]));
+  return Object.fromEntries(KEYS.map((key) => [key, target()[key]]));
 }
 
 function restore(saved: Record<string, string | undefined>) {
   for (const key of KEYS) {
-    if (saved[key] === undefined) delete process.env[key];
-    else process.env[key] = saved[key];
+    if (saved[key] === undefined) delete target()[key];
+    else target()[key] = saved[key];
   }
 }
 
 function setup(env: Record<string, string | undefined>) {
-  for (const key of KEYS) delete process.env[key];
+  for (const key of KEYS) delete target()[key];
   for (const [key, value] of Object.entries(env)) {
-    if (value !== undefined) process.env[key] = value;
+    if (value !== undefined) target()[key] = value;
   }
 }
 

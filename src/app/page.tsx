@@ -21,7 +21,7 @@ import {
   openGraphFor,
 } from "@/lib/seo";
 
-const DESCRIPTION = `Paste a Minecraft server log, client log or crash report. minelog hides private details, points out known problems and gives you a link to share. Free, no account.`;
+const DESCRIPTION = `Got a Minecraft log that needs a second pair of eyes? Paste your server log, client log or crash report. minelog scrubs the private stuff and flags what actually broke. Then it hands you a link you can share anywhere. Free, no account needed.`;
 
 export const metadata: Metadata = {
   description: DESCRIPTION,
@@ -60,22 +60,22 @@ const APP_LD = [
 const FEATURES = [
   {
     name: "Private by default",
-    note: "IP addresses, tokens, passwords, email addresses and user folder names are replaced before anything is saved.",
+    note: "Your IP, tokens, passwords, emails and those long user folder paths get swapped out in your browser before anything leaves it. We run a second check on our side too.",
     example: "203.0.113.42 becomes [redacted]",
   },
   {
     name: "Problems explained",
-    note: "When we recognize an error, we say what it means and what to try first. The log page also shows your game version, loader, Java and mods.",
+    note: "If we have seen that error before, we tell you what it usually means and what to try first. Your game version, loader, Java build and mod list get pulled out too, so you skip the hunt.",
     example: "OutOfMemoryError: raise -Xmx",
   },
   {
     name: "Easy to read",
-    note: "Errors and warnings get their own colors and long stack traces fold shut. Search or filter when the file is huge and you just want one line.",
+    note: "Errors get their own color. So do warnings. Giant stack traces fold away until you need them. Got a 50k line file? Search or filter down to the one line you care about.",
     example: "Errors only, one click",
   },
   {
     name: "Gone when it should be",
-    note: `A link works for ${RETENTION_DAYS} days. Turn off hiding and it's ${UNHIDDEN_RETENTION_HOURS} hours. You never make an account.`,
+    note: `Links live for ${RETENTION_DAYS} days, then they are gone for good. Turn hiding off and they only last ${UNHIDDEN_RETENTION_HOURS} hours. No account, ever.`,
     example: "Delete it in the first hour",
   },
 ];
@@ -84,22 +84,22 @@ const WHERE_TO_LOOK = [
   {
     name: "Client log",
     path: ".minecraft/logs/latest.log",
-    note: "Your launcher can open the game folder for you, and logs is inside it. On Windows you can also hit Win + R, type %appdata% and open .minecraft.",
+    note: "Open your launcher, find the button that opens your game folder. logs is in there. On Windows you can also hit Win + R, type %appdata% and open .minecraft by hand.",
   },
   {
     name: "Server log",
     path: "logs/latest.log",
-    note: "Next to the server jar. On a hosting panel it's usually under Files, or you can watch it in Console.",
+    note: "Look next to your server jar, that is where it lives. On a hosting panel check under Files. Or just watch it scroll past in Console.",
   },
   {
     name: "Crash report",
     path: "crash-reports/",
-    note: "Grab the newest file. A name ending in -client or -server tells you which side crashed.",
+    note: "Take the newest file in there. Ends in -client or -server? That tells you which side went down.",
   },
   {
     name: "Java crash report",
     path: "hs_err_pid12345.log",
-    note: "Java drops this file when it dies outright. It sits in the game or server folder.",
+    note: "Java drops one of these when it dies hard. No goodbye, just this file. Look in the game or server folder.",
   },
 ];
 
@@ -116,9 +116,9 @@ export default function Home() {
               link.
             </h1>
             <p className="hero__lead">
-              Paste a server log, client log or crash report. We hide your
-              private details, point out what went wrong and give you a link
-              to share.
+              Drop in a server log, client log or crash report. We strip out
+              the private bits and point to the error that actually matters.
+              Then you get one link to pass around.
             </p>
           </div>
           <div className="settle settle--late">
@@ -132,8 +132,9 @@ export default function Home() {
               <div className="cell small-12 large-4 section__intro">
                 <h2 className="section__title">What you get with every link</h2>
                 <p className="section__text">
-                  Saving a log does more than store it. Here is what the link
-                  gives you and the people you send it to.
+                  You paste, you get a link. That link scrubs the sensitive
+                  bits too. Explains the errors we know. And it stays readable
+                  even when the file is massive.
                 </p>
               </div>
               <div className="cell small-12 large-8">
@@ -161,15 +162,18 @@ export default function Home() {
                   We hide private details before upload
                 </h2>
                 <p className="section__text">
-                  IP addresses, MAC addresses, user folder names, tokens,
-                  passwords and email addresses are replaced in your browser
-                  before anything is sent, and checked again on our server.
-                  Player names stay, because you usually need them to debug.
+                  Your IP. Your MAC address. Those long user folder paths,
+                  tokens, passwords, emails. None of that leaves your machine
+                  as is. We swap it out in your browser first, then check
+                  again once the file lands with us. Player names stay put.
+                  You usually need them to figure out what happened.
                 </p>
                 <p className="section__text">
-                  The preview shows exactly what will be saved. A secret that
-                  only you would recognize can&apos;t be spotted for you, so
-                  give it a quick read.
+                  The preview is honest, what you see there is what gets
+                  saved. One heads up though. A secret only you would
+                  recognize can slip past the filters. Say a private address
+                  tucked inside a chat message. Give it a quick read before
+                  you press Get link.
                 </p>
               </div>
               <div className="cell small-12 large-7">
@@ -185,9 +189,9 @@ export default function Home() {
               <div className="cell small-12 large-4 section__intro">
                 <h2 className="section__title">Where to find your log</h2>
                 <p className="section__text">
-                  Most launchers and hosting panels have a share or copy
-                  button. If yours doesn&apos;t, the file is in one of these
-                  places.
+                  Many launchers let you copy the log straight out. Most
+                  panels too. No button? Grab the file by hand, it lives in
+                  one of these places.
                 </p>
               </div>
               <div className="cell small-12 large-8">
@@ -213,10 +217,9 @@ export default function Home() {
               <div className="cell small-12 large-4 section__intro">
                 <h2 className="section__title">Supported file types</h2>
                 <p className="section__text">
-                  minelog reads plain text and works out what it is on its own.
-                  Logs, crash reports and config files each get a view that
-                  suits them, so you never have to say what you&apos;re
-                  pasting.
+                  Just paste. We work out what kind of file it is on our own.
+                  Logs get one view, crash reports another, configs their
+                  own. No need to tell us what you pasted.
                 </p>
               </div>
               <div className="cell small-12 large-8">
@@ -233,8 +236,8 @@ export default function Home() {
                 </ul>
                 <div className="filetypes-also">
                   <p className="filetypes-also__title">
-                    Anything else that&apos;s plain text still gets colored
-                    if we recognize the language:
+                    Something else in plain text? If we know the language it
+                    still gets colors:
                   </p>
                   <ul className="filetypes-also__list">
                     {HIGHLIGHTED_LANGUAGES.map((language) => (
@@ -244,9 +247,9 @@ export default function Home() {
                     ))}
                   </ul>
                   <p className="filetypes-excluded">
-                    Archives such as .zip, .jar, .gz, .7z and .rar won&apos;t
-                    work (unzip them and paste the file inside), and neither
-                    will images, audio or video.
+                    Archives such as .zip, .jar, .gz, .7z and .rar will not
+                    open here. Unzip first, then paste what is inside. Images,
+                    audio and video are out too.
                   </p>
                 </div>
               </div>
@@ -260,9 +263,9 @@ export default function Home() {
               <div className="cell small-12 large-4 section__intro">
                 <h2 className="section__title">Questions people ask</h2>
                 <p className="section__text">
-                  Quick answers are below, and if your game or server is
-                  acting up, the guides take the common errors one step at a
-                  time.
+                  Short answers live below. And if your game or server is
+                  misbehaving right now, the guides take the usual suspects
+                  one by one.
                 </p>
                 <h3 className="faq__label faq__label--guides">Popular guides</h3>
                 <ul className="faq-guides">

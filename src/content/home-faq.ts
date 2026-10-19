@@ -9,47 +9,47 @@ export const HOME_FAQ: HomeFaq[] = [
     group: "Getting started",
     question: "Where do I find my Minecraft log?",
     answer:
-      "Look for latest.log inside the logs folder of your game folder. A server has the same logs/latest.log, and crash reports land in crash-reports. Paths for Windows, macOS, Linux and hosting panels are spelled out in the guides.",
+      "Open your game folder, then logs inside it. latest.log is in there. Servers keep the same logs/latest.log, crash reports land in crash-reports. The guides spell out the clicks for Windows, macOS, Linux and hosting panels.",
   },
   {
     group: "Getting started",
     question: "Is minelog free, and do I need an account?",
     answer:
-      "Free, and there are no accounts. Paste your log, get a link, done.",
+      "Yep, free. No accounts, no signup, none of that. Paste a log, get a link, done.",
   },
   {
     group: "Getting started",
     question: "What problems can minelog find?",
     answer:
-      "Once you save, the log page lists the problems it knows, in plain words. Think running out of memory, a mod that needs another mod, a port that's already taken, or a plugin built for a newer server, each with something to try. It also picks up your game version, loader, Java version and mods. It doesn't know every crash, and when it meets one it doesn't, the error is shown as written.",
+      "Once you save, the log page calls out the ones it knows in plain words. Running out of memory, a mod missing its dependency, a port that is already taken, a plugin built for a newer server, that sort of thing. Each comes with something to try. It also pulls out your game version, loader, Java version and mods. It does not know every crash though. When it meets one it has never seen, you just get the error as written.",
   },
   {
     group: "Privacy and storage",
     question: "What private details are hidden?",
     answer:
-      "IP addresses, MAC addresses, user folder names, access tokens, passwords and email addresses are replaced in your browser before anything is uploaded, and again on our server. Player names stay, so the log is still useful for debugging.",
+      "Your IP, MAC address, user folder names, tokens, passwords, emails. All swapped out in your browser before anything uploads, then checked again on our server. Player names stay in. The log is pretty useless for debugging without them.",
   },
   {
     group: "Privacy and storage",
     question: "How long is a log kept?",
-    answer: `Every log is deleted ${RETENTION_DAYS} days after you save it. If you turn off Hide private details, it's deleted after ${UNHIDDEN_RETENTION_HOURS} hours instead. You can delete it yourself in the first hour, from the button at the bottom of its page. After that it stays until it expires, so check the preview before you press Get link.`,
+    answer: `Every log is gone ${RETENTION_DAYS} days after you save it. Turn off Hide private details and it only sticks around for ${UNHIDDEN_RETENTION_HOURS} hours instead. You can delete it yourself in the first hour, there is a button at the bottom of its page. After that it sits until it expires, so check the preview before you press Get link.`,
   },
   {
     group: "Privacy and storage",
     question: "Who can see my log?",
     answer:
-      "Anyone who has the link. Links are random and can't be guessed, and log pages are kept out of search engines. Share the link only where you'd be fine with the log being read.",
+      "Anyone with the link can read it. Links are random, you cannot guess them, and log pages stay out of search engines. Still, only share yours somewhere you are fine with it being read.",
   },
   {
     group: "Beyond the website",
     question: "Can I share a log straight from my server?",
     answer:
-      "Yes. The minelog plugin adds /minelog share to Paper, Spigot, Purpur, Folia, BungeeCord, Waterfall and Velocity, and gives you the link in chat. You can get it from the Download button at the top of the page.",
+      "Yes. The minelog plugin adds /minelog share to Paper, Spigot, Purpur, Folia, BungeeCord, Waterfall and Velocity. Run it and the link lands right in chat. Grab the plugin from the Download button up top.",
   },
   {
     group: "Beyond the website",
     question: "Is there an API?",
     answer:
-      "Yes, launchers, mods and server panels can upload a log with one request. There's also an API that matches mclo.gs, so tools built for it work after you change the address.",
+      "Yes. A launcher, mod or panel can push a log up with one request. There is also an endpoint that matches mclo.gs. Tools built for it keep working, just swap the address.",
   },
 ];

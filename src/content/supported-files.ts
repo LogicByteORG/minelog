@@ -13,32 +13,32 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
   {
     kind: "Server log",
     example: "logs/latest.log",
-    note: "Vanilla, Paper, Spigot, Fabric, Forge and NeoForge servers all work.",
+    note: "Vanilla, Paper, Spigot, Fabric, Forge and NeoForge all work.",
   },
   {
     kind: "Crash report",
     example: "crash-reports/crash-…-client.txt",
-    note: "Minecraft's own report when it dies with an error.",
+    note: "The report Minecraft writes when it goes down with an error.",
   },
   {
     kind: "Java crash report",
     example: "hs_err_pid12345.log",
-    note: "Written by Java itself when the JVM crashes outright.",
+    note: "What Java itself leaves behind when the whole JVM falls over.",
   },
   {
     kind: "YAML config",
     example: "config.yml, bukkit.yml",
-    note: "Most plugin and server configs, Bukkit-style.",
+    note: "Most plugin and server configs in Bukkit style.",
   },
   {
     kind: "TOML config",
     example: "server.toml",
-    note: "Common in Forge and Fabric mod configs.",
+    note: "The format a lot of Forge and Fabric mods use.",
   },
   {
     kind: "Properties file",
     example: "server.properties",
-    note: "Plain key=value config files.",
+    note: "Plain key=value files, nothing fancy.",
   },
   {
     kind: "JSON file",
@@ -48,7 +48,7 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
   {
     kind: "README",
     example: "README.md",
-    note: "Rendered as Markdown, not just plain text.",
+    note: "Rendered as Markdown instead of plain text.",
   },
 ];
 

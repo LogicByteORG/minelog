@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -48,6 +49,61 @@ public final class ShareCommand implements CommandExecutor, TabCompleter {
             delete(sender, args[1]);
             return true;
         }
+        if (args[0].equalsIgnoreCase("auth")) {
+            if (!sender.hasPermission("minelog.connect")) {
+                sender.sendMessage(ChatColor.RED + Messages.noPermission());
+                return true;
+            }
+            if (args.length < 2) {
+                sender.sendMessage(ChatColor.RED + Messages.authUsage());
+                return true;
+            }
+            if (sender instanceof Player) {
+                sender.sendMessage(ChatColor.GRAY + "Tip: run this in the console next time, so the key stays out of chat logs.");
+            }
+            sender.sendMessage(ChatColor.YELLOW + Messages.authConnecting());
+            plugin.authenticate(sender, args[1]);
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("status")) {
+            if (!sender.hasPermission("minelog.connect")) {
+                sender.sendMessage(ChatColor.RED + Messages.noPermission());
+                return true;
+            }
+            status(sender);
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("test")) {
+            if (!sender.hasPermission("minelog.connect")) {
+                sender.sendMessage(ChatColor.RED + Messages.noPermission());
+                return true;
+            }
+            if (!plugin.connection().connected()) {
+                sender.sendMessage(ChatColor.RED + Messages.notConnected());
+                return true;
+            }
+            if (!plugin.watching()) {
+                sender.sendMessage(ChatColor.RED + Messages.testAlertsOff());
+                return true;
+            }
+            // The server's own logger, so the line has no plugin tag and goes down the same road as a real error.
+            Bukkit.getLogger().severe("Test error from minelog. Nothing is wrong, you asked for it with /minelog test.");
+            sender.sendMessage(ChatColor.GREEN + Messages.testWritten());
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("disconnect")) {
+            if (!sender.hasPermission("minelog.connect")) {
+                sender.sendMessage(ChatColor.RED + Messages.noPermission());
+                return true;
+            }
+            if (!plugin.connection().hasKey()) {
+                sender.sendMessage(ChatColor.RED + Messages.notConnected());
+                return true;
+            }
+            plugin.disconnect();
+            sender.sendMessage(ChatColor.GREEN + Messages.disconnected());
+            return true;
+        }
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("minelog.reload")) {
                 sender.sendMessage(ChatColor.RED + Messages.noPermission());
@@ -66,8 +122,22 @@ public final class ShareCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    private void status(CommandSender sender) {
+        org.minelog.core.MinelogConnection connection = plugin.connection();
+        if (!connection.hasKey()) {
+            sender.sendMessage(ChatColor.RED + Messages.notConnected());
+            return;
+        }
+        if (!connection.connected()) {
+            sender.sendMessage(ChatColor.YELLOW + Messages.statusOffline());
+            return;
+        }
+        sender.sendMessage(ChatColor.GREEN + Messages.statusConnected(
+                connection.serverName(), connection.webhooks().size(), plugin.watching()));
+    }
+
     private void share(final CommandSender sender, final String fileArg) {
-        final File logsDir = new File(plugin.getDataFolder().getParentFile().getParentFile(), "logs");
+        final File logsDir = plugin.logsDir();
         final File target;
         try {
             target = LogFileResolver.resolve(logsDir, fileArg);
@@ -84,8 +154,7 @@ public final class ShareCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(ChatColor.YELLOW + Messages.uploading(target.getName()));
         plugin.runAsync(() -> {
             try {
-                UploadResult result = plugin.client().upload(target);
-                plugin.tokens().put(result.id, result.deleteToken);
+                UploadResult result = plugin.uploadLog(target);
                 sendResult(sender, result);
             } catch (Exception failed) {
                 plugin.getLogger().fine("Upload failed: " + failed.getMessage());
@@ -95,15 +164,9 @@ public final class ShareCommand implements CommandExecutor, TabCompleter {
     }
 
     private void delete(final CommandSender sender, final String id) {
-        final String token = plugin.tokens().get(id);
-        if (token == null || token.isEmpty()) {
-            sender.sendMessage(ChatColor.RED + Messages.deleteFailed());
-            return;
-        }
         plugin.runAsync(() -> {
             try {
-                plugin.client().delete(id, token);
-                plugin.tokens().remove(id);
+                plugin.deleteLog(id);
                 sender.sendMessage(ChatColor.GREEN + Messages.deleted(id));
             } catch (Exception failed) {
                 plugin.getLogger().fine("Delete failed: " + failed.getMessage());
@@ -155,10 +218,10 @@ public final class ShareCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return match(args[0], Arrays.asList("share", "delete", "reload"));
+            return match(args[0], Arrays.asList("share", "delete", "auth", "status", "test", "disconnect", "reload"));
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("share")) {
-            File logsDir = new File(plugin.getDataFolder().getParentFile().getParentFile(), "logs");
+            File logsDir = plugin.logsDir();
             return match(args[1], LogFileResolver.listLogs(logsDir));
         }
         return Collections.emptyList();

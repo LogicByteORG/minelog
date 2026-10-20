@@ -93,7 +93,7 @@ export type StoredLog = {
 
 export type LogInfo = Omit<StoredLog, "content">;
 
-export type SavedLog = LogInfo & { deleteToken: string };
+export type SavedLog = LogInfo & { deleteToken: string | null };
 
 export function deletableUntil(createdAt: Date): Date {
   return new Date(createdAt.getTime() + DELETE_WINDOW_MINUTES * 60_000);
@@ -122,6 +122,8 @@ type SaveInput = {
   hidePrivate: boolean;
   ipHash: string;
   source: string | null;
+  userId: string | null;
+  isPrivate: boolean;
 };
 
 export async function saveLog({
@@ -129,6 +131,8 @@ export async function saveLog({
   hidePrivate,
   ipHash,
   source,
+  userId,
+  isPrivate,
 }: SaveInput): Promise<SavedLog> {
   await assertUnderLimit(ipHash);
 
@@ -139,7 +143,7 @@ export async function saveLog({
   if (analysis.bytes > MAX_LOG_BYTES) throw new LogTooLargeError();
   if (analysis.lineCount > MAX_LOG_LINES) throw new LogTooLongError();
 
-  const deleteToken = createDeleteToken();
+  const deleteToken = isPrivate ? null : createDeleteToken();
 
   for (let attempt = 0; attempt < 5; attempt += 1) {
     const id = createId();
@@ -147,11 +151,12 @@ export async function saveLog({
       const [row] = await db()<{ createdAt: Date; expiresAt: Date }[]>`
         insert into public.logs
           (id, content, kind, line_count, byte_size, error_count, warn_count,
-           privacy_applied, ip_hash, source, delete_token_hash, expires_at)
+           privacy_applied, ip_hash, source, delete_token_hash, user_id, is_private, expires_at)
         select
           ${id}, ${analysis.output}, ${analysis.kind}, ${analysis.lineCount},
           ${analysis.bytes}, ${analysis.errorCount}, ${analysis.warnCount},
-          ${hidePrivate}, ${ipHash}, ${source}, ${hashToken(deleteToken)},
+          ${hidePrivate}, ${ipHash}, ${source}, ${deleteToken ? hashToken(deleteToken) : null}, ${userId},
+          ${isPrivate},
           now() + make_interval(hours => ${retentionHours(hidePrivate)})
         from (
           select
@@ -190,7 +195,7 @@ export async function findLog(id: string): Promise<StoredLog | null> {
     select id, content, kind, line_count, byte_size, error_count, warn_count,
            privacy_applied, source, created_at, expires_at
     from public.logs
-    where id = ${id} and expires_at > now()
+    where id = ${id} and expires_at > now() and not is_private
   `;
   if (!row) return null;
   if (row.kind === "server" && detectKind(row.content) === "client") {
@@ -201,9 +206,32 @@ export async function findLog(id: string): Promise<StoredLog | null> {
 
 export async function logExists(id: string): Promise<boolean> {
   const [row] = await db()<{ id: string }[]>`
-    select id from public.logs where id = ${id} and expires_at > now()
+    select id from public.logs where id = ${id} and expires_at > now() and not is_private
   `;
   return Boolean(row);
+}
+
+export async function findPrivateLog(id: string, userId: string): Promise<StoredLog | null> {
+  const [row] = await db()<StoredLog[]>`
+    select id, content, kind, line_count, byte_size, error_count, warn_count,
+           privacy_applied, source, created_at, expires_at
+    from public.logs
+    where id = ${id} and user_id = ${userId} and is_private and expires_at > now()
+  `;
+  if (!row) return null;
+  if (row.kind === "server" && detectKind(row.content) === "client") {
+    row.kind = "client";
+  }
+  return row;
+}
+
+export async function findPrivateLogText(id: string, userId: string): Promise<string | null> {
+  const [row] = await db()<{ content: string }[]>`
+    select content
+    from public.logs
+    where id = ${id} and user_id = ${userId} and is_private and expires_at > now()
+  `;
+  return row?.content ?? null;
 }
 
 export async function findLogInfo(id: string): Promise<LogInfo | null> {
@@ -211,7 +239,7 @@ export async function findLogInfo(id: string): Promise<LogInfo | null> {
     select id, kind, line_count, byte_size, error_count, warn_count,
            privacy_applied, source, created_at, expires_at
     from public.logs
-    where id = ${id} and expires_at > now()
+    where id = ${id} and expires_at > now() and not is_private
   `;
   return row ?? null;
 }
@@ -220,7 +248,7 @@ export async function findLogText(id: string): Promise<string | null> {
   const [row] = await db()<{ content: string }[]>`
     select content
     from public.logs
-    where id = ${id} and expires_at > now()
+    where id = ${id} and expires_at > now() and not is_private
   `;
   return row?.content ?? null;
 }
@@ -238,7 +266,7 @@ export async function deleteLog(id: string, token: string): Promise<DeleteResult
   >`
     select delete_token_hash, expires_at
     from public.logs
-    where id = ${id} and expires_at > now()
+    where id = ${id} and expires_at > now() and not is_private
   `;
   if (!row) return { status: "not_found" };
 

@@ -11,6 +11,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
@@ -65,10 +68,7 @@ public final class MinelogClient {
         if (id.isEmpty() || url.isEmpty()) {
             throw new IOException("Upload gave an empty answer: " + response);
         }
-        if (url.startsWith("http://localhost") || url.contains("localhost")) {
-            url = config.siteBase + "/" + id;
-        }
-        if (raw.isEmpty() || raw.contains("localhost")) {
+        if (raw.isEmpty()) {
             raw = config.apiBase + "/v2/logs/" + id + "/raw";
         }
         int problems = fetchProblemCount(id);
@@ -92,6 +92,86 @@ public final class MinelogClient {
         if (status != 200) {
             throw new IOException("Delete failed with status " + status + ": " + response);
         }
+    }
+
+    public ConnectResult connect(String key, ServerInfo info) throws IOException {
+        Map<String, Object> answer = Json.object(post("/v2/connect", key, info.toJson()));
+        Map<String, Object> server = Json.object(answer.get("server"));
+        List<String> events = new ArrayList<String>();
+        for (Object event : Json.array(answer.get("events"))) {
+            events.add(Json.string(event));
+        }
+        List<WebhookInfo> webhooks = new ArrayList<WebhookInfo>();
+        for (Object entry : Json.array(answer.get("webhooks"))) {
+            Map<String, Object> hook = Json.object(entry);
+            webhooks.add(new WebhookInfo(
+                    Json.string(hook.get("handle")),
+                    Json.string(hook.get("name")),
+                    Json.string(hook.get("kind")),
+                    Json.bool(hook.get("enabled"), true)));
+        }
+        int perMinute = Json.integer(Json.object(answer.get("limits")).get("eventsPerMinute"), 60);
+        return new ConnectResult(Json.string(server.get("name")), events, webhooks, perMinute);
+    }
+
+    public AlertResult sendAlert(String key, String content, String title, List<String> webhooks)
+            throws IOException {
+        StringBuilder body = new StringBuilder("{\"content\":").append(quote(content));
+        if (title != null && !title.isEmpty()) {
+            body.append(",\"title\":").append(quote(title));
+        }
+        EventMessage.appendWebhooks(body, webhooks);
+        body.append('}');
+        Map<String, Object> answer = Json.object(post("/v2/alerts", key, body.toString()));
+        return new AlertResult(
+                Json.string(answer.get("id")),
+                Json.integer(answer.get("occurrences"), 1),
+                Json.bool(answer.get("new"), true));
+    }
+
+    public int sendEvent(String key, EventMessage message) throws IOException {
+        Map<String, Object> answer = Json.object(post("/v2/events", key, message.toJson()));
+        return Json.integer(answer.get("webhooks"), 0);
+    }
+
+    private Object post(String path, String key, String body) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) url(config.apiBase + path).openConnection();
+        connection.setRequestMethod("POST");
+        connection.setConnectTimeout(config.timeoutMs);
+        connection.setReadTimeout(config.timeoutMs);
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Authorization", "Bearer " + key);
+        connection.setRequestProperty("User-Agent", userAgent);
+        OutputStream out = connection.getOutputStream();
+        try {
+            out.write(body.getBytes(StandardCharsets.UTF_8));
+        } finally {
+            out.close();
+        }
+        int status = connection.getResponseCode();
+        String response = readBody(connection, status);
+        if (status < 200 || status >= 300) {
+            throw apiError(status, response);
+        }
+        return Json.parse(response);
+    }
+
+    private static MinelogApiException apiError(int status, String response) {
+        String code = "";
+        String message = "minelog answered with status " + status + ".";
+        try {
+            Map<String, Object> error = Json.object(Json.object(Json.parse(response)).get("error"));
+            code = Json.string(error.get("code"));
+            String said = Json.string(error.get("message"));
+            if (!said.isEmpty()) {
+                message = said;
+            }
+        } catch (IOException notJson) {
+            code = "";
+        }
+        return new MinelogApiException(status, code, message);
     }
 
     private int fetchProblemCount(String id) {

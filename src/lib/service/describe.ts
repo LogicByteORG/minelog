@@ -4,10 +4,18 @@ import { apiBase, pageBase } from "@/lib/site";
 const iso = (date: Date) => date.toISOString().replace(/\.\d{3}Z$/, "Z");
 const unix = (date: Date) => Math.floor(date.getTime() / 1000);
 
+// Without an api. host (local development) the API answers under /svc, so links built
+// from the request have to carry it or they point at a page that does not exist.
+function requestApiOrigin(request: Request): string {
+  const url = new URL(request.url);
+  const viaPath = url.pathname === "/svc" || url.pathname.startsWith("/svc/");
+  return viaPath && !url.hostname.startsWith("api.") ? `${url.origin}/svc` : url.origin;
+}
+
 export function bases(request: Request) {
   return {
     page: pageBase(),
-    api: apiBase(new URL(request.url).origin),
+    api: apiBase(requestApiOrigin(request)),
   };
 }
 

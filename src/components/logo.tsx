@@ -1,13 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { IS_PREVIEW } from "@/lib/config";
 
 export function LogoLink({
   className,
   tip,
+  badge,
 }: {
   className?: string;
   tip?: string;
+  badge?: ReactNode;
 }) {
   return (
     <Link
@@ -16,12 +19,12 @@ export function LogoLink({
       aria-label={IS_PREVIEW ? "minelog home, preview build" : "minelog home"}
       data-tip={tip}
     >
-      <Logo />
+      <Logo badge={badge} />
     </Link>
   );
 }
 
-export function Logo() {
+export function Logo({ badge }: { badge?: ReactNode }) {
   return (
     <span className="logo">
       <span className="logo__marks" aria-hidden="true">
@@ -47,6 +50,7 @@ export function Logo() {
         />
       </span>
       <span className="logo__word">minelog</span>
+      {badge}
       {IS_PREVIEW && (
         <span
           className="logo__preview"

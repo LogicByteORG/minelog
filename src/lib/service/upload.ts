@@ -15,6 +15,7 @@ export type UploadCode =
   | "empty_content"
   | "not_plain_text"
   | "invalid_option"
+  | "login_required"
   | "log_too_large"
   | "too_many_lines"
   | "blocked_content"
@@ -64,6 +65,8 @@ export type UploadInput = {
   hidePrivate: unknown;
   source: unknown;
   request: Request;
+  userId?: string | null;
+  isPrivate?: unknown;
 };
 
 export async function uploadLog({
@@ -71,12 +74,20 @@ export async function uploadLog({
   hidePrivate,
   source,
   request,
+  userId = null,
+  isPrivate,
 }: UploadInput): Promise<SavedLog> {
   if (typeof content !== "string" || content.trim().length === 0) {
     throw new UploadError(400, "empty_content", "There is no log text in this request.");
   }
   if (hidePrivate !== undefined && typeof hidePrivate !== "boolean") {
     throw new UploadError(400, "invalid_option", "hidePrivate must be true or false.");
+  }
+  if (isPrivate !== undefined && typeof isPrivate !== "boolean") {
+    throw new UploadError(400, "invalid_option", "private must be true or false.");
+  }
+  if (isPrivate === true && !userId) {
+    throw new UploadError(401, "login_required", "Log in to save a private log.");
   }
   if (isBinaryText(content)) {
     throw new UploadError(
@@ -93,6 +104,8 @@ export async function uploadLog({
       hidePrivate: hidePrivate !== false,
       ipHash,
       source: normalizeSource(source ?? request.headers.get("x-minelog-client")),
+      userId,
+      isPrivate: isPrivate === true,
     });
   } catch (error) {
     if (error instanceof UploadError) throw error;

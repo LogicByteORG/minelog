@@ -59,7 +59,7 @@ type FilterBarProps = {
     busy: boolean;
     onCopy: () => void;
     downloadUrl: string;
-    onQr: () => void;
+    onQr?: () => void;
     fullWidth: boolean;
     onToggleFullWidth: () => void;
     panelOpen: boolean;
@@ -119,16 +119,18 @@ export function FilterBar({
             <DownloadSimple aria-hidden="true" />
             <span className="action__label">Download</span>
           </a>
-          <button
-            type="button"
-            className="action"
-            data-tip="Show a QR code for this log"
-            aria-label="Show a QR code for this log"
-            onClick={actions.onQr}
-          >
-            <QrCode aria-hidden="true" />
-            <span className="action__label">QR code</span>
-          </button>
+          {actions.onQr && (
+            <button
+              type="button"
+              className="action"
+              data-tip="Show a QR code for this log"
+              aria-label="Show a QR code for this log"
+              onClick={actions.onQr}
+            >
+              <QrCode aria-hidden="true" />
+              <span className="action__label">QR code</span>
+            </button>
+          )}
           <button
             type="button"
             className="action action--wide-toggle"

@@ -1,22 +1,21 @@
 package org.minelog.core;
 
 public final class MinelogConfig {
+    public static final String DEFAULT_API_BASE = "https://api.minelog.org";
+
     public final String apiBase;
-    public final String siteBase;
     public final int timeoutMs;
     public final String source;
 
-    public MinelogConfig(String apiBase, String siteBase, int timeoutMs, String source) {
-        this.apiBase = trim(apiBase, "https://api.minelog.org");
-        this.siteBase = trim(siteBase, "https://minelog.org");
+    public MinelogConfig(String apiBase, int timeoutMs, String source) {
+        this.apiBase = trim(apiBase, DEFAULT_API_BASE);
         this.timeoutMs = timeoutMs <= 0 ? 15000 : timeoutMs;
         this.source = source == null || source.isEmpty() ? "minelog Service" : source;
     }
 
     public static MinelogConfig defaults(String source) {
         return new MinelogConfig(
-                "https://api.minelog.org",
-                "https://minelog.org",
+                DEFAULT_API_BASE,
                 15000,
                 source);
     }

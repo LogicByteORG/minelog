@@ -32,6 +32,24 @@ export const DELETE_WINDOW_MINUTES = 60;
 
 export const LOG_CACHE_SECONDS = 600;
 
+export const WEBHOOKS_PER_ACCOUNT = 25;
+
+export const WEBHOOK_MAX_FAILURES = 10;
+
+export const SERVERS_PER_ACCOUNT = 10;
+
+export const EVENTS_PER_MINUTE = 60;
+
+export const WEBHOOK_TESTS_PER_MINUTE = 10;
+
+export const ALERTS_PER_ACCOUNT = 100;
+
+export const ALERT_RETENTION_DAYS = 14;
+
+export const ALERT_CONTENT_MAX = 65_536;
+
+export const ALERTS_PER_MINUTE = 30;
+
 export const VIEW_CHUNK_LINES = 2000;
 
 export const INLINE_LOG_CHARS = 256 * 1024;
@@ -55,6 +73,8 @@ export const HANGAR_URL = "https://hangar.minelog.org";
 export const BUYMEACOFFEE_URL = "https://buymeacoffee.com/pozii";
 
 export const LOGICBYTE_URL = "https://logicbyte.org";
+
+export const STATUS_URL = "https://status.logicbyte.org";
 
 export const GITHUB_URL = "https://github.com/LogicByteORG/minelog";
 

@@ -25,6 +25,7 @@ All platforms share the same shape:
 - `/minelog share` uploads `logs/latest.log`.
 - `/minelog share <name>` uploads one file from `logs/`, for example `/minelog share 2026-10-01-1.log`.
 - `/minelog delete <id>` deletes a recent upload with its stored token.
+- `/minelog auth <key>` connects the server to your account (permission `minelog.connect`), `/minelog status` and `/minelog disconnect` manage it. `/minelog test` writes a test error to the log to check that alerts arrive.
 - `/minelog reload` re-reads `config.yml` (Bukkit, permission `minelog.reload`).
 - Alias: `/mlog`.
 - Bukkit only: `/log` does the same as `/minelog`. Set `log-command: false` in
@@ -56,10 +57,13 @@ Every platform writes the same keys:
 
 ```yaml
 api-base: "https://api.minelog.org"
-site-base: "https://minelog.org"
 timeout-seconds: 15
 source-name: "minelog-bukkit"
 ```
+
+`api-base` is the only address. The API builds the links it hands back, so there is no
+separate site address to keep in step. Older config files that still have `site-base`
+work, the key is ignored.
 
 The Bukkit config also has `log-command: true`, which controls the short `/log`
 command. Older config files without the key behave as if it were `true`.

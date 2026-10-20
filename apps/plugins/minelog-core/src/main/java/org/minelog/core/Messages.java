@@ -67,7 +67,74 @@ public final class Messages {
     }
 
     public static String usage() {
-        return "Use /minelog share [file], /minelog delete <id>, or /minelog reload.";
+        return "Use /minelog share [file], /minelog delete <id>, /minelog auth <key>, /minelog status, /minelog test, /minelog disconnect or /minelog reload.";
+    }
+
+    public static String authUsage() {
+        return "Create a key in the Servers tab of your minelog dashboard, then run /minelog auth <key>.";
+    }
+
+    public static String keyLooksWrong() {
+        return "That does not look like a minelog key. It starts with mlk_ and has 36 characters.";
+    }
+
+    public static String authConnecting() {
+        return "Connecting to minelog. One moment.";
+    }
+
+    public static String authFailed(String reason) {
+        String text = "Could not connect: " + reason;
+        if (reason != null && reason.contains("SSL")) {
+            text += ". That address does not use https. Check api-base in plugins/minelog/config.yml, "
+                    + "a local site starts with http://.";
+        }
+        return text;
+    }
+
+    public static String connected(String serverName, int webhooks) {
+        String hooks = webhooks == 0
+                ? "No webhooks yet, add one in your dashboard."
+                : webhooks == 1 ? "1 webhook is ready." : webhooks + " webhooks are ready.";
+        return "Connected as " + serverName + ". " + hooks;
+    }
+
+    public static String errorWatchOn() {
+        return "Errors in the server log will show up under Alerts in your dashboard.";
+    }
+
+    public static String notConnected() {
+        return "This server is not connected to minelog yet. Run /minelog auth <key> first.";
+    }
+
+    public static String disconnected() {
+        return "Disconnected. This server no longer sends anything to minelog.";
+    }
+
+    public static String statusConnected(String serverName, int webhooks, boolean watching) {
+        return "Connected as " + serverName + ", " + webhooks + (webhooks == 1 ? " webhook" : " webhooks")
+                + ", error alerts " + (watching ? "on" : "off") + ".";
+    }
+
+    public static String skriptMissing() {
+        return "Skript is not installed on this server. Error alerts work without it, but the minelog lines for"
+                + " Skript scripts stay off. Install Skript 2.9 or newer to send your own alerts from scripts.";
+    }
+
+    public static String skriptUnavailable() {
+        return "Skript is installed, but minelog could not add its syntax to it. It needs Skript 2.9 or newer on"
+                + " Java 17 or newer. The console says why.";
+    }
+
+    public static String testWritten() {
+        return "I wrote a test error to the server log. It should show up under Alerts in a few seconds.";
+    }
+
+    public static String testAlertsOff() {
+        return "Error alerts are turned off. Set alerts: true in config.yml and run /minelog reload.";
+    }
+
+    public static String statusOffline() {
+        return "A key is saved but minelog could not be reached. It will keep trying.";
     }
 
     public static String reloaded() {

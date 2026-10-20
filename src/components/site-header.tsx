@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GITHUB_URL } from "@/lib/config";
+import { HeaderAccount } from "./auth/header-account";
 import { BrandIcon } from "./brand-icon";
 import { DownloadMenu } from "./download-menu";
 import { HeaderMenu } from "./header-menu";
@@ -26,6 +27,9 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
         <LogoLink />
         <div className="site-header__actions">
           <nav aria-label="Main" className="site-header__desktop">
+            <Link href="/plugin" className="nav-button">
+              Plugin
+            </Link>
             <Link href="/api" className="nav-button">
               API
             </Link>
@@ -40,6 +44,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
             >
               <BrandIcon slug="github" size={22} />
             </a>
+            <HeaderAccount />
           </nav>
           <ThemeToggle />
           <HeaderMenu />

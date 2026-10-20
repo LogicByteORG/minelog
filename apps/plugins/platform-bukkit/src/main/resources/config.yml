@@ -4,8 +4,16 @@
 # Set to false if another plugin already owns /log. /minelog keeps working.
 log-command: true
 
-# Where uploads go. Leave these alone unless you host your own copy.
+# The minelog API. It does everything: uploads, links, alerts, webhooks. Leave it alone
+# unless you host your own copy. The links you get back come from the API too.
 api-base: "https://api.minelog.org"
-site-base: "https://minelog.org"
 timeout-seconds: 15
 source-name: "minelog Service"
+
+# After you run /minelog auth <key>, errors in logs/latest.log are sent to the
+# Alerts tab of your minelog account. Turn this off to keep logs on the server.
+alerts: true
+
+# Tell your webhooks when this server starts or stops (needs /minelog auth).
+notify-start: true
+notify-stop: true

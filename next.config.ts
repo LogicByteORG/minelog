@@ -22,6 +22,9 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [{ source: "/dashboard/:path*", destination: "/dash/:path*", permanent: false }];
+  },
   async rewrites() {
     return {
       beforeFiles: API_MODE

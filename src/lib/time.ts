@@ -17,6 +17,10 @@ export function timeAgo(date: Date, now: Date = new Date()): string {
   return "";
 }
 
+export function formatDate(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
 export function formatUtc(date: Date): string {
   return `${date.toISOString().slice(0, 16).replace("T", " ")} UTC`;
 }

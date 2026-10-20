@@ -6,6 +6,29 @@ Release notes and the Modrinth changelog.
 
 ## Unreleased
 
+## 1.2.0 - 2026-10-20
+
+Servers can now connect to a minelog account, send error alerts and
+notifications to webhooks, and use all of it from Skript. The Bungee and
+Velocity jars carry the new version number only.
+
+- Bukkit jar: `/minelog auth <key>` connects the server with a key from the
+  dashboard (`minelog.connect`). `/minelog status` and `/minelog disconnect`
+  manage the connection.
+- Bukkit jar: errors in `logs/latest.log` are grouped and sent to Alerts.
+  Server start and stop notices go to your webhooks. Both can be turned off in
+  `config.yml` (`alerts`, `notify-start`, `notify-stop`).
+- Bukkit jar: right after `/minelog auth`, the plugin warns you when Skript is missing (or could not be
+  hooked), because the Skript syntax needs it. Error alerts work either way.
+- Bukkit jar: `/minelog test` writes a harmless error to the server log, so you can see the whole
+  path to Alerts and your webhooks work. Run it a few seconds after the server has started.
+- Bukkit jar: minelog's own log lines right before a real error no longer hide that error.
+- Skript syntax built into the Bukkit jar (loads only when Skript 2.9+ is installed, needs Java 17):
+  `send minelog alert`, `send minelog error`, `share minelog log`,
+  `delete minelog log`, the events `minelog tps drop`, `minelog error detected`,
+  `minelog connected`, `minelog disconnected`, `minelog log shared` and
+  `minelog send failed`, and expressions for TPS, links, errors and webhooks.
+
 ## 1.1.0 - 2026-10-15
 
 The Bukkit jar gets a short command, a reload command and a settings

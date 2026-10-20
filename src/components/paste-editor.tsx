@@ -15,11 +15,13 @@ import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import {
   FileText,
+  LockSimple,
   ShieldCheck,
   UploadSimple,
   WarningCircle,
 } from "@phosphor-icons/react";
 import { createLog } from "@/lib/api";
+import { authClient } from "@/lib/auth-client";
 import { saveDeleteToken } from "@/lib/delete-token";
 import { recordSave } from "@/lib/donate";
 import {
@@ -33,7 +35,9 @@ import { readInsights } from "@/lib/diagnose/insights";
 import { moderationMessage } from "@/lib/moderation";
 import { isPrivateFileName, privateFileMessage } from "@/lib/private-files";
 import { SAMPLE_LOG } from "@/lib/samples";
+import { Loader } from "./loader";
 import { LogView } from "./log-view";
+import { SwitchRow } from "./switch-row";
 import { ReadmeView } from "./readme-view";
 import { Segmented } from "./workspace/segmented";
 
@@ -120,6 +124,10 @@ export function PasteEditor() {
   const [text, setText] = useState("");
   const [view, setView] = useState<View>("paste");
   const [hidePrivate, setHidePrivate] = useState(true);
+  const [privateLog, setPrivateLog] = useState(false);
+  const { data: session } = authClient.useSession();
+  const signedIn = Boolean(session);
+  const savePrivate = signedIn && privateLog;
   const [phase, setPhase] = useState<Phase>({ status: "idle" });
   const [notice, setNotice] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -247,13 +255,13 @@ export function PasteEditor() {
       if (fresh.blocked) throw new Error(moderationMessage(fresh.blockMessage));
       if (fresh.bytes > MAX_LOG_BYTES) throw new Error("This log is too large.");
       if (fresh.lineCount > MAX_LOG_LINES) throw new Error(tooLongMessage(fresh.lineCount));
-      const log = await createLog(fresh.output, hidePrivate);
+      const log = await createLog(fresh.output, hidePrivate, savePrivate);
       if (log.deleteToken && log.deleteUntil) {
         saveDeleteToken(log.id, log.deleteToken, log.deleteUntil);
       }
       recordSave();
       setPhase({ status: "opening" });
-      router.push(`/${log.id}`);
+      router.push(log.isPrivate ? `/p/${log.id}` : `/${log.id}`);
     } catch (error) {
       setPhase({
         status: "error",
@@ -263,7 +271,7 @@ export function PasteEditor() {
             : "Something went wrong. Try again in a moment.",
       });
     }
-  }, [canSave, text, hidePrivate, sourceName, router]);
+  }, [canSave, text, hidePrivate, savePrivate, sourceName, router]);
 
   useEffect(() => {
     function focusEditor() {
@@ -455,7 +463,21 @@ export function PasteEditor() {
           onChange={setHidePrivate}
           analysis={analysis}
           isEmpty={isEmpty}
+          isPrivateLog={savePrivate}
         />
+
+        {signedIn && (
+          <div className="privacy-toggle">
+            <SwitchRow
+              id={`${ids}-private`}
+              icon={<LockSimple aria-hidden="true" />}
+              title="Private log"
+              hint="Only you can open it, and only while you're signed in. It gets a /p/ link that no one else can use."
+              checked={privateLog}
+              onChange={setPrivateLog}
+            />
+          </div>
+        )}
 
         <div className="side__save">
           <button
@@ -466,14 +488,7 @@ export function PasteEditor() {
             aria-busy={busy}
           >
             {busy && (
-              <span className="loader" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-              </span>
+              <Loader />
             )}
             {opening ? "Opening log" : busy ? "Saving" : "Get link"}
           </button>
@@ -602,40 +617,25 @@ function PrivacySwitch({
   onChange,
   analysis,
   isEmpty,
+  isPrivateLog,
 }: {
   id: string;
   checked: boolean;
   onChange: (next: boolean) => void;
   analysis: Analysis;
   isEmpty: boolean;
+  isPrivateLog: boolean;
 }) {
   return (
     <div className="privacy-toggle">
-      <div className="privacy-toggle__row">
-        <div className="privacy-toggle__text">
-          <label htmlFor={id} className="privacy-toggle__title">
-            <ShieldCheck aria-hidden="true" />
-            Hide private details
-          </label>
-          <p id={`${id}-hint`} className="privacy-toggle__hint">
-            IP addresses, MAC addresses, user folder names, tokens, passwords and email addresses.
-          </p>
-        </div>
-        <div className="switch">
-          <input
-            id={id}
-            className="switch-input"
-            type="checkbox"
-            role="switch"
-            checked={checked}
-            onChange={(event) => onChange(event.target.checked)}
-            aria-describedby={`${id}-hint`}
-          />
-          <label className="switch-paddle" htmlFor={id}>
-            <span className="show-for-sr">Hide private details</span>
-          </label>
-        </div>
-      </div>
+      <SwitchRow
+        id={id}
+        icon={<ShieldCheck aria-hidden="true" />}
+        title="Hide private details"
+        hint="IP addresses, MAC addresses, user folder names, tokens, passwords and email addresses."
+        checked={checked}
+        onChange={onChange}
+      />
 
       {checked && !isEmpty && (
         <p className="privacy-toggle__result" aria-live="polite">
@@ -648,8 +648,8 @@ function PrivacySwitch({
       )}
       {!checked && (
         <Message tone="warn">
-          Anyone with the link will see everything in this log. Because nothing
-          is hidden, it&apos;s deleted after{" "}
+          {isPrivateLog ? "" : "Anyone with the link will see everything in this log. "}Because
+          nothing is hidden, it&apos;s deleted after{" "}
           {retentionHours(false)}{" "}
           {retentionHours(false) === 1 ? "hour" : "hours"}.
         </Message>

@@ -4,6 +4,7 @@ export type CreatedLog = {
   expiresAt: Date;
   deleteToken: string | null;
   deleteUntil: Date | null;
+  isPrivate: boolean;
 };
 
 const GZIP_THRESHOLD = 64 * 1024;
@@ -11,8 +12,9 @@ const GZIP_THRESHOLD = 64 * 1024;
 export async function createLog(
   content: string,
   hidePrivate: boolean,
+  isPrivate = false,
 ): Promise<CreatedLog> {
-  const json = JSON.stringify({ content, hidePrivate });
+  const json = JSON.stringify({ content, hidePrivate, ...(isPrivate ? { private: true } : {}) });
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
@@ -50,6 +52,7 @@ export async function createLog(
     expiresAt: new Date(data.expiresAt),
     deleteToken: typeof data.deleteToken === "string" ? data.deleteToken : null,
     deleteUntil: data.deletableUntil ? new Date(data.deletableUntil) : null,
+    isPrivate: data.private === true,
   };
 }
 

@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
-import { Trash, X } from "@phosphor-icons/react";
+import { Trash } from "@phosphor-icons/react";
+import { deleteOwnedLog, ownsLog } from "@/app/dash/actions";
 import { deleteLog } from "@/lib/api";
-import { useBackdropClose } from "@/lib/backdrop-close";
+import { authClient } from "@/lib/auth-client";
+import { DASHBOARD_PATH } from "@/lib/auth-providers";
 import {
   forgetDeleteToken,
   parseDeleteEntry,
   readDeleteRaw,
   subscribeDeleteTokens,
 } from "@/lib/delete-token";
+import { ConfirmDialog } from "./confirm-dialog";
 
 const TICK_MS = 15_000;
 
@@ -19,9 +22,28 @@ function subscribeTick(notify: () => void) {
   return () => window.clearInterval(timer);
 }
 
+function useOwnsLog(logId: string): boolean {
+  const { data } = authClient.useSession();
+  const userId = data?.user.id ?? null;
+  const [owned, setOwned] = useState<{ logId: string; userId: string } | null>(null);
+
+  useEffect(() => {
+    if (!userId) return;
+    let live = true;
+    void ownsLog(logId).then((result) => {
+      if (live) setOwned(result ? { logId, userId } : null);
+    });
+    return () => {
+      live = false;
+    };
+  }, [logId, userId]);
+
+  return owned !== null && owned.logId === logId && owned.userId === userId;
+}
+
 export function DeleteLog({ logId }: { logId: string }) {
   const router = useRouter();
-  const dialog = useRef<HTMLDialogElement>(null);
+  const owned = useOwnsLog(logId);
 
   const raw = useSyncExternalStore(
     subscribeDeleteTokens,
@@ -39,18 +61,8 @@ export function DeleteLog({ logId }: { logId: string }) {
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
 
-  useEffect(() => {
-    const element = dialog.current;
-    if (!element) return;
-    if (open && !element.open) element.showModal();
-    if (!open && element.open) element.close();
-  }, [open, entry]);
-
-  const backdrop = useBackdropClose(() => close());
-
-  if (!entry) return null;
-  const minutes = Math.ceil((entry.until - tick * TICK_MS) / 60_000);
-  if (minutes <= 0) return null;
+  const minutes = entry ? Math.ceil((entry.until - tick * TICK_MS) / 60_000) : 0;
+  if (!owned && (!entry || minutes <= 0)) return null;
 
   function close() {
     if (busy) return;
@@ -59,10 +71,17 @@ export function DeleteLog({ logId }: { logId: string }) {
   }
 
   async function confirm() {
-    if (!entry || busy) return;
+    if (busy) return;
     setBusy(true);
     setProblem(null);
     try {
+      if (owned) {
+        const outcome = await deleteOwnedLog(logId);
+        if (!outcome.ok) throw new Error(outcome.error);
+        router.replace(`${DASHBOARD_PATH}/logs`);
+        return;
+      }
+      if (!entry) return;
       await deleteLog(logId, entry.token);
       forgetDeleteToken(logId);
       router.replace("/");
@@ -80,12 +99,12 @@ export function DeleteLog({ logId }: { logId: string }) {
     <section className="delete-log" aria-labelledby="delete-log-title">
       <div className="delete-log__text">
         <h2 id="delete-log-title" className="delete-log__title">
-          Saved this by mistake?
+          {owned ? "This log is yours" : "Saved this by mistake?"}
         </h2>
         <p>
-          You can delete this log for another {minutes}{" "}
-          {minutes === 1 ? "minute" : "minutes"}. After that it stays until it
-          expires.
+          {owned
+            ? "It's saved to your account, so you can delete it whenever you like. If you don't, it stays until it expires."
+            : `You can delete this log for another ${minutes} ${minutes === 1 ? "minute" : "minutes"}. After that it stays until it expires.`}
         </p>
       </div>
       <button
@@ -97,71 +116,19 @@ export function DeleteLog({ logId }: { logId: string }) {
         Delete this log
       </button>
 
-      <dialog
-        ref={dialog}
-        className="dialog"
-        aria-labelledby="delete-dialog-title"
-        onCancel={(event) => {
-          if (busy) event.preventDefault();
-        }}
-        onClose={() => {
-          setOpen(false);
-          setProblem(null);
-        }}
-        {...backdrop}
+      <ConfirmDialog
+        open={open}
+        busy={busy}
+        problem={problem}
+        title="Delete this log?"
+        confirmLabel="Delete log"
+        busyLabel="Deleting"
+        onConfirm={() => void confirm()}
+        onClose={close}
       >
-        <div className="dialog__panel">
-          <div className="dialog__head">
-            <h2 id="delete-dialog-title" className="dialog__title">
-              Delete this log?
-            </h2>
-            <button
-              type="button"
-              className="dialog__close"
-              aria-label="Close"
-              data-tip="Close (Esc)"
-              onClick={close}
-            >
-              <X aria-hidden="true" />
-            </button>
-          </div>
-
-          <p className="dialog__text">
-            It stops working for everyone right away, including anyone you sent
-            the link to. This can&apos;t be undone.
-          </p>
-
-          <div className="dialog__actions">
-            <button
-              type="button"
-              className="button button--sm button--danger"
-              onClick={() => void confirm()}
-              aria-busy={busy}
-            >
-              {busy ? (
-                <span className="loader" aria-hidden="true">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </span>
-              ) : (
-                <Trash aria-hidden="true" />
-              )}
-              {busy ? "Deleting" : "Delete log"}
-            </button>
-          </div>
-
-          {problem && (
-            <p className="dialog__problem" role="alert">
-              {problem}
-            </p>
-          )}
-        </div>
-      </dialog>
+        It stops working for everyone right away, including anyone you sent the
+        link to. This can&apos;t be undone.
+      </ConfirmDialog>
     </section>
   );
 }
-

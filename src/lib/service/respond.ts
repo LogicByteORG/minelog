@@ -43,7 +43,10 @@ export function plainText(body: string, status = 200): Response {
 
 const STREAM_CHUNK_CHARS = 256 * 1024;
 
-export function streamedText(body: string, options: { saveAs?: string } = {}): Response {
+export function streamedText(
+  body: string,
+  options: { saveAs?: string; owner?: boolean } = {},
+): Response {
   let offset = 0;
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
@@ -59,15 +62,16 @@ export function streamedText(body: string, options: { saveAs?: string } = {}): R
       offset = end;
     },
   });
+  const headers: Record<string, string> = {
+    "Content-Type": "text/plain; charset=utf-8",
+    "X-Content-Type-Options": "nosniff",
+    "X-Robots-Tag": "noindex, nofollow",
+    "Cache-Control": options.owner ? "private, no-store" : "public, max-age=60",
+    ...(options.saveAs ? { "Content-Disposition": `attachment; filename="${options.saveAs}"` } : {}),
+  };
   return new Response(stream, {
     status: 200,
-    headers: withCors({
-      "Content-Type": "text/plain; charset=utf-8",
-      "X-Content-Type-Options": "nosniff",
-      "X-Robots-Tag": "noindex, nofollow",
-      "Cache-Control": "public, max-age=60",
-      ...(options.saveAs ? { "Content-Disposition": `attachment; filename="${options.saveAs}"` } : {}),
-    }),
+    headers: options.owner ? new Headers(headers) : withCors(headers),
   });
 }
 

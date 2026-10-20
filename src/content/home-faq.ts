@@ -15,7 +15,7 @@ export const HOME_FAQ: HomeFaq[] = [
     group: "Getting started",
     question: "Is minelog free, and do I need an account?",
     answer:
-      "Yep, free. No accounts, no signup, none of that. Paste a log, get a link, done.",
+      "Yep, free. You do not need an account to paste a log and get a link. An account is only for the server side, where your alerts and webhooks live.",
   },
   {
     group: "Getting started",
@@ -45,6 +45,18 @@ export const HOME_FAQ: HomeFaq[] = [
     question: "Can I share a log straight from my server?",
     answer:
       "Yes. The minelog plugin adds /minelog share to Paper, Spigot, Purpur, Folia, BungeeCord, Waterfall and Velocity. Run it and the link lands right in chat. Grab the plugin from the Download button up top.",
+  },
+  {
+    group: "Beyond the website",
+    question: "What are server alerts?",
+    answer:
+      "Connect a server to your account with a key from the dashboard. The plugin then watches the server log and saves every error under Alerts. It can also message a Discord, Slack, Microsoft Teams, Google Chat, Telegram, Guilded or Mattermost webhook, or any address that takes JSON. This part is in beta.",
+  },
+  {
+    group: "Beyond the website",
+    question: "Do I need Skript for that?",
+    answer:
+      "No. Error alerts and start and stop notices work on their own. Skript is optional. If you have it, the plugin adds a few lines of syntax so your own scripts can send alerts and react to TPS drops and errors.",
   },
   {
     group: "Beyond the website",

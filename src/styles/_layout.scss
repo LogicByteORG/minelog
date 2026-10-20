@@ -797,3 +797,67 @@
   }
 }
 
+
+.status-link__dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--muted);
+  opacity: 0.5;
+
+  &--operational {
+    background: var(--callout-tip);
+    opacity: 1;
+  }
+
+  &--degraded,
+  &--maintenance {
+    background: var(--lv-warn);
+    opacity: 1;
+  }
+
+  &--down {
+    background: var(--lv-error);
+    opacity: 1;
+  }
+}
+
+// Same lockup as the Preview label: a thin divider, then quiet text.
+.beta-tag {
+  margin-left: 0.25rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.logo .beta-tag {
+  @media (max-width: 520px) {
+    position: absolute;
+    top: calc(100% - 0.125rem);
+    left: 2.125rem;
+    margin-left: 0;
+    padding: 0;
+    border-left: 0;
+    font-size: 0.6875rem;
+    line-height: 0.875rem;
+  }
+}
+
+.hero__title--tagged {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+
+  .beta-tag {
+    margin-left: 0;
+    padding-left: 0.875rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}

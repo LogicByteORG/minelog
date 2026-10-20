@@ -183,7 +183,7 @@ export default function ApiPage() {
                   upload straight from the browser.
                 </li>
                 <li>
-                  There are no accounts and no API keys. Limits are per
+                  You don&apos;t need an account or an API key. Limits are per
                   connection.
                 </li>
               </ul>

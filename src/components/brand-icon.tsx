@@ -19,7 +19,6 @@ export function BrandIcon({
       fill="currentColor"
       aria-hidden="true"
     >
-      <title>{mark.title}</title>
       <path d={mark.path} />
     </svg>
   );

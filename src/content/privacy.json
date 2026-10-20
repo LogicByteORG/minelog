@@ -24,10 +24,19 @@
       ]
     },
     {
+      "id": "accounts",
+      "heading": "If you sign in",
+      "paragraphs": [
+        "You never need an account to share a log. Signing in with GitHub or Discord is optional, and it only unlocks the dashboard.",
+        "When you sign in, we keep the name, email address and profile picture link that GitHub or Discord hand over. You can change the display name later, and names go through the same content filter as logs. We don't keep the access tokens they issue, and we never post or read anything on your behalf. A session cookie keeps you signed in on this browser. It's only set after you sign in.",
+        "Logs you save from the website while you're signed in are linked to your account, so they show up in your dashboard. Logs you saved while signed out aren't linked and can't be added later. If you use alerts, we keep the key for each server you connect (only a scrambled copy, so we can't read it back), the server software and version it reports, and the webhooks you add. A webhook address is encrypted before it's saved, because anyone who has it can post to your channel. When your server reports something, we pass it on to your webhooks and keep only whether the last delivery worked. We don't keep the events themselves. When a connected server finds an error in its log, it can send the log lines around it to your account as an alert. Alert text is encrypted before it's saved, hidden the same way as any log, and only you can open it. The same error on the same server is saved once with a counter, we keep your latest 100, and each alert is deleted 14 days after it last happened. You can also save a log as private. A private log gets a /p/ address that only works while you're signed in to the account that saved it, so having the link isn't enough. It never appears on the public pages or in the public API. You can delete any of your logs from the dashboard whenever you want, with no one-hour limit. If you delete your account, your profile, connected accounts, servers, webhooks and every log saved to it are deleted right away. Otherwise a linked log is deleted on its normal schedule, and the link between you and it goes away with it."
+      ]
+    },
+    {
       "id": "never",
       "heading": "What we don't collect",
       "paragraphs": [
-        "No accounts. A log page sets no cookies and loads nothing from anyone else: your browser only talks to minelog. Fonts and brand marks ship inside our own pages (the marks come from the Simple Icons set, bundled at build time), so no icon service ever sees your visit. Log addresses are never sent to any analytics service.",
+        "A log page sets no cookies and loads nothing from anyone else: your browser only talks to minelog. Fonts and brand marks ship inside our own pages (the marks come from the Simple Icons set, bundled at build time), so no icon service ever sees your visit. Log addresses are never sent to any analytics service.",
         "The home page, the guides, the API docs and this page do use Google Analytics, to count visits and see which pages people read. Google Analytics sets cookies on those pages. It sees the page, roughly where you are and your device type, and never anything from a log. It doesn't run at all for visitors in the European Union, the wider European Economic Area, the United Kingdom or Switzerland, because it would need your consent first. We work out where you are from your connection when the page loads, and we don't store it.",
         "The other exception is the Ask AI button. When you click it, it opens Claude or ChatGPT with the error lines from your log in the question. Nothing is sent unless you click."
       ]

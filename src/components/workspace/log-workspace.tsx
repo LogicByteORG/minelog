@@ -141,6 +141,7 @@ type WorkspaceProps = {
   logId: string;
   rawUrl: string;
   downloadUrl: string;
+  isPrivate?: boolean;
 };
 
 export function LogWorkspace({
@@ -152,6 +153,7 @@ export function LogWorkspace({
   logId,
   rawUrl,
   downloadUrl,
+  isPrivate = false,
 }: WorkspaceProps) {
   const panelId = useId();
   const viewer = useRef<HTMLDivElement>(null);
@@ -751,16 +753,18 @@ export function LogWorkspace({
                 <DownloadSimple aria-hidden="true" />
                 <span className="action__label">Download</span>
               </a>
-              <button
-                type="button"
-                className="action"
-                data-tip="Show a QR code for this page"
-                aria-label="Show a QR code for this page"
-                onClick={() => setQrOpen(true)}
-              >
-                <QrCode aria-hidden="true" />
-                <span className="action__label">QR code</span>
-              </button>
+              {!isPrivate && (
+                <button
+                  type="button"
+                  className="action"
+                  data-tip="Show a QR code for this page"
+                  aria-label="Show a QR code for this page"
+                  onClick={() => setQrOpen(true)}
+                >
+                  <QrCode aria-hidden="true" />
+                  <span className="action__label">QR code</span>
+                </button>
+              )}
               <button
                 type="button"
                 className="action action--wide-toggle"
@@ -842,13 +846,15 @@ export function LogWorkspace({
           </div>
         </div>
 
-        <QrDialog
-          open={qrOpen}
-          onClose={() => setQrOpen(false)}
-          logId={logId}
-          rawUrl={rawUrl}
-          viewPath={`/${logId}/view`}
-        />
+        {!isPrivate && (
+          <QrDialog
+            open={qrOpen}
+            onClose={() => setQrOpen(false)}
+            logId={logId}
+            rawUrl={rawUrl}
+            viewPath={`/${logId}/view`}
+          />
+        )}
 
         <button
           type="button"
@@ -919,7 +925,7 @@ export function LogWorkspace({
           busy: partial,
           onCopy: () => void copy(),
           downloadUrl,
-          onQr: () => setQrOpen(true),
+          onQr: isPrivate ? undefined : () => setQrOpen(true),
           fullWidth: settings.fullWidth,
           onToggleFullWidth: () => {
             enableLayoutMotion();
@@ -1033,12 +1039,14 @@ export function LogWorkspace({
         </div>
       </div>
 
-      <QrDialog
+      {!isPrivate && (
+        <QrDialog
           open={qrOpen}
           onClose={() => setQrOpen(false)}
           logId={logId}
           rawUrl={rawUrl}
         />
+      )}
 
       <button
         type="button"

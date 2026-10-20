@@ -22,6 +22,12 @@ test("Authorization headers keep the scheme and lose the credential", () => {
   assert.equal(hidden("Authorization: Basic dXNlcjpwYXNzd29yZA=="), "Authorization: Basic [redacted]");
 });
 
+test("minelog keys are hidden wherever they show up", () => {
+  const key = "mlk_" + "a1B2c3D4".repeat(4);
+  assert.equal(hidden(`/minelog auth ${key}`), "/minelog auth [redacted]");
+  assert.equal(hidden("mlk_short"), "mlk_short");
+});
+
 test("webhook addresses lose their token but keep the host", () => {
   assert.equal(
     hidden("https://discord.com/api/webhooks/123456789012345678/AbCdEfGhIjKlMnOpQrStUvWxYz0123456789_-abcd"),

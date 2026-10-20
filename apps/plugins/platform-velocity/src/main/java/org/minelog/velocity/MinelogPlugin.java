@@ -45,7 +45,6 @@ public final class MinelogPlugin {
         Properties config = loadConfig();
         MinelogConfig parsed = new MinelogConfig(
                 config.getProperty("api-base", "https://api.minelog.org"),
-                config.getProperty("site-base", "https://minelog.org"),
                 parseSeconds(config.getProperty("timeout-seconds", "15")) * 1000,
                 config.getProperty("source-name", "minelog Service"));
         client = new MinelogClient(parsed, "minelog-velocity/1.0.0");
@@ -76,7 +75,6 @@ public final class MinelogPlugin {
     private Properties loadConfig() {
         Properties out = new Properties();
         out.setProperty("api-base", "https://api.minelog.org");
-        out.setProperty("site-base", "https://minelog.org");
         out.setProperty("timeout-seconds", "15");
         out.setProperty("source-name", "minelog Service");
         try {

@@ -57,6 +57,13 @@ const RULES: Rule[] = [
     replace: (m, scheme, value) => (isHidden(value) ? m : `${scheme}${HIDDEN}`),
   },
   {
+    id: "minelog-key",
+    singular: "minelog key",
+    plural: "minelog keys",
+    pattern: /\bmlk_[A-Za-z0-9]{32}\b/g,
+    replace: () => HIDDEN,
+  },
+  {
     id: "webhook",
     singular: "webhook address",
     plural: "webhook addresses",

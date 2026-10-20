@@ -9,9 +9,15 @@ import java.util.Properties;
 public final class TokenStore {
     private final File file;
     private final Properties saved = new Properties();
+    private final String header;
 
     public TokenStore(File file) {
+        this(file, "minelog delete tokens");
+    }
+
+    public TokenStore(File file, String header) {
         this.file = file;
+        this.header = header;
         load();
     }
 
@@ -60,7 +66,7 @@ public final class TokenStore {
             }
             FileOutputStream out = new FileOutputStream(file);
             try {
-                saved.store(out, "minelog delete tokens");
+                saved.store(out, header);
             } finally {
                 out.close();
             }

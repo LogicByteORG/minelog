@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { isValidId } from "@/lib/ids";
 import { findLogText } from "@/lib/logs";
 import { DeleteError, deleteLogFor } from "@/lib/service/delete";
+import { privateLogResponse } from "@/lib/service/private";
 import { streamedText } from "@/lib/service/respond";
 
 export async function GET(
@@ -11,6 +12,8 @@ export async function GET(
   const { id } = await params;
   const text = isValidId(id) ? await findLogText(id) : null;
   if (text === null) {
+    const owned = await privateLogResponse(id, false);
+    if (owned) return owned;
     return new Response("This log doesn't exist or has expired.", {
       status: 404,
       headers: { "Cache-Control": "no-store", "Content-Type": "text/plain; charset=utf-8" },

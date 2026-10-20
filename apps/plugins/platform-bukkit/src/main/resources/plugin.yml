@@ -4,10 +4,11 @@ main: org.minelog.bukkit.MinelogPlugin
 description: Share server logs on minelog.org with a link.
 author: LogicByte
 website: https://minelog.org
+softdepend: [Skript]
 commands:
   minelog:
     description: Share a log on minelog.org.
-    usage: /minelog share [file] | delete <id> | reload
+    usage: /minelog share [file] | delete <id> | auth <key> | status | test | disconnect | reload
     aliases: [mlog]
     permission: minelog.share
 permissions:
@@ -20,6 +21,9 @@ permissions:
   minelog.reload:
     description: Reload the minelog settings.
     default: op
+  minelog.connect:
+    description: Connect this server to your minelog account.
+    default: op
   minelog.admin:
     description: Full minelog access.
     default: op
@@ -27,3 +31,4 @@ permissions:
       minelog.share: true
       minelog.delete: true
       minelog.reload: true
+      minelog.connect: true

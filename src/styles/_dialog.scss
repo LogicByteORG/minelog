@@ -1,5 +1,6 @@
 .dialog {
   width: min(92vw, 26rem);
+
   max-width: none;
   margin: auto;
   padding: 0;
@@ -72,6 +73,10 @@
     color: var(--muted);
     line-height: 1.6;
   }
+}
+
+.dialog--wide {
+  width: min(94vw, 36rem);
 }
 
 .qr {

@@ -1,6 +1,7 @@
 import { Analytics } from "@/components/analytics";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CodeTabs } from "@/components/api/code-tabs";
 import { JsonLd } from "@/components/json-ld";
 import { PasteEditor } from "@/components/paste-editor";
 import { RedactionDemo } from "@/components/redaction-demo";
@@ -8,6 +9,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { GUIDES } from "@/content/guides";
 import { FAQ_GROUPS, HOME_FAQ } from "@/content/home-faq";
+import { ERROR_SAMPLE, TPS_SAMPLE } from "@/content/plugin-docs";
 import {
   HIGHLIGHTED_LANGUAGES,
   SUPPORTED_FILE_TYPES,
@@ -79,6 +81,32 @@ const FEATURES = [
     example: "Delete it in the first hour",
   },
 ];
+
+const SERVER_ALERTS = [
+  {
+    name: "Errors in your dashboard",
+    note: "Connect a server with a key and the errors in its log show up under Alerts. The same error counts up instead of piling up, so a noisy plugin does not bury the rest.",
+    example: "ERROR in latest.log, then Alerts",
+  },
+  {
+    name: "Where you already are",
+    note: "Discord, Slack, Microsoft Teams, Google Chat, Telegram, Guilded and Mattermost all work. So does any address that takes JSON, like Zapier, n8n or your own server.",
+    example: "Paste the URL, we pick the format",
+  },
+  {
+    name: "Start and stop notices",
+    note: "Hear when a server comes up or goes down. Each server connects with its own key, and you choose which webhooks listen to which server.",
+    example: "Paper 1.21.8 started",
+  },
+  {
+    name: "Yours alone",
+    note: "Alerts are stored encrypted and only you can read them. Each one is deleted after 14 days. The key stays in your server's plugin folder, and you can revoke it any time.",
+    example: "14 days, then gone",
+  },
+];
+
+const JOIN_SHORT = `on join:
+    send minelog alert "%player% joined" with message "Players online: %number of all players%" as info`;
 
 const WHERE_TO_LOOK = [
   {
@@ -252,6 +280,77 @@ export default function Home() {
                     audio and video are out too.
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="server" className="section">
+          <div className="grid-container reveal">
+            <div className="grid-x grid-margin-x">
+              <div className="cell small-12 large-4 section__intro">
+                <h2 className="section__title">
+                  Know when your server has a problem
+                </h2>
+                <p className="section__text">
+                  Sharing a log is half of it. Connect a server to your
+                  account and the plugin keeps an eye on its log for you. When
+                  something breaks, you hear about it where you already hang
+                  out. This part is in beta.
+                </p>
+                <Link href="/plugin" className="faq-guides__all">
+                  See how it works
+                  <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </div>
+              <div className="cell small-12 large-8">
+                <ul className="filetype-grid filetype-grid--pairs">
+                  {SERVER_ALERTS.map((item) => (
+                    <li key={item.name} className="filetype-card">
+                      <h3 className="filetype-card__name">{item.name}</h3>
+                      <p className="filetype-card__note">{item.note}</p>
+                      <code className="filetype-card__example">
+                        {item.example}
+                      </code>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="skript" className="section">
+          <div className="grid-container reveal">
+            <div className="grid-x grid-margin-x">
+              <div className="cell small-12 large-5 section__intro">
+                <h2 className="section__title">
+                  Your own alerts, in a few lines of Skript
+                </h2>
+                <p className="section__text">
+                  Already run Skript? The plugin gives your scripts a few new
+                  lines. Someone joins, the TPS drops, a player gets kicked, a
+                  command runs. You write the trigger and minelog does the
+                  sending.
+                </p>
+                <p className="section__text">
+                  Nothing extra to install. If Skript is there, the syntax
+                  switches on by itself.
+                </p>
+                <Link href="/plugin#recipes" className="faq-guides__all">
+                  More recipes
+                  <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </div>
+              <div className="cell small-12 large-7">
+                <CodeTabs
+                  label="Skript examples"
+                  samples={[
+                    { id: "join", label: "Join", code: JOIN_SHORT },
+                    { id: "lag", label: "Lag", code: TPS_SAMPLE },
+                    { id: "error", label: "Error", code: ERROR_SAMPLE },
+                  ]}
+                />
               </div>
             </div>
           </div>

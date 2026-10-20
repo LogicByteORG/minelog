@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { List, Package, X } from "@phosphor-icons/react";
 import { CURSEFORGE_URL, GITHUB_URL, HANGAR_URL } from "@/lib/config";
 import { useFloatingMenu } from "@/lib/use-floating-menu";
+import { MenuAccount } from "./auth/header-account";
 import { BrandIcon } from "./brand-icon";
 
 export function HeaderMenu() {
@@ -43,6 +44,9 @@ export function HeaderMenu() {
             </Link>
             <Link href="/guides" className="site-menu__link" onClick={close}>
               Guides
+            </Link>
+            <Link href="/plugin" className="site-menu__link" onClick={close}>
+              Plugin
             </Link>
             <Link href="/api" className="site-menu__link" onClick={close}>
               API
@@ -86,6 +90,7 @@ export function HeaderMenu() {
               <BrandIcon slug="github" size={20} />
               Source on GitHub
             </a>
+            <MenuAccount onNavigate={close} />
           </div>,
           document.body,
         )}

@@ -3,6 +3,7 @@ import { deletableUntil } from "@/lib/logs";
 import { BodyError, readBodyText } from "@/lib/service/body";
 import { UploadError, uploadLog } from "@/lib/service/upload";
 import { SITE_SOURCE_NAME } from "@/lib/config";
+import { getSession } from "@/lib/session";
 import { rawUrl, siteUrl } from "@/lib/site";
 
 function fail(status: number, error: string, headers?: HeadersInit) {
@@ -29,10 +30,13 @@ export async function POST(request: NextRequest) {
     return fail(400, 'Send JSON like {"content": "..."}.');
   }
 
-  const { content, hidePrivate } = (payload ?? {}) as {
+  const { content, hidePrivate, private: isPrivate } = (payload ?? {}) as {
     content?: unknown;
     hidePrivate?: unknown;
+    private?: unknown;
   };
+
+  const session = await getSession();
 
   try {
     const saved = await uploadLog({
@@ -40,18 +44,22 @@ export async function POST(request: NextRequest) {
       hidePrivate,
       source: SITE_SOURCE_NAME,
       request,
+      userId: session?.user.id ?? null,
+      isPrivate,
     });
     const base = siteUrl(request.nextUrl.origin);
+    const owned = isPrivate === true;
     return NextResponse.json(
       {
         id: saved.id,
-        url: `${base}/${saved.id}`,
-        raw: rawUrl(saved.id),
+        url: owned ? `${base}/p/${saved.id}` : `${base}/${saved.id}`,
+        raw: owned ? null : rawUrl(saved.id),
         expiresAt: saved.expiresAt.toISOString(),
         deleteToken: saved.deleteToken,
-        deletableUntil: deletableUntil(saved.createdAt).toISOString(),
+        deletableUntil: owned ? null : deletableUntil(saved.createdAt).toISOString(),
+        private: owned,
       },
-      { status: 201 },
+      { status: 201, headers: owned ? { "Cache-Control": "no-store" } : undefined },
     );
   } catch (error) {
     if (error instanceof UploadError) {

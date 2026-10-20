@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BUYMEACOFFEE_URL, GITHUB_URL, LOGICBYTE_URL, REPORT_EMAIL } from "@/lib/config";
 import { BrandIcon } from "./brand-icon";
 import { LogoLink } from "./logo";
+import { StatusLink } from "./status-link";
 
 const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
 const COMMIT_SHA = process.env.VERCEL_GIT_COMMIT_SHA ?? null;
@@ -23,9 +24,17 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/plugin" className="footer-link">
+                  Plugin
+                </Link>
+              </li>
+              <li>
                 <Link href="/api" className="footer-link">
                   API
                 </Link>
+              </li>
+              <li>
+                <StatusLink />
               </li>
               <li>
                 <Link href="/privacy" className="footer-link">

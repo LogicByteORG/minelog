@@ -24,7 +24,6 @@ public final class MinelogPlugin extends Plugin {
         Map<String, String> values = readConfig();
         MinelogConfig config = new MinelogConfig(
                 values.get("api-base"),
-                values.get("site-base"),
                 parseSeconds(values.get("timeout-seconds")) * 1000,
                 values.get("source-name"));
         client = new MinelogClient(config, "minelog-bungee/1.0.0");
@@ -76,7 +75,6 @@ public final class MinelogPlugin extends Plugin {
     private Map<String, String> readConfig() {
         Map<String, String> values = new HashMap<String, String>();
         values.put("api-base", "https://api.minelog.org");
-        values.put("site-base", "https://minelog.org");
         values.put("timeout-seconds", "15");
         values.put("source-name", "minelog Service");
         try {

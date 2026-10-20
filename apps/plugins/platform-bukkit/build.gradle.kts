@@ -6,6 +6,8 @@ plugins {
 }
 
 repositories {
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.skriptlang.org/releases")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
@@ -21,6 +23,19 @@ dependencies {
     compileOnly("com.google.code.gson:gson:2.8.0")
 }
 
+// The Skript syntax lives in its own source set because Skript needs Java 17 while the
+// plugin itself stays on Java 8. It ships inside the same jar and is only loaded when
+// Skript is installed.
+val skript = sourceSets.create("skript")
+
+dependencies {
+    "skriptCompileOnly"(sourceSets["main"].output)
+    "skriptCompileOnly"(project(":minelog-core"))
+    "skriptCompileOnly"("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    "skriptCompileOnly"("com.github.SkriptLang:Skript:2.9.5")
+    "skriptCompileOnly"("org.jetbrains:annotations:24.1.0")
+}
+
 val modVersion: String by project
 
 tasks.named<ProcessResources>("processResources") {
@@ -28,7 +43,7 @@ tasks.named<ProcessResources>("processResources") {
 }
 
 tasks.withType<JavaCompile> {
-    options.release.set(8)
+    options.release.set(if (name == "compileSkriptJava") 17 else 8)
 }
 
 // bStats asks every plugin to ship its own relocated copy so two plugins never
@@ -39,6 +54,7 @@ tasks.named<ShadowJar>("shadowJar") {
     archiveClassifier.set("")
     relocate("org.bstats", "org.minelog.bukkit.libs.bstats")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(skript.output)
 }
 
 tasks.named<Jar>("jar") {

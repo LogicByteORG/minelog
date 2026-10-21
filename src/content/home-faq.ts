@@ -50,7 +50,7 @@ export const HOME_FAQ: HomeFaq[] = [
     group: "Beyond the website",
     question: "What are server alerts?",
     answer:
-      "Connect a server to your account with a key from the dashboard. The plugin then watches the server log and saves every error under Alerts. It can also message a Discord, Slack, Microsoft Teams, Google Chat, Telegram, Guilded or Mattermost webhook, or any address that takes JSON. This part is in beta.",
+      "Connect a server to your account with a key from the dashboard. The plugin then watches the server log and saves every error under Alerts. It can also message a Discord, Slack, Microsoft Teams, Google Chat, Telegram, Guilded or Mattermost webhook, or any address that takes JSON.",
   },
   {
     group: "Beyond the website",

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { HeaderAccount } from "../auth/header-account";
-import { BetaTag } from "../beta-tag";
 import { LogoLink } from "../logo";
 import { ThemeToggle } from "../theme-toggle";
 import { DashboardTabs } from "./dashboard-tabs";
@@ -10,7 +9,7 @@ export function DashboardHeader() {
     <header className="dash-head">
       <div className="dash-wide dash-head__bar">
         <div className="dash-head__brand">
-          <LogoLink badge={<BetaTag />} />
+          <LogoLink />
         </div>
         <DashboardTabs />
         <div className="dash-head__actions">

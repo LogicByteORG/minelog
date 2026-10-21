@@ -296,7 +296,7 @@ export default function Home() {
                   Sharing a log is half of it. Connect a server to your
                   account and the plugin keeps an eye on its log for you. When
                   something breaks, you hear about it where you already hang
-                  out. This part is in beta.
+                  out.
                 </p>
                 <Link href="/plugin" className="faq-guides__all">
                   See how it works

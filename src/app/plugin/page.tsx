@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ApiToc } from "@/components/api/api-toc";
 import { CodeTabs } from "@/components/api/code-tabs";
-import { BetaTag } from "@/components/beta-tag";
 import { WebhookIcon } from "@/components/dashboard/webhook-icon";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -73,10 +72,7 @@ export default function PluginPage() {
       <main>
         <section className="hero hero--doc grid-container">
           <div className="hero__head settle">
-            <h1 className="hero__title hero__title--tagged">
-              Plugin
-              <BetaTag />
-            </h1>
+            <h1 className="hero__title">Plugin</h1>
             <p className="hero__lead">
               Connect a server to your minelog account. Its errors land in your dashboard and in the chat apps
               you already use, and Skript can send alerts of your own.
@@ -101,8 +97,7 @@ export default function PluginPage() {
                 one.
               </p>
               <p>
-                The server connection is in beta. It works, but details can still change. If something breaks, tell us
-                on <a href={`${GITHUB_URL}/issues`}>GitHub</a>.
+                If something breaks, tell us on <a href={`${GITHUB_URL}/issues`}>GitHub</a>.
               </p>
             </section>
 

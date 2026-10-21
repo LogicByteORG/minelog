@@ -201,37 +201,22 @@ export function buildPayload(kind: WebhookKind, event: OutgoingEvent): unknown {
     };
   }
 
-  if (kind === "telegram") {
-    return {
-      text: plainLines(
-        {
-          ...event,
-          title: htmlSafe(event.title),
-          message: htmlSafe(event.message),
-          serverName: htmlSafe(event.serverName),
-          fields: event.fields.map((field) => ({
-            name: htmlSafe(field.name),
-            value: htmlSafe(field.value),
-          })),
-        },
-        (text) => `<b>${text}</b>`,
-        (text) => `<i>${text}</i>`,
-      ),
-      parse_mode: "HTML",
-      link_preview_options: { is_disabled: true },
-    };
-  }
-
   return {
-    source: "minelog",
-    event: event.event,
-    level: event.level,
-    title: event.title,
-    message: event.message,
-    fields: Object.fromEntries(
-      event.fields.map((field) => [field.name, field.value]),
+    text: plainLines(
+      {
+        ...event,
+        title: htmlSafe(event.title),
+        message: htmlSafe(event.message),
+        serverName: htmlSafe(event.serverName),
+        fields: event.fields.map((field) => ({
+          name: htmlSafe(field.name),
+          value: htmlSafe(field.value),
+        })),
+      },
+      (text) => `<b>${text}</b>`,
+      (text) => `<i>${text}</i>`,
     ),
-    server: { name: event.serverName },
-    occurredAt: event.occurredAt.toISOString(),
+    parse_mode: "HTML",
+    link_preview_options: { is_disabled: true },
   };
 }

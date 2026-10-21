@@ -24,6 +24,7 @@ export function GET() {
     "## More",
     `- [Privacy](${absoluteUrl("/privacy")}): What is hidden, what is stored and for how long.`,
     `- [Terms](${absoluteUrl("/terms")}): What you can upload, the limits and how long logs stay.`,
+    `- [Rules](${absoluteUrl("/rules")}): What is allowed when sharing logs, connecting a server and sending alerts, including keeping player data out of webhooks.`,
     "",
   ].join("\n");
 

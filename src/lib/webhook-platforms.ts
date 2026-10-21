@@ -58,11 +58,4 @@ export const PLATFORMS: Platform[] = [
     looks: "your-server.com/hooks/<26 characters>",
     note: "Alerts arrive as an attachment. The server needs a public https address.",
   },
-  {
-    kind: "custom",
-    name: "Anything else",
-    where: "Any public https:// address that accepts a JSON POST: Zapier, Make, n8n or your own server.",
-    looks: "https://example.com/…",
-    note: "minelog sends plain JSON with source, event, level, title, message, fields, server and occurredAt.",
-  },
 ];

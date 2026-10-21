@@ -28,6 +28,9 @@ export function DashboardFooter() {
           <Link href="/terms" className="footer-link">
             Terms
           </Link>
+          <Link href="/rules" className="footer-link">
+            Rules
+          </Link>
           <StatusLink />
         </nav>
         <div className="dash-foot__icons">

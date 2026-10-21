@@ -34,7 +34,8 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         your account.
       </p>
       <p className="auth__legal">
-        By continuing you agree to the <Link href="/terms">Terms</Link> and the{" "}
+        By continuing you agree to the <Link href="/terms">Terms</Link>, the{" "}
+        <Link href="/rules">Rules</Link> and the{" "}
         <Link href="/privacy">Privacy Policy</Link>.
       </p>
     </section>

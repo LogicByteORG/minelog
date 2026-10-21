@@ -5,8 +5,7 @@ export type WebhookKind =
   | "googlechat"
   | "telegram"
   | "guilded"
-  | "mattermost"
-  | "custom";
+  | "mattermost";
 
 export type DetectedWebhook =
   | { ok: true; kind: WebhookKind; url: string; hint: string }
@@ -22,7 +21,6 @@ export const KIND_LABEL: Record<WebhookKind, string> = {
   telegram: "Telegram",
   guilded: "Guilded",
   mattermost: "Mattermost",
-  custom: "Custom",
 };
 
 const DISCORD_HOSTS = new Set([
@@ -158,5 +156,9 @@ export function detectWebhook(raw: string): DetectedWebhook {
     return { ok: true, kind: "mattermost", url: url.toString(), hint: hintFor("mattermost", url) };
   }
 
-  return { ok: true, kind: "custom", url: url.toString(), hint: hintFor("custom", url) };
+  return {
+    ok: false,
+    error:
+      "minelog only sends to Discord, Slack, Microsoft Teams, Google Chat, Telegram, Guilded and Mattermost. That address isn't one of them.",
+  };
 }

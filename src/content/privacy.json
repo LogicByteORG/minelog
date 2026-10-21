@@ -1,7 +1,7 @@
 {
   "title": "Privacy",
   "lead": "What minelog hides, what it stores for {days} days, and what it never collects.",
-  "updated": "Last updated September 2026.",
+  "updated": "Last updated October 2026.",
   "sections": [
     {
       "id": "hiding",
@@ -48,6 +48,14 @@
         "Every log gets a random 9-character link that nobody can guess. There's no password, so anyone with the link can read the log and its raw text. Only share it with people you trust.",
         "If you share a log by mistake, you can delete it yourself in the first hour, from the button at the bottom of its page. That button only shows in the browser that saved the log. After that hour the log stays readable until it expires, so check the preview first.",
         "README pages show the pictures the README points to, loaded through the wsrv.nl image cache instead of straight from each site that hosts them. That means wsrv.nl can see your IP address when you open such a page, and not the sites themselves. They keep request logs for 7 days on servers in the EU and cached pictures for a while after that. The sites that host the pictures only ever see wsrv.nl fetching them, never you. minelog checks the pictures in your browser and removes any that look like adult content. Nothing is sent to us or to anyone else for that. It can only check pictures the cache can read, and no check is perfect."
+      ]
+    },
+    {
+      "id": "who",
+      "heading": "Who runs minelog",
+      "paragraphs": [
+        "minelog is run by LogicByte Studios. If you want to know what we hold about you, have it corrected or deleted, or object to how it's used, write to {email}. Signed-in users can already delete their logs and account in the dashboard.",
+        "We only keep what this page describes, and we don't sell it or use it for ads. If you live somewhere with rules about personal data, like the EU, the UK or California, you have the rights those rules give you, and we'll honour them wherever you are."
       ]
     }
   ]

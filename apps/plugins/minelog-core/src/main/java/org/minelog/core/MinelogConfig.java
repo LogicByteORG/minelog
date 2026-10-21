@@ -28,6 +28,11 @@ public final class MinelogConfig {
         while (out.endsWith("/")) {
             out = out.substring(0, out.length() - 1);
         }
-        return out.isEmpty() ? fallback : out;
+        if (out.isEmpty()) {
+            return fallback;
+        }
+        // A bare host like api.minelog.org is what most people type. Treat it as https.
+        String lower = out.toLowerCase(java.util.Locale.ENGLISH);
+        return lower.startsWith("http://") || lower.startsWith("https://") ? out : "https://" + out;
     }
 }

@@ -1,0 +1,94 @@
+{
+  "title": "Rules",
+  "lead": "What's fine and what isn't when you share logs, connect a server or send alerts. Short version: don't take what isn't yours.",
+  "updated": "Last updated October 2026.",
+  "sections": [
+    {
+      "id": "scope",
+      "heading": "What these rules cover",
+      "paragraphs": [
+        "minelog does two things. It turns a log into a link anyone can open, and it lets a server you run send error alerts and your own messages to places like Discord, Slack or Teams. These rules apply to both, to the website, the API and the minelog plugin.",
+        "Alerts exist so server owners hear about what's happening on their own server: lag, a TPS drop, a crash, an error, a ban and why. That's what minelog is for, and anything else is a misuse of it.",
+        "They sit next to the [terms](/terms) and the [privacy page](/privacy). If something here clashes with the law where you live, the law wins."
+      ]
+    },
+    {
+      "id": "logs",
+      "heading": "Sharing logs",
+      "paragraphs": [
+        "Share logs, crash reports and config files from your own game, server or mods, and nothing else. A saved log is a link that anyone can open, so treat it like posting in public.",
+        "Keep secrets out. That means passwords, API keys, tokens, private keys and environment files. minelog hides many of them for you and refuses some files outright, but it can't know every secret you have. Read the preview before you share.",
+        "Don't upload other people's private information, anything illegal, adult, hateful or harassing, or files made to harm whoever opens them. Don't try to read logs that aren't yours either, by scraping saved logs or guessing links."
+      ]
+    },
+    {
+      "id": "your-own",
+      "heading": "Only connect what's yours",
+      "paragraphs": [
+        "Connect a server to minelog only if you own it or the owner has said you can. The key you get when you add a server belongs to that one server and that one account.",
+        "Never put your key inside a plugin, mod, modpack, panel template or script that you give to other people. Software like that would send data from servers you don't run into your account, and the people running them wouldn't know. Everyone connects their own server with their own key.",
+        "Treat a key like a password. Don't paste it into a public channel or a repository. If it leaks, revoke it in the Servers tab and make a new one."
+      ]
+    },
+    {
+      "id": "no-stealing",
+      "heading": "No collecting data that isn't yours",
+      "paragraphs": [
+        "Alerts, webhooks and the plugin are for running your server. They must never be used to collect information from people without them knowing, or to move it somewhere it shouldn't go.",
+        "Don't send IP addresses, passwords, login or session tokens, email addresses, real names, payment details or files taken from a player's computer. Don't read chat that was meant to be private, or build scripts and plugins that quietly report a player's data to a webhook. If a player wouldn't expect a piece of information to leave the game, it shouldn't go into an alert.",
+        "Names, ping, world or position can be fine inside a channel you and your staff control, because that's ordinary server running. Keep it to what you need, and follow the privacy rules that apply to you. If your players live somewhere that asks for consent, getting it is on you.",
+        "minelog also hides IP addresses, tokens, passwords and webhook links in alert text before it saves it. That's a safety net, not permission to send them."
+      ]
+    },
+    {
+      "id": "webhooks",
+      "heading": "Webhooks",
+      "paragraphs": [
+        "minelog only sends to Discord, Slack, Microsoft Teams, Google Chat, Telegram, Guilded and Mattermost. Addresses on other sites are refused, so an alert can't be sent to a server that nobody can vouch for.",
+        "A webhook should lead to a channel you control, or one whose owner agreed to receive minelog messages. Don't point one at someone else's channel to spam or harass them.",
+        "We only send to public web addresses. Pointing a webhook at an internal or private network address to probe it is not allowed, and our servers refuse those anyway. Don't try to get around that, for example with a Mattermost address that isn't really a Mattermost server.",
+        "Everything in an alert is posted as it was written, so what your script puts in is what your channel shows. Keep messages short, useful and about your server."
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Limits",
+      "paragraphs": [
+        "An account can have {servers} servers and {webhooks} webhooks. A server can send {events} events a minute and {alerts} alerts a minute. We keep your latest {kept} alerts, and each one is deleted {alertDays} days after it last happened. Names have to be unique inside an account.",
+        "Don't split work across accounts or servers to get past these numbers. The numbers can change, and the [plugin docs](/plugin) list the current ones."
+      ]
+    },
+    {
+      "id": "responsibility",
+      "heading": "Who is responsible",
+      "paragraphs": [
+        "You are responsible for what you send through minelog. That covers the logs you share, the keys you create, the scripts and plugins you run, the messages you put in alerts and where your webhooks point. If a script or plugin on your server sends data about your players, that's your doing, not ours.",
+        "minelog and LogicByte Studios don't check what servers send ahead of time and aren't responsible for it, but when someone tells us about a misuse we look into it quickly and act. We also aren't responsible for what other people share, for software that misuses minelog, or for Discord, Slack, Microsoft Teams, Google Chat, Telegram, Guilded, Mattermost or any other service we deliver to. Once a message reaches one of them, it's under their rules, not ours.",
+        "If you use minelog with players' data, you're the one who has to follow the laws and platform rules that apply to you, including asking for consent where it's needed. To the extent the law allows, minelog and LogicByte Studios aren't liable for losses, claims or damage that come from breaking these rules, whether it's you or someone else who does. The [terms](/terms) say more about what we do and don't promise."
+      ]
+    },
+    {
+      "id": "enforcement",
+      "heading": "If someone breaks these rules",
+      "paragraphs": [
+        "We can remove a log, turn off a webhook, revoke a server key, block an app or close an account, with or without warning, when something here is broken or looks about to be. If you lose access over a mistake, write to {email} and we'll take a look.",
+        "If we find out data was taken from people who didn't agree to it, we can also pass what we know to the people affected, the platform involved or the authorities, as far as the law allows."
+      ]
+    },
+    {
+      "id": "reporting",
+      "heading": "Reporting a problem",
+      "paragraphs": [
+        "If you think a plugin, script or server is using minelog to take data from players or other servers, tell us at {email}. Include the plugin or server name and anything that shows what it does, like a link or a screenshot. Please don't test it on other people's servers to find out.",
+        "Found a hole in minelog itself? Write to the same address and give us a little time to fix it before you share it."
+      ]
+    },
+    {
+      "id": "changes",
+      "heading": "Changes to these rules",
+      "paragraphs": [
+        "When the rules change, the new version goes on this page with a new date. Using minelog after that means you accept it."
+      ]
+    }
+  ]
+}

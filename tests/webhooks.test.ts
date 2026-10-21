@@ -37,9 +37,7 @@ test("the URL tells us which service it belongs to", () => {
   assert.ok(discord.ok && !discord.hint.includes("abc_DEF"));
   const slack = detectWebhook(SLACK);
   assert.ok(slack.ok && slack.kind === "slack");
-  const custom = detectWebhook("https://example.com/hooks/secret-token?x=1");
-  assert.ok(custom.ok && custom.kind === "custom");
-  assert.ok(custom.ok && !custom.hint.includes("secret-token"));
+  assert.equal(detectWebhook("https://example.com/hooks/secret-token?x=1").ok, false);
 });
 
 test("URLs that could reach our own network are refused", () => {
@@ -126,10 +124,6 @@ test("each service gets a message in its own shape", () => {
   assert.equal(slack.attachments[0].text, "Running at &lt;12&gt; &amp; falling");
   assert.equal(slack.attachments[0].color, "#f5a524");
 
-  const custom = buildPayload("custom", event) as { event: string; fields: Record<string, string>; server: { name: string } };
-  assert.equal(custom.event, "tps");
-  assert.deepEqual(custom.fields, { TPS: "12.4" });
-  assert.equal(custom.server.name, "Paper 1.21.1");
 });
 
 test("an event from the plugin is cleaned and given sensible defaults", () => {
@@ -189,8 +183,7 @@ test("every supported platform is recognised from its URL", () => {
     const found = detectWebhook(url);
     assert.ok(found.ok && found.kind === kind, `${kind}: ${JSON.stringify(found)}`);
   }
-  const custom = detectWebhook("https://example.com/hooks/not-a-mattermost-id");
-  assert.ok(custom.ok && custom.kind === "custom");
+  assert.equal(detectWebhook("https://example.com/hooks/not-a-mattermost-id").ok, false);
 });
 
 test("half-finished platform URLs say what is missing", () => {

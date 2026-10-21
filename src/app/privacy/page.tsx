@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
+  REPORT_EMAIL,
   RETENTION_DAYS,
   UNHIDDEN_RETENTION_HOURS,
   UPLOADS_PER_DAY,
@@ -15,7 +16,8 @@ function fill(text: string): string {
     .replaceAll("{days}", String(RETENTION_DAYS))
     .replaceAll("{hours}", String(UNHIDDEN_RETENTION_HOURS))
     .replaceAll("{uploads}", String(UPLOADS_PER_MINUTE))
-    .replaceAll("{perDay}", String(UPLOADS_PER_DAY));
+    .replaceAll("{perDay}", String(UPLOADS_PER_DAY))
+    .replaceAll("{email}", REPORT_EMAIL);
 }
 
 export const metadata: Metadata = {

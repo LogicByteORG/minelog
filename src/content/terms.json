@@ -1,14 +1,22 @@
 {
   "title": "Terms",
   "lead": "The rules for using minelog and its API, in plain words.",
-  "updated": "Last updated September 2026.",
+  "updated": "Last updated October 2026.",
   "sections": [
     {
       "id": "using",
       "heading": "Using minelog",
       "paragraphs": [
         "minelog lets you share Minecraft logs, crash reports and config files by link. It's free, and you don't need an account to share a log. By using the website or the API you agree to these terms. If you don't, please don't use them.",
-        "minelog is an independent project. It has no connection to Mojang Studios or Microsoft, and Minecraft is a trademark of Mojang Studios."
+        "minelog is an independent project. It has no connection to Mojang Studios or Microsoft, and Minecraft is a trademark of Mojang Studios.",
+        "The [rules](/rules) go into more detail on what is and isn't okay when you share logs, connect a server or send alerts."
+      ]
+    },
+    {
+      "id": "age",
+      "heading": "Who can use it",
+      "paragraphs": [
+        "You need to be at least 13 to sign in, and old enough to agree to these terms where you live. Some places set that age higher, up to 16, and then the higher number applies. If you're younger, ask a parent or guardian first. Sharing a log doesn't need an account."
       ]
     },
     {
@@ -40,7 +48,8 @@
       "id": "reporting",
       "heading": "Reporting a log",
       "paragraphs": [
-        "If a log is harmful, upsetting, or has your private information in it, write to {email} with its link. We'll look at it and remove it if it breaks these terms."
+        "If a log is harmful, upsetting, or has your private information in it, write to {email} with its link. We'll look at it and remove it if it breaks these terms.",
+        "If a log copies something you own the rights to, write to the same address with the link, what it copies, your name and contact details, and a line saying you're the owner or act for them and that the report is true. We remove clear cases quickly. If the person who saved it thinks we got it wrong, they can write to us and we'll look again."
       ]
     },
     {

@@ -90,7 +90,7 @@ const SERVER_ALERTS = [
   },
   {
     name: "Where you already are",
-    note: "Discord, Slack, Microsoft Teams, Google Chat, Telegram, Guilded and Mattermost all work. So does any address that takes JSON, like Zapier, n8n or your own server.",
+    note: "Discord, Slack, Microsoft Teams, Google Chat, Telegram, Guilded and Mattermost all work.",
     example: "Paste the URL, we pick the format",
   },
   {

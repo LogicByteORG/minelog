@@ -47,6 +47,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/rules" className="footer-link">
+                  Rules
+                </Link>
+              </li>
+              <li>
                 <a href={`mailto:${REPORT_EMAIL}`} className="footer-link">
                   Report abuse
                 </a>

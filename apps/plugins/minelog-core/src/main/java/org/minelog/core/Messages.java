@@ -125,6 +125,21 @@ public final class Messages {
                 + " Java 17 or newer. The console says why.";
     }
 
+    // Letters that cannot be read as hex, so the site never folds the code away when it groups errors.
+    private static final String CODE_LETTERS = "ghjkmnpqrstvwxyz";
+
+    public static String testCode(java.util.Random random) {
+        StringBuilder code = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            code.append(CODE_LETTERS.charAt(random.nextInt(CODE_LETTERS.length())));
+        }
+        return code.toString();
+    }
+
+    public static String testErrorLine(String code) {
+        return "Test error from minelog (run " + code + "). Nothing is wrong, you asked for it with /minelog test.";
+    }
+
     public static String testWritten() {
         return "I wrote a test error to the server log. It should show up under Alerts in a few seconds.";
     }

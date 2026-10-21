@@ -6,6 +6,17 @@ Release notes and the Modrinth changelog.
 
 ## Unreleased
 
+## 1.2.1 - 2026-10-21
+
+A small fix for the address setting. The Bungee and Velocity jars carry the new
+version number only.
+
+- An `api-base` written without `https://`, like `api.minelog.org`, now works. Before, the
+  plugin could not build a valid address from it and only said minelog could not be
+  reached. Addresses that start with `http://` or `https://` are used as they are.
+- `/minelog test` now writes a different error every time. Before, the second run was counted as the same
+  error and your webhooks stayed quiet, so it only ever notified once.
+
 ## 1.2.0 - 2026-10-20
 
 Servers can now connect to a minelog account, send error alerts and

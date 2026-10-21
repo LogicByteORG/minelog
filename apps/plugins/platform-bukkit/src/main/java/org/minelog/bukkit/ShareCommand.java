@@ -87,7 +87,8 @@ public final class ShareCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
             // The server's own logger, so the line has no plugin tag and goes down the same road as a real error.
-            Bukkit.getLogger().severe("Test error from minelog. Nothing is wrong, you asked for it with /minelog test.");
+            // A new code on every run, so minelog sees a new error each time and your webhooks hear about it each time.
+            Bukkit.getLogger().severe(Messages.testErrorLine(Messages.testCode(new java.util.Random())));
             sender.sendMessage(ChatColor.GREEN + Messages.testWritten());
             return true;
         }

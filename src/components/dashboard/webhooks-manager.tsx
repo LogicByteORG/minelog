@@ -112,7 +112,7 @@ export function WebhooksManager({
                     <p className="dash-hook__url">{hook.urlHint}</p>
                     <p className="dash-hook__scope">
                       <HandleChip handle={hook.handle} />
-                      {(servers.length >= 2 || hook.serverIds !== null) && (
+                      {(servers.length >= 1 || hook.serverIds !== null) && (
                         <> · {hook.scopeText}</>
                       )}
                     </p>

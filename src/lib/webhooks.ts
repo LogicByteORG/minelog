@@ -140,6 +140,7 @@ export async function resolveTargets(
       select id, kind, url_encrypted, handle, enabled
       from public.webhooks
       where user_id = ${userId} and handle = any(${handles})
+        and (server_ids is null or ${serverId}::uuid = any(server_ids))
     `;
     const known = new Set(rows.map((row) => row.handle));
     return {
@@ -158,9 +159,12 @@ export async function resolveTargets(
   return { targets, unknown: [] };
 }
 
-export async function availableHandles(userId: string): Promise<string[]> {
+export async function availableHandles(userId: string, serverId: string): Promise<string[]> {
   const rows = await db()<{ handle: string }[]>`
-    select handle from public.webhooks where user_id = ${userId} order by created_at
+    select handle from public.webhooks
+    where user_id = ${userId}
+      and (server_ids is null or ${serverId}::uuid = any(server_ids))
+    order by created_at
   `;
   return rows.map((row) => row.handle);
 }

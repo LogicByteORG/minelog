@@ -78,7 +78,7 @@ export function ConnectedAccounts({ linked }: { linked: LinkedAccount[] }) {
                 >
                   <button
                     type="button"
-                    className="button hollow button--danger dash-accounts__button"
+                    className="button hollow button--danger"
                     disabled={!canDisconnect}
                     onClick={() => setPending(provider.id)}
                   >
@@ -89,7 +89,7 @@ export function ConnectedAccounts({ linked }: { linked: LinkedAccount[] }) {
                 <span className="dash-accounts__action">
                   <button
                     type="button"
-                    className="button hollow dash-accounts__button"
+                    className="button hollow"
                     disabled={connecting !== null}
                     aria-busy={connecting === provider.id}
                     onClick={() => void connect(provider.id)}

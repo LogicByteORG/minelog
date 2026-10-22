@@ -82,6 +82,21 @@ export async function listAlerts(userId: string): Promise<AlertRow[]> {
   return rows.map(({ summaryEncrypted, ...rest }) => ({ ...rest, summary: readable(summaryEncrypted) }));
 }
 
+export async function listAlertDetails(userId: string): Promise<AlertDetail[]> {
+  const rows = await db()<StoredAlert[]>`
+    select id, server_id, server_name, summary_encrypted, content_encrypted, occurrences,
+           first_seen_at, last_seen_at, expires_at
+    from public.alerts
+    where user_id = ${userId} and expires_at > now()
+    order by last_seen_at desc
+  `;
+  return rows.map(({ summaryEncrypted, contentEncrypted, ...rest }) => ({
+    ...rest,
+    summary: readable(summaryEncrypted),
+    content: readable(contentEncrypted ?? ""),
+  }));
+}
+
 export async function getAlert(userId: string, id: string): Promise<AlertDetail | null> {
   const [row] = await db()<StoredAlert[]>`
     select id, server_id, server_name, summary_encrypted, content_encrypted, occurrences,

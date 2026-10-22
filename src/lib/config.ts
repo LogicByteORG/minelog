@@ -42,6 +42,8 @@ export const EVENTS_PER_MINUTE = 60;
 
 export const WEBHOOK_TESTS_PER_MINUTE = 10;
 
+export const EXPORTS_PER_MINUTE = 3;
+
 export const ALERTS_PER_ACCOUNT = 100;
 
 export const ALERT_RETENTION_DAYS = 14;

@@ -61,7 +61,7 @@ export function DeleteAccount({ logCount }: { logCount: number }) {
       </p>
       <button
         type="button"
-        className="button hollow button--danger dash-danger__button"
+        className="button hollow button--danger"
         onClick={() => setOpen(true)}
       >
         <Trash size={18} aria-hidden="true" />

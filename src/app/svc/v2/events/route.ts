@@ -48,11 +48,11 @@ export async function POST(request: NextRequest) {
 
   const resolved = await resolveTargets(owner.userId, owner.id, targets.handles);
   if (resolved.unknown.length > 0) {
-    const known = await availableHandles(owner.userId);
+    const known = await availableHandles(owner.userId, owner.id);
     return v2Error(
       400,
       "unknown_webhook",
-      `No webhook with the handle ${resolved.unknown.join(", ")}. Yours: ${known.join(", ") || "none yet"}.`,
+      `No webhook with the handle ${resolved.unknown.join(", ")} is open to this server. This server can use: ${known.join(", ") || "none yet"}.`,
       NO_STORE,
     );
   }

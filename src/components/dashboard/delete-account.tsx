@@ -4,16 +4,26 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Trash } from "@phosphor-icons/react";
 import { authClient } from "@/lib/auth-client";
+import type { AuthProvider } from "@/lib/auth-providers";
+import { REVERIFY_CODE } from "@/lib/reverify";
 import { ConfirmDialog } from "../confirm-dialog";
+import { VerifyDialog } from "./verify-dialog";
 
 export const DELETE_PHRASE = "delete my account";
 
-export function DeleteAccount({ logCount }: { logCount: number }) {
+export function DeleteAccount({
+  logCount,
+  primary,
+}: {
+  logCount: number;
+  primary: AuthProvider | null;
+}) {
   const router = useRouter();
   const inputId = useId();
   const input = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [typed, setTyped] = useState("");
+  const [verifying, setVerifying] = useState(false);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
 
@@ -42,6 +52,12 @@ export function DeleteAccount({ logCount }: { logCount: number }) {
     const { error } = await authClient.deleteUser({});
     if (error) {
       setBusy(false);
+      if (error.code === REVERIFY_CODE && primary) {
+        setOpen(false);
+        setTyped("");
+        setVerifying(true);
+        return;
+      }
       setProblem(
         error.code === "SESSION_EXPIRED"
           ? "For your safety, log out and log back in, then try again."
@@ -97,6 +113,10 @@ export function DeleteAccount({ logCount }: { logCount: number }) {
           onChange={(event) => setTyped(event.target.value)}
         />
       </ConfirmDialog>
+
+      {primary && (
+        <VerifyDialog open={verifying} provider={primary} onClose={() => setVerifying(false)} />
+      )}
     </div>
   );
 }

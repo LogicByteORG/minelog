@@ -6,28 +6,43 @@ import { DisplayNameForm } from "@/components/dashboard/display-name-form";
 import { Detail, Notice, PageHeader, Panel } from "@/components/dashboard/panel";
 import { SessionsList } from "@/components/dashboard/sessions-list";
 import { linkErrorMessage } from "@/lib/auth-providers";
+import { AUTH_PROVIDERS } from "@/lib/auth-providers";
+import { REVERIFY_MINUTES } from "@/lib/config";
 import { linkedAccounts, logSummary } from "@/lib/dashboard";
 import { requireSession } from "@/lib/session";
 import { sessionViews } from "@/lib/sessions";
+import { primaryProvider } from "@/lib/verification";
 import { formatDate } from "@/lib/time";
 
 export const metadata: Metadata = { title: "Account" };
 
 export default async function AccountPage({ searchParams }: PageProps<"/dash/account">) {
   const { user, session } = await requireSession();
-  const [linked, summary, sessions] = await Promise.all([
+  const [linked, summary, sessions, primaryId] = await Promise.all([
     linkedAccounts(),
     logSummary(user.id),
     sessionViews(session.id),
+    primaryProvider(user.id),
   ]);
-  const { error } = await searchParams;
-  const notice = linkErrorMessage(typeof error === "string" ? error : undefined);
+  const primary = AUTH_PROVIDERS.find((provider) => provider.id === primaryId) ?? null;
+  const { error, verified, verify } = await searchParams;
+  const notice =
+    verify === "failed"
+      ? "We couldn’t confirm it’s you, so nothing was changed. You can try again whenever you like."
+      : linkErrorMessage(typeof error === "string" ? error : undefined);
 
   return (
     <>
       <PageHeader title="Account" />
 
       {notice && <Notice>{notice}</Notice>}
+
+      {verified === "1" && primary && (
+        <Notice tone="ok">
+          Confirmed with {primary.label}. Go ahead with what you were doing, it stays unlocked for{" "}
+          {REVERIFY_MINUTES} minutes.
+        </Notice>
+      )}
 
       <Panel title="Profile" description="Your picture comes from the account you first signed in with.">
         <div className="dash-profile">
@@ -56,14 +71,14 @@ export default async function AccountPage({ searchParams }: PageProps<"/dash/acc
         title="Connected accounts"
         description="Connect both to log in either way. At least one has to stay connected."
       >
-        <ConnectedAccounts linked={linked} />
+        <ConnectedAccounts linked={linked} primary={primaryId} />
       </Panel>
 
       <Panel
         title="Active sessions"
         description="Devices that are signed in to your account. Sign out any you don’t recognize."
       >
-        <SessionsList sessions={sessions} />
+        <SessionsList sessions={sessions} primary={primary} />
       </Panel>
 
       <Panel
@@ -76,7 +91,7 @@ export default async function AccountPage({ searchParams }: PageProps<"/dash/acc
       </Panel>
 
       <Panel title="Delete account" tone="danger">
-        <DeleteAccount logCount={summary.active} />
+        <DeleteAccount logCount={summary.active} primary={primary} />
       </Panel>
     </>
   );

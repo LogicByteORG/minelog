@@ -35,52 +35,33 @@ export function AlertsList({ groups }: { groups: AlertGroup[] }) {
           description={`${group.alerts.length} ${group.alerts.length === 1 ? "error" : "errors"}`}
           flush
         >
-          <div className="dash-table__wrap">
-            <table className="dash-table">
-              <thead>
-                <tr>
-                  <th scope="col">Error</th>
-                  <th scope="col" className="dash-table__num">
-                    Seen
-                  </th>
-                  <th scope="col">Last seen</th>
-                  <th scope="col">Deleted on</th>
-                  <th scope="col" className="dash-table__end">
-                    <span className="show-for-sr">Actions</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {group.alerts.map((alert) => (
-                  <tr key={alert.id}>
-                    <td>
-                      <Link
-                        href={`/dash/alerts/${alert.id}`}
-                        className="dash-table__id dash-table__summary"
-                        data-tip={alert.summary}
-                      >
-                        {alert.summary}
-                      </Link>
-                    </td>
-                    <td className="dash-table__num">×{alert.occurrences.toLocaleString("en")}</td>
-                    <td className="dash-table__times">{alert.lastSeenText}</td>
-                    <td className="dash-table__times">{alert.expiresText}</td>
-                    <td className="dash-table__end">
-                      <button
-                        type="button"
-                        className="nav-button nav-button--icon dash-table__action"
-                        aria-label="Delete this alert"
-                        data-tip="Delete"
-                        onClick={() => setPending(alert)}
-                      >
-                        <Trash size={16} aria-hidden="true" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ul className="dash-alerts">
+            {group.alerts.map((alert) => (
+              <li key={alert.id} className="dash-alert">
+                <div className="dash-alert__main">
+                  <Link href={`/dash/alerts/${alert.id}`} className="dash-alert__summary">
+                    {alert.summary}
+                  </Link>
+                  <p className="dash-alert__meta">
+                    <span className="dash-alert__count">
+                      ×{alert.occurrences.toLocaleString("en")}
+                    </span>
+                    <span>Last seen {alert.lastSeenText}</span>
+                    <span>Deleted on {alert.expiresText}</span>
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="nav-button nav-button--icon dash-table__action"
+                  aria-label="Delete this alert"
+                  data-tip="Delete"
+                  onClick={() => setPending(alert)}
+                >
+                  <Trash size={16} aria-hidden="true" />
+                </button>
+              </li>
+            ))}
+          </ul>
         </Panel>
       ))}
 

@@ -15,6 +15,12 @@ export const DASHBOARD_TABS: DashboardTab[] = [
   { href: ACCOUNT_PATH, label: "Account" },
 ];
 
+export const DASHBOARD_RESOURCES = [
+  { href: "/guides", label: "Guides" },
+  { href: "/plugin", label: "Plugin" },
+  { href: "/api", label: "API" },
+] as const;
+
 export function currentTab(pathname: string): DashboardTab | null {
   const matches = DASHBOARD_TABS.filter(
     (tab) => pathname === tab.href || pathname.startsWith(`${tab.href}/`),

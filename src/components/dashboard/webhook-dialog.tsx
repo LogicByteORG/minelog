@@ -33,7 +33,7 @@ export function WebhookDialog({
   const detected = useMemo(() => detectWebhook(url), [url]);
   const typed = url.trim().length > 0;
   const showScope =
-    servers.length >= 2 || (editing?.serverIds ?? null) !== null;
+    servers.length >= 1 || (editing?.serverIds ?? null) !== null;
 
   const suggested = handleFromName(
     name || (detected.ok ? KIND_LABEL[detected.kind] : ""),

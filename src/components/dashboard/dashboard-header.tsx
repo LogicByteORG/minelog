@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { HeaderAccount } from "../auth/header-account";
 import { LogoLink } from "../logo";
 import { ThemeToggle } from "../theme-toggle";
+import { DashboardMenu } from "./dashboard-menu";
 import { DashboardTabs } from "./dashboard-tabs";
 
 export function DashboardHeader() {
@@ -13,17 +13,7 @@ export function DashboardHeader() {
         </div>
         <DashboardTabs />
         <div className="dash-head__actions">
-          <nav aria-label="Resources" className="site-header__desktop">
-            <Link href="/guides" className="nav-button">
-              Guides
-            </Link>
-            <Link href="/plugin" className="nav-button">
-              Plugin
-            </Link>
-            <Link href="/api" className="nav-button">
-              API
-            </Link>
-          </nav>
+          <DashboardMenu />
           <ThemeToggle />
           <HeaderAccount />
         </div>

@@ -54,7 +54,7 @@
       "id": "who",
       "heading": "Who runs minelog",
       "paragraphs": [
-        "minelog is run by LogicByte Studios. If you want to know what we hold about you, have it corrected or deleted, or object to how it's used, write to {email}. Signed-in users can already delete their logs and account in the dashboard.",
+        "minelog is run by LogicByte Studios. If you want to know what we hold about you, have it corrected or deleted, or object to how it's used, write to {email}. Signed-in users can already download a copy of their data, sign out devices they no longer use, and delete their logs and account in the dashboard.",
         "We only keep what this page describes, and we don't sell it or use it for ads. If you live somewhere with rules about personal data, like the EU, the UK or California, you have the rights those rules give you, and we'll honour them wherever you are."
       ]
     }

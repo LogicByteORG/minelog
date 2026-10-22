@@ -108,13 +108,13 @@ export function DisplayNameForm({ name }: { name: string }) {
           setProblem(null);
         }}
       />
-      <button type="submit" className="button dash-name__button" disabled={!changed || busy}>
+      <button type="submit" className="button" disabled={!changed || busy}>
         {busy && <Loader />}
         Save
       </button>
       <button
         type="button"
-        className="button hollow dash-name__button"
+        className="button hollow"
         disabled={busy}
         onClick={cancel}
       >

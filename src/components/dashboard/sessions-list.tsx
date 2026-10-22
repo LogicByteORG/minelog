@@ -4,9 +4,11 @@ import { useState } from "react";
 import { DeviceMobile, DeviceTablet, Desktop } from "@phosphor-icons/react";
 import { signOutDevice, signOutOtherDevices } from "@/app/dash/account/actions";
 import type { ActionOutcome } from "@/app/dash/actions";
+import type { AuthProvider } from "@/lib/auth-providers";
 import type { SessionView } from "@/lib/sessions";
 import type { DeviceKind } from "@/lib/user-agent";
 import { Loader } from "../loader";
+import { VerifyDialog } from "./verify-dialog";
 
 const ALL = "all";
 
@@ -16,9 +18,16 @@ const ICONS: Record<DeviceKind, typeof Desktop> = {
   desktop: Desktop,
 };
 
-export function SessionsList({ sessions }: { sessions: SessionView[] }) {
+export function SessionsList({
+  sessions,
+  primary,
+}: {
+  sessions: SessionView[];
+  primary: AuthProvider | null;
+}) {
   const [busy, setBusy] = useState<string | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
+  const [verifying, setVerifying] = useState(false);
 
   const others = sessions.filter((session) => !session.current).length;
 
@@ -28,7 +37,9 @@ export function SessionsList({ sessions }: { sessions: SessionView[] }) {
     setProblem(null);
     const outcome = await action();
     setBusy(null);
-    if (!outcome.ok) setProblem(outcome.error);
+    if (outcome.ok) return;
+    if (outcome.reverify && primary) setVerifying(true);
+    else setProblem(outcome.error);
   }
 
   return (
@@ -79,6 +90,10 @@ export function SessionsList({ sessions }: { sessions: SessionView[] }) {
             Sign out all other devices
           </button>
         </div>
+      )}
+
+      {primary && (
+        <VerifyDialog open={verifying} provider={primary} onClose={() => setVerifying(false)} />
       )}
 
       {problem && (

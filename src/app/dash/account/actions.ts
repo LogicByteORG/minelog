@@ -5,7 +5,9 @@ import { headers } from "next/headers";
 import type { ActionOutcome } from "@/app/dash/actions";
 import { auth } from "@/lib/auth";
 import { ACCOUNT_PATH } from "@/lib/auth-providers";
+import { REVERIFY_MESSAGE } from "@/lib/reverify";
 import { requireSession } from "@/lib/session";
+import { isReverifyError } from "@/lib/verification";
 
 export async function signOutDevice(id: string): Promise<ActionOutcome> {
   const { session } = await requireSession();
@@ -36,6 +38,7 @@ export async function signOutOtherDevices(): Promise<ActionOutcome> {
   try {
     await auth.api.revokeOtherSessions({ headers: await headers() });
   } catch (error) {
+    if (isReverifyError(error)) return { ok: false, error: REVERIFY_MESSAGE, reverify: true };
     console.error("Signing out other devices failed:", error);
     return { ok: false, error: "Couldn't sign the other devices out. Try again in a moment." };
   }

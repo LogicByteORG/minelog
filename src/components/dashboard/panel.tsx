@@ -100,9 +100,18 @@ export function Detail({ label, children }: { label: string; children: ReactNode
   );
 }
 
-export function Notice({ children }: { children: ReactNode }) {
+export function Notice({
+  tone = "error",
+  children,
+}: {
+  tone?: "error" | "ok";
+  children: ReactNode;
+}) {
   return (
-    <p className="dash-notice" role="alert">
+    <p
+      className={tone === "ok" ? "dash-notice dash-notice--ok" : "dash-notice"}
+      role={tone === "ok" ? "status" : "alert"}
+    >
       {children}
     </p>
   );

@@ -8,9 +8,14 @@ import { ACCOUNT_PATH, AUTH_PROVIDERS } from "@/lib/auth-providers";
 import { isOwnedLog, removeOwnedLog } from "@/lib/dashboard";
 import { isValidId } from "@/lib/ids";
 import { forgetLog } from "@/lib/log-cache";
+import { REVERIFY_MESSAGE } from "@/lib/reverify";
 import { getSession, requireSession } from "@/lib/session";
+import { isProviderId } from "@/lib/primary-provider";
+import { isReverifyError, isVerified, setPrimaryProvider } from "@/lib/verification";
 
-export type ActionOutcome = { ok: true } | { ok: false; error: string };
+export type ActionOutcome = { ok: true } | { ok: false; error: string; reverify?: boolean };
+
+const NEEDS_VERIFY: ActionOutcome = { ok: false, error: REVERIFY_MESSAGE, reverify: true };
 
 export async function ownsLog(id: string): Promise<boolean> {
   if (!isValidId(id)) return false;
@@ -60,6 +65,7 @@ export async function disconnectAccount(providerId: string): Promise<ActionOutco
     }
     await auth.api.unlinkAccount({ headers: requestHeaders, body: { accountId: target.id } });
   } catch (error) {
+    if (isReverifyError(error)) return NEEDS_VERIFY;
     if (error instanceof APIError && error.body?.code === "SESSION_NOT_FRESH") {
       return {
         ok: false,
@@ -68,6 +74,27 @@ export async function disconnectAccount(providerId: string): Promise<ActionOutco
     }
     console.error("Disconnecting an account failed:", error);
     return { ok: false, error: "Couldn't disconnect the account. Try again in a moment." };
+  }
+
+  revalidatePath(ACCOUNT_PATH);
+  return { ok: true };
+}
+
+export async function makePrimaryAccount(providerId: string): Promise<ActionOutcome> {
+  const { user } = await requireSession();
+
+  if (!isProviderId(providerId)) return { ok: false, error: "That account isn’t connected." };
+
+  try {
+    const accounts = await auth.api.listUserAccounts({ headers: await headers() });
+    if (!accounts.some((account) => account.providerId === providerId)) {
+      return { ok: false, error: "That account isn’t connected." };
+    }
+    if (!(await isVerified(user.id))) return NEEDS_VERIFY;
+    await setPrimaryProvider(user.id, providerId);
+  } catch (error) {
+    console.error("Changing the primary account failed:", error);
+    return { ok: false, error: "Couldn’t change the primary account. Try again in a moment." };
   }
 
   revalidatePath(ACCOUNT_PATH);

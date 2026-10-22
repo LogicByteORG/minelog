@@ -630,6 +630,21 @@ $dash-tab: 2.75rem;
   line-height: 1.5;
 }
 
+.dash-notice--ok {
+  border-color: color-mix(in srgb, var(--callout-tip) 45%, var(--line));
+  color: var(--callout-tip);
+}
+
+.dash-accounts__who .dash-tag {
+  margin-left: 0;
+}
+
+.dash-accounts__action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .dash-profile {
   display: flex;
   flex-direction: column;

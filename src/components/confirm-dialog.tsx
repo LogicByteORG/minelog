@@ -14,6 +14,7 @@ export function ConfirmDialog({
   busyLabel,
   icon,
   confirmDisabled = false,
+  tone = "danger",
   onConfirm,
   onClose,
   children,
@@ -26,6 +27,7 @@ export function ConfirmDialog({
   busyLabel: string;
   icon?: ReactNode;
   confirmDisabled?: boolean;
+  tone?: "danger" | "default";
   onConfirm: () => void;
   onClose: () => void;
   children: ReactNode;
@@ -45,7 +47,7 @@ export function ConfirmDialog({
       <div className="dialog__actions">
         <button
           type="submit"
-          className="button button--sm button--danger"
+          className={tone === "danger" ? "button button--sm button--danger" : "button button--sm"}
           disabled={confirmDisabled}
           aria-busy={busy}
         >

@@ -35,7 +35,7 @@
     "better-auth": "^1.7.12",
     "buffer": "^6.0.3",
     "foundation-sites": "^6.9.0",
-    "next": "16.4.0",
+    "next": "16.4.2",
     "nsfwjs": "^4.4.0",
     "pg": "^8.23.1",
     "postgres": "^3.4.9",
@@ -56,7 +56,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9.39.5",
-    "eslint-config-next": "16.4.0",
+    "eslint-config-next": "16.4.2",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3"
   }

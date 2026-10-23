@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
-import { SignOut, SquaresFour, User } from "@phosphor-icons/react";
+import { Gear, SignOut, SquaresFour, User } from "@phosphor-icons/react";
 import { authClient } from "@/lib/auth-client";
-import { DASHBOARD_PATH, LOGIN_PATH } from "@/lib/auth-providers";
+import { ACCOUNT_PATH, DASHBOARD_PATH, LOGIN_PATH } from "@/lib/auth-providers";
 import { useFloatingMenu } from "@/lib/use-floating-menu";
 import { useSignOut } from "@/lib/use-sign-out";
 
@@ -30,6 +31,8 @@ function Avatar({ user }: { user: AccountUser }) {
 function AccountMenu({ user }: { user: AccountUser }) {
   const { open, pos, button, menu, toggle, close } = useFloatingMenu<HTMLDivElement>();
   const signOut = useSignOut();
+  const pathname = usePathname();
+  const onDashboard = pathname === DASHBOARD_PATH || pathname.startsWith(`${DASHBOARD_PATH}/`);
 
   return (
     <div className="account">
@@ -58,9 +61,15 @@ function AccountMenu({ user }: { user: AccountUser }) {
               <span className="account__name">{user.name}</span>
               <span className="account__email">{user.email}</span>
             </p>
-            <Link href={DASHBOARD_PATH} className="site-menu__link" onClick={close}>
-              <SquaresFour size={18} aria-hidden="true" />
-              Dashboard
+            {!onDashboard && (
+              <Link href={DASHBOARD_PATH} className="site-menu__link" onClick={close}>
+                <SquaresFour size={18} aria-hidden="true" />
+                Dashboard
+              </Link>
+            )}
+            <Link href={ACCOUNT_PATH} className="site-menu__link" onClick={close}>
+              <Gear size={18} aria-hidden="true" />
+              Account
             </Link>
             <button
               type="button"

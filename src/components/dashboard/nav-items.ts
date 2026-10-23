@@ -4,6 +4,7 @@ export type DashboardTab = {
   href: string;
   label: string;
   badge?: string;
+  menu?: boolean;
 };
 
 export const DASHBOARD_TABS: DashboardTab[] = [
@@ -12,7 +13,7 @@ export const DASHBOARD_TABS: DashboardTab[] = [
   { href: `${DASHBOARD_PATH}/alerts`, label: "Alerts" },
   { href: `${DASHBOARD_PATH}/servers`, label: "Servers" },
   { href: `${DASHBOARD_PATH}/webhooks`, label: "Webhooks" },
-  { href: ACCOUNT_PATH, label: "Account" },
+  { href: ACCOUNT_PATH, label: "Account", menu: true },
 ];
 
 export const DASHBOARD_RESOURCES = [

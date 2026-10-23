@@ -10,7 +10,7 @@ export function DashboardTabs() {
   return (
     <nav aria-label="Dashboard" className="dash-tabs">
       <ul className="dash-tabs__list">
-        {DASHBOARD_TABS.map((tab) => (
+        {DASHBOARD_TABS.filter((tab) => !tab.menu).map((tab) => (
           <li key={tab.href}>
             <Link
               href={tab.href}

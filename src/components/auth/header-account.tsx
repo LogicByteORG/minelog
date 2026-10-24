@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { Gear, SignOut, SquaresFour, User } from "@phosphor-icons/react";
+import { Loader } from "@/components/loader";
 import { authClient } from "@/lib/auth-client";
 import { ACCOUNT_PATH, DASHBOARD_PATH, LOGIN_PATH } from "@/lib/auth-providers";
 import { useFloatingMenu } from "@/lib/use-floating-menu";
@@ -94,14 +95,19 @@ export function HeaderAccount() {
 
   if (data) return <AccountMenu user={data.user} />;
 
+  if (isPending) {
+    return (
+      <span className="nav-button account__pending" role="status" aria-label="Checking sign-in">
+        <span className="account__pending-label" aria-hidden="true">
+          Log in
+        </span>
+        <Loader />
+      </span>
+    );
+  }
+
   return (
-    <Link
-      href={LOGIN_PATH}
-      className="nav-button"
-      data-pending={isPending ? "" : undefined}
-      aria-hidden={isPending}
-      tabIndex={isPending ? -1 : undefined}
-    >
+    <Link href={LOGIN_PATH} className="nav-button">
       Log in
     </Link>
   );

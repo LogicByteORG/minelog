@@ -14,7 +14,7 @@ import {
   HIGHLIGHTED_LANGUAGES,
   SUPPORTED_FILE_TYPES,
 } from "@/content/supported-files";
-import { RETENTION_DAYS, UNHIDDEN_RETENTION_HOURS } from "@/lib/config";
+import { ACTION_URL, RETENTION_DAYS, UNHIDDEN_RETENTION_HOURS } from "@/lib/config";
 import {
   SITE_NAME,
   SITE_TAGLINE,
@@ -107,6 +107,22 @@ const SERVER_ALERTS = [
 
 const JOIN_SHORT = `on join:
     send minelog alert "%player% joined" with message "Players online: %number of all players%" as info`;
+
+const ACTION_WORKFLOW = `name: minelog
+on:
+  issues:
+    types: [opened, edited]
+  issue_comment:
+    types: [created, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  read-log:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: LogicByteORG/minelog-action@v1`;
 
 const WHERE_TO_LOOK = [
   {
@@ -349,6 +365,47 @@ export default function Home() {
                     { id: "join", label: "Join", code: JOIN_SHORT },
                     { id: "lag", label: "Lag", code: TPS_SAMPLE },
                     { id: "error", label: "Error", code: ERROR_SAMPLE },
+                  ]}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="authors" className="section">
+          <div className="grid-container reveal">
+            <div className="grid-x grid-margin-x">
+              <div className="cell small-12 large-5 section__intro">
+                <h2 className="section__title">
+                  Read bug reports before you open them
+                </h2>
+                <p className="section__text">
+                  Maintain a mod or a plugin? Then you know the routine. Someone
+                  opens an issue, you ask for the log, you wait. Add one
+                  workflow file and that step goes away.
+                </p>
+                <p className="section__text">
+                  When an issue has a minelog link, the action replies once with
+                  the game version, loader and Java build, plus the problems we
+                  found and a fix or two to try. Another link later? The same
+                  comment updates.
+                </p>
+                <a
+                  href={ACTION_URL}
+                  className="faq-guides__all"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Get the action
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
+              <div className="cell small-12 large-7">
+                <CodeTabs
+                  label="GitHub workflow"
+                  caption=".github/workflows/minelog.yml"
+                  samples={[
+                    { id: "workflow", label: "Workflow", code: ACTION_WORKFLOW },
                   ]}
                 />
               </div>

@@ -82,3 +82,5 @@ export const STATUS_URL = "https://status.logicbyte.org";
 
 export const GITHUB_URL = "https://github.com/LogicByteORG/minelog";
 
+export const ACTION_URL = "https://github.com/LogicByteORG/minelog-action";
+

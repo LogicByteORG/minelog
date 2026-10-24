@@ -60,6 +60,12 @@ export const HOME_FAQ: HomeFaq[] = [
   },
   {
     group: "Beyond the website",
+    question: "Can minelog read logs in my GitHub issues?",
+    answer:
+      "Yes, if you add the minelog action to your repository. One workflow file is all it takes. When someone drops a minelog link in an issue or a comment, it replies once with the game version, loader, Java build and the problems we found. A new link later just updates that same comment. Private logs are skipped, since only their owner can open them.",
+  },
+  {
+    group: "Beyond the website",
     question: "Is there an API?",
     answer:
       "Yes. A launcher, mod or panel can push a log up with one request. There is also an endpoint that matches mclo.gs. Tools built for it keep working, just swap the address.",

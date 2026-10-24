@@ -1,4 +1,25 @@
-.nav-button[data-pending] {
+// Holds the width of "Log in" while the session loads so the header does not jump,
+// with the loader centered over the hidden label.
+.account__pending {
+  position: relative;
+  justify-content: center;
+  cursor: progress;
+
+  &:hover,
+  &:active {
+    background: none;
+    color: var(--muted);
+  }
+
+  .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+  }
+}
+
+.account__pending-label {
   visibility: hidden;
 }
 

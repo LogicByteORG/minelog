@@ -1,4 +1,4 @@
-$dash-bar: 3.5rem;
+$dash-bar: 3.75rem;
 $dash-tab: 2.75rem;
 
 .dash {
@@ -78,8 +78,26 @@ $dash-tab: 2.75rem;
   overflow-x: auto;
   scrollbar-width: none;
 
+  --fade-start: 0px;
+  --fade-end: 0px;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  &[data-start="more"] {
+    --fade-start: 1.5rem;
+  }
+
+  &[data-end="more"] {
+    --fade-end: 1.5rem;
   }
 
   @include breakpoint(medium) {
@@ -103,11 +121,12 @@ $dash-tab: 2.75rem;
   display: flex;
   align-items: center;
   height: $dash-tab;
-  padding: 0 0.75rem;
+  padding: 0 0.875rem;
   color: var(--muted);
   font-size: 0.9375rem;
   font-weight: 500;
   white-space: nowrap;
+  scroll-margin-inline: 1.5rem;
   transition:
     color 140ms ease,
     background-color 140ms ease;
@@ -127,6 +146,7 @@ $dash-tab: 2.75rem;
   }
 
   &[aria-current="page"] {
+    background: color-mix(in srgb, var(--ink) 6%, transparent);
     color: var(--ink);
 
     &::after {

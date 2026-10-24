@@ -1,5 +1,5 @@
 import { GUIDES } from "@/content/guides";
-import { RETENTION_DAYS } from "@/lib/config";
+import { ACTION_URL, RETENTION_DAYS } from "@/lib/config";
 import { SITE_NAME, SITE_TAGLINE, absoluteUrl } from "@/lib/seo";
 
 export function GET() {
@@ -17,6 +17,7 @@ export function GET() {
     "",
     "## Plugin",
     `- [Plugin and Skript docs](${absoluteUrl("/plugin")}): Connect a Minecraft server to minelog, get error alerts in Discord, Slack, Teams and more, and send your own alerts from Skript.`,
+    `- [GitHub Action for issues](${ACTION_URL}): Add one workflow file and minelog replies on issues that contain a minelog link, with the game version, loader, Java build and the problems found.`,
     "",
     "## API",
     `- [API documentation](${absoluteUrl("/api")}): Upload logs from launchers, mods and server panels. Includes an API that matches mclo.gs.`,

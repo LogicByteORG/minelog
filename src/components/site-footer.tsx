@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BUYMEACOFFEE_URL, GITHUB_URL, LOGICBYTE_URL, REPORT_EMAIL } from "@/lib/config";
+import { BUYMEACOFFEE_URL, GITHUB_URL, REPORT_EMAIL } from "@/lib/config";
 import { BrandIcon } from "./brand-icon";
 import { LogoLink } from "./logo";
 import { StatusLink } from "./status-link";
@@ -79,9 +79,7 @@ export function SiteFooter() {
           <p className="site-footer__meta">
             <span>&copy; {year} minelog</span>
             <span className="site-footer__dot" aria-hidden="true" />
-            <a href={LOGICBYTE_URL} target="_blank" rel="noopener noreferrer">
-              LogicByte Studios
-            </a>
+            <span>LogicByte Studios</span>
             <span className="site-footer__dot" aria-hidden="true" />
             <a href={LICENSE_URL} target="_blank" rel="noopener noreferrer">
               PolyForm Shield License

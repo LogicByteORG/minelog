@@ -5,6 +5,7 @@ import {
   CURSEFORGE_URL,
   GITHUB_URL,
   HANGAR_URL,
+  LOGICBYTE_URL,
 } from "@/lib/config";
 import { BrandIcon } from "../brand-icon";
 import { StatusLink } from "../status-link";
@@ -16,7 +17,9 @@ export function DashboardFooter() {
         <p className="dash-foot__copy">
           <span>&copy; {new Date().getFullYear()} minelog</span>
           <span className="site-footer__dot" aria-hidden="true" />
-          <span>LogicByte Studios</span>
+          <a href={LOGICBYTE_URL} target="_blank" rel="noopener noreferrer">
+            LogicByte Studios
+          </a>
         </p>
         <nav aria-label="Footer" className="dash-foot__links">
           <Link href="/privacy" className="footer-link">

@@ -8,6 +8,7 @@ import { isValidId } from "@/lib/ids";
 
 const SINGLE_SEGMENT = /^\/([A-Za-z0-9]+)$/;
 const LOG_TEXT = /^\/api\/log\/[A-Za-z0-9]+$/;
+const PUBLIC_ASSET = /^\/(?:brand|font|vendor)\/[\w./-]+$/;
 
 function hostOf(address: string | undefined): string[] {
   try {
@@ -35,7 +36,9 @@ async function serveCustomDomain(request: NextRequest, host: string) {
   const single = SINGLE_SEGMENT.exec(pathname);
   if (single && isValidId(single[1])) return rewriteTo(request, `/c/${slug}/${single[1]}`);
 
-  if (request.method === "GET" && LOG_TEXT.test(pathname)) return NextResponse.next();
+  if (request.method === "GET" && (LOG_TEXT.test(pathname) || PUBLIC_ASSET.test(pathname))) {
+    return NextResponse.next();
+  }
 
   return rewriteTo(request, `/c/${slug}/missing`);
 }

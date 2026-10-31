@@ -111,13 +111,7 @@ export function DomainPanel({ pageId, initial, enabled }: Props) {
 
   if (!domain) {
     return (
-      <form
-        className="page-field"
-        onSubmit={(event) => {
-          event.preventDefault();
-          void add();
-        }}
-      >
+      <div className="page-field">
         <label htmlFor={`${pageId}-domain`} className="page-field__label">
           Domain
         </label>
@@ -133,12 +127,18 @@ export function DomainPanel({ pageId, initial, enabled }: Props) {
             spellCheck={false}
             placeholder="logs.yoursite.com"
             onChange={(event) => setInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key !== "Enter") return;
+              event.preventDefault();
+              void add();
+            }}
           />
           <button
-            type="submit"
+            type="button"
             className="button"
             disabled={busy !== null || input.trim() === ""}
             aria-busy={busy === "add"}
+            onClick={() => void add()}
           >
             {busy === "add" && <Loader />}
             Connect domain
@@ -149,7 +149,7 @@ export function DomainPanel({ pageId, initial, enabled }: Props) {
           Use a subdomain you own, like logs.yoursite.com. Your logs then open at that address
           instead of minelog.org.
         </p>
-      </form>
+      </div>
     );
   }
 

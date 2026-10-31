@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { DeleteLog } from "@/components/delete-log";
 import { DonateNudge } from "@/components/donate-nudge";
 import {
@@ -17,6 +18,7 @@ import { AnalyzeMenu } from "@/components/analyze-menu";
 import { ProblemsPanel } from "@/components/problems-panel";
 import { LogWorkspace } from "@/components/workspace/log-workspace";
 import { REPORT_EMAIL } from "@/lib/config";
+import { DEFAULT_FEATURES, type PageFeature, type PageFeatures } from "@/lib/page-settings";
 import { formatBytes } from "@/lib/log";
 import type { LogPage } from "@/lib/log-cache";
 import { downloadUrl, rawUrl } from "@/lib/site";
@@ -30,19 +32,33 @@ export function LogPageView({
   log,
   notice = false,
   isPrivate = false,
+  features,
 }: {
   log: LogPage;
   notice?: boolean;
   isPrivate?: boolean;
+  // Set on a custom page: its header and footer come from the page layout.
+  features?: PageFeatures;
 }) {
+  const custom = features !== undefined;
+  const show = features ?? DEFAULT_FEATURES;
   const source = log.source;
   const { insights } = log;
   const raw = isPrivate ? `/p/${log.id}/raw` : rawUrl(log.id);
   const download = isPrivate ? `/p/${log.id}/raw?download=1` : downloadUrl(log.id);
+  // On a custom page every switchable part is tagged, so the editor preview can hide it live.
+  const gate = (key: PageFeature, node: ReactNode) =>
+    custom ? (
+      <span data-feature={key} className="feature">
+        {node}
+      </span>
+    ) : (
+      node
+    );
 
   return (
     <>
-      <SiteHeader />
+      {!custom && <SiteHeader />}
 
       <main className="grid-container log-page">
         <div className="log-head settle">
@@ -58,29 +74,36 @@ export function LogPageView({
                   Private
                 </span>
               )}
-              {source && (
-                <span className="source-badge" data-tip={`Uploaded from ${source}`}>
-                  <DownloadSimple weight="bold" aria-hidden="true" />
-                  {source}
-                </span>
-              )}
-              {log.privacyApplied ? (
-                <span
-                  className="source-badge"
-                  data-tip="IP addresses, tokens, emails and user folder names were hidden before saving"
-                >
-                  <ShieldCheck weight="bold" aria-hidden="true" />
-                  Private details hidden
-                </span>
-              ) : (
-                <span
-                  className="source-badge source-badge--warn"
-                  data-tip="Nothing was hidden in this log. It is deleted early to limit the risk."
-                >
-                  <Eye weight="bold" aria-hidden="true" />
-                  Not hidden
-                </span>
-              )}
+              {show.details &&
+                source &&
+                gate(
+                  "details",
+                  <span className="source-badge" data-tip={`Uploaded from ${source}`}>
+                    <DownloadSimple weight="bold" aria-hidden="true" />
+                    {source}
+                  </span>,
+                )}
+              {show.details &&
+                gate(
+                  "details",
+                  log.privacyApplied ? (
+                    <span
+                      className="source-badge"
+                      data-tip="IP addresses, tokens, emails and user folder names were hidden before saving"
+                    >
+                      <ShieldCheck weight="bold" aria-hidden="true" />
+                      Private details hidden
+                    </span>
+                  ) : (
+                    <span
+                      className="source-badge source-badge--warn"
+                      data-tip="Nothing was hidden in this log. It is deleted early to limit the risk."
+                    >
+                      <Eye weight="bold" aria-hidden="true" />
+                      Not hidden
+                    </span>
+                  ),
+                )}
               <span>
                 {number(log.lineCount)} lines, {formatBytes(log.byteSize)}. Saved{" "}
                 <time dateTime={log.createdAt.toISOString()} data-tip={formatUtc(log.createdAt)}>
@@ -91,11 +114,13 @@ export function LogPageView({
             </p>
           </div>
           <div className="log-head__actions">
-            {!isPrivate && <ShareLink />}
-            {insights && <AnalyzeMenu env={insights.environment} />}
-            {insights && <ProblemsPanel problems={insights.problems} />}
-            <AskAiMenu excerpt={log.excerpt} />
-            {log.kind === "readme" && !isPrivate && (
+            {!isPrivate && show.share && gate("share", <ShareLink />)}
+            {show.analysis && insights && gate("analysis", <AnalyzeMenu env={insights.environment} />)}
+            {show.analysis &&
+              insights &&
+              gate("analysis", <ProblemsPanel problems={insights.problems} />)}
+            {show.askAi && gate("askAi", <AskAiMenu excerpt={log.excerpt} />)}
+            {log.kind === "readme" && !isPrivate && !custom && (
               <a
                 href={`/${log.id}/view`}
                 className="button hollow button--sm"
@@ -105,15 +130,19 @@ export function LogPageView({
                 Clean view
               </a>
             )}
-            <a
-              href={raw}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="button hollow button--sm"
-              data-tip="The whole log as plain text, in a new tab"
-            >
-              Raw
-            </a>
+            {show.raw &&
+              gate(
+                "raw",
+                <a
+                  href={raw}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button hollow button--sm"
+                  data-tip="The whole log as plain text, in a new tab"
+                >
+                  Raw
+                </a>,
+              )}
           </div>
         </div>
 
@@ -142,7 +171,7 @@ export function LogPageView({
           isPrivate={isPrivate}
         />
 
-        <DonateNudge />
+        {!custom && <DonateNudge />}
 
         <p className="log-page__expiry">
           This log is deleted on{" "}
@@ -152,20 +181,18 @@ export function LogPageView({
           ({timeLeft(log.expiresAt)}).
         </p>
 
-        <DeleteLog logId={log.id} />
+        {!custom && <DeleteLog logId={log.id} />}
 
         <p className="log-page__report">
           Is this log harmful or upsetting? Write to{" "}
-          <a
-            href={`mailto:${REPORT_EMAIL}?subject=${encodeURIComponent(`Report log ${log.id}`)}`}
-          >
+          <a href={`mailto:${REPORT_EMAIL}?subject=${encodeURIComponent(`Report log ${log.id}`)}`}>
             {REPORT_EMAIL}
           </a>{" "}
           and we&apos;ll take a look.
         </p>
       </main>
 
-      <SiteFooter />
+      {!custom && <SiteFooter />}
     </>
   );
 }

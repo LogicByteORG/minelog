@@ -38,6 +38,10 @@ export const WEBHOOK_MAX_FAILURES = 10;
 
 export const SERVERS_PER_ACCOUNT = 10;
 
+export const PAGES_PER_ACCOUNT = 5;
+
+export const PAGE_LOGO_MAX_BYTES = 256 * 1024;
+
 export const EVENTS_PER_MINUTE = 60;
 
 export const WEBHOOK_TESTS_PER_MINUTE = 10;

@@ -4,7 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { Check, Copy } from "@phosphor-icons/react";
 import { copyText } from "@/lib/copy";
 
-export function HandleChip({ handle }: { handle: string }) {
+export function HandleChip({
+  handle,
+  tip = "Copy the handle your scripts use",
+}: {
+  handle: string;
+  tip?: string;
+}) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<number | undefined>(undefined);
 
@@ -21,8 +27,8 @@ export function HandleChip({ handle }: { handle: string }) {
     <button
       type="button"
       className="dash-handle"
-      data-tip={copied ? "Copied" : "Copy the handle your scripts use"}
-      aria-label={`Copy the handle ${handle}`}
+      data-tip={copied ? "Copied" : tip}
+      aria-label={`Copy ${handle}`}
       onClick={() => void copy()}
     >
       {handle}

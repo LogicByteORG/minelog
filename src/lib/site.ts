@@ -34,6 +34,13 @@ export function publicApiBase(): string {
   return trim(process.env.API_URL ?? fallback);
 }
 
+// Page logos are served by the API host. Local and preview builds have no API host of their own,
+// so they use the /svc path on the same site.
+export function cdnBase(): string {
+  const local = process.env.NODE_ENV !== "production" || process.env.VERCEL_ENV === "preview";
+  return local ? "/svc" : trim(process.env.API_URL ?? API_BASE);
+}
+
 export function rawUrl(id: string): string {
   return `${publicApiBase()}/v2/logs/${id}/raw`;
 }

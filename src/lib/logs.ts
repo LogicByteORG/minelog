@@ -124,6 +124,7 @@ type SaveInput = {
   source: string | null;
   userId: string | null;
   isPrivate: boolean;
+  customPageId?: string | null;
 };
 
 export async function saveLog({
@@ -133,6 +134,7 @@ export async function saveLog({
   source,
   userId,
   isPrivate,
+  customPageId = null,
 }: SaveInput): Promise<SavedLog> {
   await assertUnderLimit(ipHash);
 
@@ -151,12 +153,12 @@ export async function saveLog({
       const [row] = await db()<{ createdAt: Date; expiresAt: Date }[]>`
         insert into public.logs
           (id, content, kind, line_count, byte_size, error_count, warn_count,
-           privacy_applied, ip_hash, source, delete_token_hash, user_id, is_private, expires_at)
+           privacy_applied, ip_hash, source, delete_token_hash, user_id, is_private, custom_page_id, expires_at)
         select
           ${id}, ${analysis.output}, ${analysis.kind}, ${analysis.lineCount},
           ${analysis.bytes}, ${analysis.errorCount}, ${analysis.warnCount},
           ${hidePrivate}, ${ipHash}, ${source}, ${deleteToken ? hashToken(deleteToken) : null}, ${userId},
-          ${isPrivate},
+          ${isPrivate}, ${customPageId},
           now() + make_interval(hours => ${retentionHours(hidePrivate)})
         from (
           select

@@ -67,6 +67,7 @@ export type UploadInput = {
   request: Request;
   userId?: string | null;
   isPrivate?: unknown;
+  customPageId?: string | null;
 };
 
 export async function uploadLog({
@@ -76,6 +77,7 @@ export async function uploadLog({
   request,
   userId = null,
   isPrivate,
+  customPageId = null,
 }: UploadInput): Promise<SavedLog> {
   if (typeof content !== "string" || content.trim().length === 0) {
     throw new UploadError(400, "empty_content", "There is no log text in this request.");
@@ -106,6 +108,7 @@ export async function uploadLog({
       source: normalizeSource(source ?? request.headers.get("x-minelog-client")),
       userId,
       isPrivate: isPrivate === true,
+      customPageId,
     });
   } catch (error) {
     if (error instanceof UploadError) throw error;

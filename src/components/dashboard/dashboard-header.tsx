@@ -1,6 +1,7 @@
 import { HeaderAccount } from "../auth/header-account";
 import { LogoLink } from "../logo";
 import { ThemeToggle } from "../theme-toggle";
+import { CreateMenu } from "./create-menu";
 import { DashboardMenu } from "./dashboard-menu";
 import { DashboardTabs } from "./dashboard-tabs";
 
@@ -13,6 +14,7 @@ export function DashboardHeader() {
         </div>
         <DashboardTabs />
         <div className="dash-head__actions">
+          <CreateMenu />
           <DashboardMenu />
           <ThemeToggle />
           <HeaderAccount />

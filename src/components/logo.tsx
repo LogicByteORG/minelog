@@ -24,8 +24,7 @@ export function LogoLink({
   );
 }
 
-// `word` replaces the wordmark, used by custom pages that show the owner's name beside the mark.
-export function Logo({ badge, word }: { badge?: ReactNode; word?: string }) {
+export function Logo({ badge }: { badge?: ReactNode }) {
   return (
     <span className="logo">
       <span className="logo__marks" aria-hidden="true">
@@ -50,7 +49,7 @@ export function Logo({ badge, word }: { badge?: ReactNode; word?: string }) {
           draggable={false}
         />
       </span>
-      <span className="logo__word">{word ?? "minelog"}</span>
+      <span className="logo__word">minelog</span>
       {badge}
       {IS_PREVIEW && (
         <span

@@ -12,9 +12,13 @@ import { formatDate } from "@/lib/time";
 
 export const metadata: Metadata = { title: "Edit log page" };
 
-export default async function EditPagePage({ params }: PageProps<"/dash/pages/[id]">) {
+export default async function EditPagePage({
+  params,
+  searchParams,
+}: PageProps<"/dash/pages/[id]">) {
   const { user } = await requireSession();
   const { id } = await params;
+  const { tab } = await searchParams;
   if (!ID_PATTERN.test(id)) notFound();
 
   const page = await findOwnedPage(id, user.id);
@@ -23,6 +27,7 @@ export default async function EditPagePage({ params }: PageProps<"/dash/pages/[i
   const logos = logoSources(page, cdnBase());
   return (
     <PageEditor
+      initialTab={typeof tab === "string" ? tab : undefined}
       page={{
         id: page.id,
         name: page.name ?? "",

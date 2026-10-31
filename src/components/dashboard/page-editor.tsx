@@ -286,11 +286,25 @@ const DEVICES = [
   { value: "phone", label: "Phone" },
 ] as const;
 
-export function PageEditor({ page }: { page: EditablePage }) {
+const tabFrom = (value: string | undefined): Tab =>
+  TABS.find((item) => item.value === value)?.value ?? "brand";
+
+export function PageEditor({
+  page,
+  initialTab,
+}: {
+  page: EditablePage;
+  initialTab?: string;
+}) {
   const ids = useId();
   const router = useRouter();
 
-  const [tab, setTab] = useState<Tab>("brand");
+  const [tab, setTab] = useState<Tab>(tabFrom(initialTab));
+
+  function selectTab(next: Tab) {
+    setTab(next);
+    window.history.replaceState(null, "", `?tab=${next}`);
+  }
   const [name, setName] = useState(page.name);
   const [slug, setSlug] = useState(page.slug);
   const [logoUrl, setLogoUrl] = useState(page.logoUrl);
@@ -558,7 +572,7 @@ export function PageEditor({ page }: { page: EditablePage }) {
                 aria-selected={tab === item.value}
                 aria-controls={`${ids}-panel`}
                 className="page-tabs__tab"
-                onClick={() => setTab(item.value)}
+                onClick={() => selectTab(item.value)}
               >
                 {item.label}
               </button>

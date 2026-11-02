@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import { LinkGuard } from "@/components/link-guard";
 import { TooltipHost } from "@/components/tooltip-host";
 import { RETENTION_DAYS } from "@/lib/config";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <LinkGuard />
         <TooltipHost />
+        <Analytics />
       </body>
     </html>
   );

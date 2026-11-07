@@ -67,6 +67,8 @@ test("local addresses, timestamps and code that looks like an address are left a
     "loopback 127.0.0.1 and fe80::1",
     "ratio 1:2:3:4:5:6:7",
     "time=12:00:00:123",
+    "Running Java 25 (OpenJDK 64-Bit Server VM 25.0.1.1+1-LTS; Eclipse Adoptium Temurin-25.0.1.1+1) on Windows 11",
+    "Java version 21.0.3.1 from jdk-17.0.9.1",
     "uuid 069a79f4-44e9-4726-a5be-fca90e38aaf5",
   ]) {
     assert.equal(hidden(line), line);

@@ -121,7 +121,7 @@ const RULES: Rule[] = [
     singular: "IP address",
     plural: "IP addresses",
     pattern:
-      /(?<![\w.])(?<!^[ \t]*(?:-|[|\\]--)[ \t]+\S+[ \t])(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?!\w)/gm,
+      /(?<![\w.])(?<!^[ \t]*(?:-|[|\\]--)[ \t]+\S+[ \t])(?<!(?:jdk|jre|java|temurin|openjdk|version|build)[-_ ]?v?)(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?!\w|\+\d|-(?:LTS|ea|b\d))/gim,
     replace: (m) => (isLocalAddress(m) ? m : HIDDEN),
   },
   {

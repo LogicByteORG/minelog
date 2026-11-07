@@ -436,6 +436,13 @@ export const PROBLEM_DOCS: { id: string; text: string }[] = [
   { id: "server-jar-invalid", text: "Java couldn't open or run the server jar (Unable to access, corrupt, or no main manifest)." },
   { id: "native-crash-exit-code", text: "Windows ended the game after a native crash (exit code 0xC0000409 or 0xC0000005)." },
   { id: "binary-incompatible", text: "IllegalAccessError, AbstractMethodError or IncompatibleClassChangeError between mods or plugins." },
+  { id: "bind-address", text: "The server's server-ip is not an address of this machine (Cannot assign requested address)." },
+  { id: "concurrent-modification", text: "ConcurrentModificationException, usually a plugin or mod changing a list from two threads." },
+  { id: "main-class-missing", text: "Java couldn't find the main class, so the game or server never started." },
+  { id: "plugin-task-error", text: "A scheduled task from a plugin threw an error (Task # for Plugin generated an exception)." },
+  { id: "registries-failed", text: "A data pack or mod broke the registries (Failed to load registries due to above errors)." },
+  { id: "stack-overflow", text: "StackOverflowError, a mod or plugin calling itself in a loop." },
+  { id: "world-newer-version", text: "The world was saved by a newer Minecraft version than the one running." },
   { id: "unknown-error", text: "An error no rule covers yet, shown with its own line." },
   { id: "crash-summary", text: "What a crash report or Java crash log says, when no rule covers it." },
 ];

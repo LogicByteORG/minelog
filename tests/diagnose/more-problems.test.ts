@@ -305,7 +305,8 @@ test("the real logs on file don't gain a rule hit that isn't about a real proble
     "unknown-host", "disk-full", "too-many-open-files", "ssl-certificate", "world-data-corrupt",
     "ticking-crash", "memory-region-exhausted", "graphics-driver-crash", "config-yaml-error",
     "database-connection", "plugin-already-initialized", "not-a-forge-mod", "server-jar-invalid",
-    "native-crash-exit-code", "binary-incompatible",
+    "native-crash-exit-code", "binary-incompatible", "bind-address", "concurrent-modification",
+    "main-class-missing", "plugin-task-error", "registries-failed", "stack-overflow", "world-newer-version",
   ]);
   const hits: string[] = [];
   for (const name of readdirSync(dir)) {

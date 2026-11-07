@@ -62,6 +62,13 @@ import { unknownHost } from "./unknown-host";
 import { versionMismatch } from "./version-mismatch";
 import { worldDataCorrupt } from "./world-data-corrupt";
 import { wrongLoader } from "./wrong-loader";
+import { bindAddress } from "./bind-address";
+import { concurrentModification } from "./concurrent-modification";
+import { mainClassMissing } from "./main-class-missing";
+import { pluginTaskError } from "./plugin-task-error";
+import { registriesFailed } from "./registries-failed";
+import { stackOverflow } from "./stack-overflow";
+import { worldNewerVersion } from "./world-newer-version";
 
 export const RULES: Rule[] = [
   outOfMemory,
@@ -127,4 +134,11 @@ export const RULES: Rule[] = [
   serverJarInvalid,
   nativeCrashExitCode,
   binaryIncompatible,
+  bindAddress,
+  concurrentModification,
+  mainClassMissing,
+  pluginTaskError,
+  registriesFailed,
+  stackOverflow,
+  worldNewerVersion,
 ];

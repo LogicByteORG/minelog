@@ -443,6 +443,10 @@ export const PROBLEM_DOCS: { id: string; text: string }[] = [
   { id: "registries-failed", text: "A data pack or mod broke the registries (Failed to load registries due to above errors)." },
   { id: "stack-overflow", text: "StackOverflowError, a mod or plugin calling itself in a loop." },
   { id: "world-newer-version", text: "The world was saved by a newer Minecraft version than the one running." },
+  { id: "duplicate-entity-uuid", text: "Two entities share one UUID and the server dropped one." },
+  { id: "moved-too-quickly", text: "Players repeatedly flagged for moving too quickly or wrongly, usually lag or a movement mod." },
+  { id: "null-pointer", text: "A NullPointerException, with the name of what was null when Java says it." },
+  { id: "resource-pack-failed", text: "A resource pack could not be downloaded or applied." },
   { id: "unknown-error", text: "An error no rule covers yet, shown with its own line." },
   { id: "crash-summary", text: "What a crash report or Java crash log says, when no rule covers it." },
 ];

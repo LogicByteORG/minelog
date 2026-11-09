@@ -69,6 +69,10 @@ import { pluginTaskError } from "./plugin-task-error";
 import { registriesFailed } from "./registries-failed";
 import { stackOverflow } from "./stack-overflow";
 import { worldNewerVersion } from "./world-newer-version";
+import { duplicateEntityUuid } from "./duplicate-entity-uuid";
+import { movedTooQuickly } from "./moved-too-quickly";
+import { nullPointer } from "./null-pointer";
+import { resourcePackFailed } from "./resource-pack-failed";
 
 export const RULES: Rule[] = [
   outOfMemory,
@@ -141,4 +145,8 @@ export const RULES: Rule[] = [
   registriesFailed,
   stackOverflow,
   worldNewerVersion,
+  duplicateEntityUuid,
+  movedTooQuickly,
+  nullPointer,
+  resourcePackFailed,
 ];
